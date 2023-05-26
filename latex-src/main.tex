@@ -1,18 +1,26 @@
-\documentclass{article}
+% Add the "twocolumn" argument to convert to 2 column format
+% Add the "linenumbers" argument to include line numbers
+% See this link for more info on how to use the documentclass
+%  https://www.overleaf.com/project/6470f9cad6ea94bea26d41cb
+\documentclass[]{aastex631}
 
 \usepackage{BobsPreamble}
 
-\addbibresource{bibliography.bib} 
-
-
-\title{MHD Methods Paper}
-\author{Robert Caddy, Evan Schneider}
-\date{2023}
-
 \begin{document}
 
-\maketitle
+\title{MHD Methods Paper}
 
+\author[0000-0002-4475-3181]{Robert V. Caddy}
+\affiliation{University of Pittsburgh, Department of Physics \& Astronomy \\
+3941 O'Hara St \\ 
+Pittsburgh, PA 15260, USA}
+
+\author[0000-0001-9735-7484]{Evan E. Schneider}
+\affiliation{University of Pittsburgh, Department of Physics \& Astronomy \\
+3941 O'Hara St \\ 
+Pittsburgh, PA 15260, USA}
+
+\input{0-abstract}
 \input{1-intro}
 \input{2-methods}
 \input{3-mhd-tests}
@@ -25,6 +33,6 @@
 \input{A1-mhd-equations-glossary}
 \input{A2-HLLD-summary}
 
-\printbibliography[heading=bibintoc]
+\bibliography{bibliography.bib}
 
 \end{document}
