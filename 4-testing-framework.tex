@@ -1,0 +1,36 @@
+\section{Testing Framework}
+\label{sec:testing}
+
+As Cholla grows in complexity, and with the fundamental changes that implementing MHD requires, a more rigorous testing method was required  that would also work on large parallel systems. We addressed this in three primary steps: 1) Choose a testing framework for unit tests, 2) Write the software tools needed to extend that testing framework for Cholla's needs, and 3) add automated testing that runs whenever anyone submits a pull request to the Cholla GitHub repository. 
+
+Taken together, the ease of writing and running tests and their automated running on every pull request has meant that new features are faster and easier to add to Cholla with confidence. Any errors or changes that break older code will likely be quickly caught by the tests before they ever make it into Cholla and have been successful in doing so.
+
+\subsection{Testing Framework}
+
+GoogleTest\footnote{https://github.com/google/googletest} was chosen for as the testing framework. While there are many C++ testing frameworks available, GoogleTest is one of the most fully featured, popular, and easy to use options. The primary reason however is that it supports death tests, tests that check if the internals of the test crash/segfault/etc. Since Cholla, like many HPC codes, handles errors by reporting those errors then exiting a testing framework that can have the components it is testing crash without crashing the tests as well is critical.
+
+GoogleTest was reasonably easy to integrate into the build system for Cholla and is available already built as a module on many HPC systems. Building it from scratch is also fairly easy and is an optional part of the test running script.
+
+% This needs work
+Generally we have found GoogleTest to be easy to use, very flexible, and extensible. The only major issues we have had is that any functions that contain GoogleTest assertions must be void functions with no returns and since GoogleTest is a macro library it can lead to false positives when the codebase is being examined by a static analyzer such as clang-tidy.
+
+\subsection{Extensions for Cholla}
+
+Two primary extensions were required for fully testing Cholla: a robust method for comparing floating point numbers and a way to run system tests, tests of the entire code running some kind of test problem.
+
+\subsubsection{Floating Point Comparisons}
+
+Comparing floating point numbers is notoriously challenging\footnote{https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/} and generally the exact comparison method that should be used varies by application. We chose a hybrid method of both an absolute comparison and a Units in Last Place (ULP) comparison. By default the hybrid method first checks if the two test numbers are within $10^{-14}$ of each other. This number was chosen as we found that typical errors in the Sod Shock Tube when comparing results with different hardware and compilers resulted in errors of $\sim5\times10^{-15}$. After the absolute check a ULP check is performed with a maximum allowed error of 4. If either check passes then the numbers are deemed to be "equal".
+
+\subsubsection{System Tests}
+
+GoogleTest provides all the tools required to run unit and integration tests but validating the results of an entire system test is much more complex. We wrote a class that can perform all of the required tasks from launching Cholla with any number of MPI ranks all the way through comparing against fiducial data. This class also had to work well when running Cholla with a single MPI rank all the way up to tens of thousands of ranks. To facilitate this the system tests can be run in a few modes: launch Cholla and save the results, compare already existing test data to fiducial data, or both. This enables the use to run Cholla on many thousands of ranks then, in a separate job, the actual comparison can be made. Even with 10,000 ranks with small grids per rank the later comparison only takes a few minutes. Most of the time however both steps can be run within the same job since large tests with many ranks are not typically required.
+
+\subsection{Automated Testing}
+
+All of this work on testing and writing tests is only useful if the tests are actually run and all new code is required to pass the tests. To this end we needed the tests to be easy to run and are run automatically on each pull request. To this end we wrote a script that sets up the tests, installs GoogleTest (if requested), builds Cholla, and runs all the tests; when manually running the tests there is a function that combines all of these into a single function call for ease of use. 
+
+Automated testing was more complex. Since Cholla requires CUDA or HIP capable GPUs to run we required a continuous integration (CI) service that had GPUs available for a reasonable cost. That left us with three options: GitHub Actions are free and have easy integration with the Cholla GitHub repository but have no GPUs, GitLab CI has GPUs but can be challenging to integrate with GitHub, and hosting our own CI system. We ended up running the builds and static analyzers only, without running the tests, on GitHub Actions while a self hosted Jenkins instance was setup by the University of Pittsburgh Center for Research Computing (CRC) to run on their cluster. In the final configuration several jobs are launched on every pull request: A GitHub Actions jobs to check the formatting, a GitHub actions matrix job to build all the HIP/AMD builds, and a Jenkins matrix job running on CRC hardware that runs the CUDA builds, tests, and static analyzers. The end result is that every common configuration of Cholla is built with both CUDA and HIP on every pull request and the CUDA builds are also tested to ensure that no existing or new tests fail. 
+
+
+

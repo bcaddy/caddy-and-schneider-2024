@@ -1,0 +1,143 @@
+% This is the standard preamble I use for documents. It is intended for Physics, 
+% Math, and CS work. 
+% This preamble can be included with \usepackage{BobsPreamble} and packages for 
+% a specific document should be included BEFORE this package as hyperref should
+% always be included last
+
+\ProvidesPackage{BobsPreamble}
+
+% ==============================================================================
+% Packages
+% ==============================================================================
+
+% Math
+% ====
+\usepackage{amsmath} % All the basic math stuff
+% Align environment: align multiple equations based on &, updates equation counter
+% Split environment: a single multi-line equation
+\usepackage{amssymb} % Mathematical symbols
+\usepackage{tensor} % For phantom indices
+
+% Graphics and Figures
+% ====================
+\usepackage{graphicx} % For including figures
+\usepackage{caption} % better captioning
+\usepackage{subcaption} % better captioning 
+\usepackage{wrapfig} % Wrap text around figures
+% \usepackage{deluxetable} % For complex tables
+% \usepackage{longtable} % For complex tables
+
+% Physics and Units
+% =================
+\usepackage{physics} % All the specific math stuff that physicists need
+% Vector notation: \vb{}=bold, \va{}=bold with arrow, \vu{}=bold with unit vector hat. \vX*{} give italics
+% Special commands for trig, exponential, logs, etc
+% Matrix macros: \mqty()
+\usepackage{physunits} % For units. Conflicts with the SI units package
+% Syntax is: \BaseUnit[Prefix]. e.g. \m[k] gives km and \y[G] gives Gy
+
+% Show Your Work
+% ==============
+% An incredibly powerful tool for syncing papers and the scripts used for figures and analysis. Use it for my next paper
+% https://show-your.work/en/latest/overleaf/
+% \usepackage{showyourwork}
+
+% LaTeX Modifiers 
+% ===============
+\usepackage{xparse} % Allows you to create new commands using \newcommands{}{}
+\usepackage{chngcntr} % For resetting counters for equations/figures/
+\usepackage{xcolor} % General color tools. See https://www.overleaf.com/learn/latex/Using_colours_in_LaTeX
+% \usepackage[margin=2.54cm]{geometry} % set margins
+\usepackage[compact, explicit]{titlesec} 
+\titleformat{\paragraph}[leftmargin]{\bfseries}{}{}{\llap{\parbox[t]{\marginparwidth}{\raggedleft#1}}}[\hskip-\parindent] % \paragraph{} now puts contents in margins
+
+% Coding
+% ======
+\usepackage{pythonhighlight} % a simple way to format and color python
+\usepackage{listings} % The more powerful way to do code formatting and syntax highlighting. See https://www.overleaf.com/learn/latex/Code_listing
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Bibliography
+% ============
+% Biblatex files can be imported with:
+% \addbibresource{sample.bib} 
+% Citations referenced with: 
+% - \cite{ref-name} for basic citations
+% - \citeyear[Author names][]{ref-name} for format like Doe & Jane 2022
+% The biblography is then printed and added to the ToC with:
+% \printbibliography[heading=bibintoc]
+% Show all references by adding \nocite{*} before print command or specific with \nocite{<key>}
+\usepackage[
+backend=biber,
+style=ieee, % authoryear = 'smith et al 2022', numeric = [1], ieee, 
+sorting=ynt
+]{biblatex} %Imports biblatex package
+
+% Hyperlinking
+% ============
+\usepackage{hyperref} % Enables hyperlinks
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+% \urlstyle{same} % Uncomment to use the same font for URLs as used in the text
+% See this page for usage https://www.overleaf.com/learn/latex/Hyperlinks
+% Should be loaded last
+
+% ==============================================================================
+% Notes
+% ==============================================================================
+% - \ gives a space when used on its own
+% - ~ for a space that won't break across lines
+% - Spacing in equations: 
+%   - \; = thick
+%   - \: = medium 
+%   - \, = thin
+%   - \ (space) = single space
+%   - \! = negative thin space
+% - \\ newline, alias for \newline
+% - \rm gives non-italic letters, can use \mathrm{} too
+% - Including:
+%   - \input{filename} - Should be used for figure, tables, subsections, etc. Copies and pastes the file, will not insert a new page, should not include any preamble code, can be nested
+%   - \include{filename} - Should be used for chapters/major sections. will insert a new page, cannot be nested. Preserves .aux files
+%     - \includeonly{} - can be used to speed up compilation by only including some files
+%   - \import{} - https://www.overleaf.com/learn/latex/Management_in_a_large_project#Introduction
+% - latexdiff can be used to create a pdf diff between two versions
+% - Automatically find citations https://github.com/yymao/adstex
+%
+%
+% Figures like
+% \begin{figure}[h]
+%     \includegraphics[width=\textwidth]{image-file}
+%     \caption{}
+%     \centering
+%     \label{fig:}
+% \end{figure}
