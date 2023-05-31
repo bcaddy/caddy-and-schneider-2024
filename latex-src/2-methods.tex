@@ -10,7 +10,7 @@ Overall the algorithm is very similar to the Van Leer algorithm, though with sig
 \subsection*{Glossary of Symbols}
 
 \begin{enumerate}
-    \item $ \vec{U} $, Vector of conserved variables. Note that the magnetic field is the face averaged value at the $ i-1/2 $ interface whereas all the other values are volume 
+    \item $ \vec{U} $, Vector of conserved variables. Note that the magnetic field is the face averaged value at the $ i-1/2 $ interface whereas all the other values are volume
     \item $ \vec{W} $, Vector of primitive variables.
     \item $ \vec{F} $, The flux vector
     \item $ x, y, \text{or} z $, Subscript to indicate which vector element is in use
@@ -126,9 +126,9 @@ $$
 
 The easiest way to see how to compute these derivatives is with the following diagrams based off of Figure 5 in \citeyear[Stone et al.][]{stone_athena_2008}. Each edge requires 4 derivatives and they are computed as differences between a reference state and an edge state.
 
-\includegraphics[scale=0.25]{Assets/2-methods/CT-edge-field-figures-X.pdf}
-\includegraphics[scale=0.25]{Assets/2-methods/CT-edge-field-figures-Y.pdf}
-\includegraphics[scale=0.25]{Assets/2-methods/CT-edge-field-figures-Z.pdf}
+\includegraphics[scale=0.15]{assets/2-methods/CT-edge-field-figures-X.pdf}
+\includegraphics[scale=0.15]{assets/2-methods/CT-edge-field-figures-Y.pdf}
+\includegraphics[scale=0.15]{assets/2-methods/CT-edge-field-figures-Z.pdf}
 
 \subsection{Step 4. Perform the Half Time-step Update}
 

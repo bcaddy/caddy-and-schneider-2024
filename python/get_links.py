@@ -18,7 +18,7 @@ def main():
     parser.add_argument('text', help='The key to the link to load')
     args = parser.parse_args()
 
-    link = f'\href{{{shared_tools.unpickle_dictionary()[args.key]}}}{{{args.text}}}'
+    link = f'\href{{{shared_tools.unpickle_dictionary()[args.key]}}}{{\img{{../assets/github.png}}}}'
 
     print(link)
 
