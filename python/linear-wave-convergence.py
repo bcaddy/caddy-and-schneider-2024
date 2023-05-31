@@ -181,7 +181,9 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
     data_markersize = 10
     scaling_linestyle = '--'
     alpha = 0.6
-    scaling_color = 'white'
+    scaling_color = 'black'
+    plmc_color = 'red'
+    ppmc_color = 'blue'
     annotate_font_size = 13
 
     # Plot the L2 Norm data
@@ -200,8 +202,8 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
             norm_name = ''
 
         # Plot raw data
-        plt.plot(resolutions, plmc_data, color='#8dd3c7', linestyle=data_linestyle, linewidth=linewidth, marker=data_marker, markersize=data_markersize, label='PLMC')
-        plt.plot(resolutions, ppmc_data, color='#feffb3', linestyle=data_linestyle, linewidth=linewidth, marker=data_marker, markersize=data_markersize, label='PPMC')
+        plt.plot(resolutions, plmc_data, color=plmc_color, linestyle=data_linestyle, linewidth=linewidth, marker=data_marker, markersize=data_markersize, label='PLMC')
+        plt.plot(resolutions, ppmc_data, color=ppmc_color, linestyle=data_linestyle, linewidth=linewidth, marker=data_marker, markersize=data_markersize, label='PPMC')
 
         # Plot the scaling lines
         scalingRes = [resolutions[0], resolutions[1], resolutions[-1]]
