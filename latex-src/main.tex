@@ -26,10 +26,11 @@ Pittsburgh, PA 15260, USA}
 % - make plots that write out their info to a saved pickle dictionary
 % - have a script to read in the proper link to the file
 \section{asdf}
-\input{|pwd}
-% \input{|ls -a}
-% \input{|ls -a ..}
-\input{|python print('hello')}
+\input{|python ../python/get_links.py --key 'test_link'}
+
+\href{\include{|python ../python/get_links.py --key 'test_link'}}{Something Linky} 
+
+\href{http://www.overleaf.com}{Something Linky} 
 
 \input{1-intro}
 \input{2-methods}
