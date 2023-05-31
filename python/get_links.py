@@ -14,16 +14,13 @@ import argparse
 def main():
     # Check for CLI arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('-k', '--key', help='The key to the link to load')
+    parser.add_argument('key', help='The key to the link to load')
+    parser.add_argument('text', help='The key to the link to load')
     args = parser.parse_args()
 
-    if args.key:
-        key = args.key
-    else:
-        print(f'ERROR: A KEY WAS NOT PROVIDED')
-        exit()
+    link = f'\href{{{shared_tools.unpickle_dictionary()[args.key]}}}{{{args.text}}}'
 
-    print(shared_tools.unpickle_dictionary()[key])
+    print(link)
 
 
 if __name__ == '__main__':
