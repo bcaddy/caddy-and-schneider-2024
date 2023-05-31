@@ -6,6 +6,16 @@
 
 \usepackage{BobsPreamble}
 
+\newcommand*{\img}[1]{%
+    \raisebox{-.3\baselineskip}{%
+        \includegraphics[
+        height=\baselineskip,
+        width=\baselineskip,
+        keepaspectratio,
+        ]{#1}%
+    }%
+}
+
 \begin{document}
 
 \title{MHD Methods Paper}
@@ -26,11 +36,10 @@ Pittsburgh, PA 15260, USA}
 % - make plots that write out their info to a saved pickle dictionary
 % - have a script to read in the proper link to the file
 \section{asdf}
-\input{|python ../python/get_links.py --key 'test_link'}
-
-\href{\include{|python ../python/get_links.py --key 'test_link'}}{Something Linky} 
-
-\href{http://www.overleaf.com}{Something Linky} 
+\input{|python ../python/get_links.py 'test_link' 'test text'}
+for Constrained Transport (CT). CT treats the magnetic field as surface, rather than volume, averaged quantities then updates using edge averaged EMF (Electromotive Force). By updating with EMF you automatically fulfill the divergence free condition for magnetic fields so no magnetic monopoles will appear, assuming that the initial conditions are divergence free.
+\href{http://www.overleaf.com}{\img{latex-src/orcid-ID.png}} 
+for Constrained Transport (CT). CT treats the magnetic field as surface, rather than volume, averaged quantities then updates using edge averaged EMF (Electromotive Force). By updating with EMF you automatically fulfill the divergence free condition for magnetic fields so no magnetic monopoles will appear, assuming that the initial conditions are divergence free.
 
 \input{1-intro}
 \input{2-methods}
