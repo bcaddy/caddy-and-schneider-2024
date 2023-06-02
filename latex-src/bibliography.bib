@@ -27,3 +27,97 @@
 should be + min not - min(note on p. 7)},
 	file = {Stone et al. - 2008 - ATHENA A NEW CODE FOR ASTROPHYSICAL MHD.pdf:/Users/Bob/Zotero/storage/GK9JCGUT/Stone et al. - 2008 - ATHENA A NEW CODE FOR ASTROPHYSICAL MHD.pdf:application/pdf},
 }
+
+@article{gardiner_2005,
+	title = {An unsplit {Godunov} method for ideal {MHD} via constrained transport},
+	volume = {205},
+	issn = {00219991},
+	doi = {10.1016/j.jcp.2004.11.016},
+	abstract = {We describe a single step, second-order accurate Godunov scheme for ideal MHD based on combining the piecewise parabolic method (PPM) for performing spatial reconstruction, the corner transport upwind (CTU) method of Colella for multidimensional integration, and the constrained transport (CT) algorithm for preserving the divergence-free constraint on the magnetic field. We adopt the most compact form of CT, which requires the field be represented by area-averages at cell faces. We demonstrate that the fluxes of the area-averaged field used by CT can be made consistent with the fluxes of the volume-averaged field returned by a Riemann solver if they obey certain simple relationships. We use these relationships to derive new algorithms for constructing the CT fluxes at grid cell corners which reduce exactly to the equivalent one-dimensional solver for plane-parallel, grid-aligned flow. We show that the PPM reconstruction algorithm must include multidimensional terms for MHD, and we describe a number of important extensions that must be made to CTU in order for it to be used for MHD with CT. We present the results of a variety of test problems to demonstrate the method is accurate and robust. © 2004 Elsevier Inc. All rights reserved.},
+	number = {2},
+	journal = {Journal of Computational Physics},
+	author = {Gardiner, Thomas A. and Stone, James M.},
+	month = may,
+	year = {2005},
+	note = {Publisher: Academic Press Inc.},
+	pages = {509--539},
+	file = {PDF:/Users/Bob/Zotero/storage/XRI5SRJA/Gardiner & Stone 2005.pdf:application/pdf},
+}
+
+@article{gardiner_unsplit_2008,
+	title = {An unsplit {Godunov} method for ideal {MHD} via constrained transport in three dimensions},
+	volume = {227},
+	issn = {10902716},
+	url = {https://ui.adsabs.harvard.edu/abs/2008JCoPh.227.4123G/abstract},
+	doi = {10.1016/j.jcp.2007.12.017},
+	abstract = {We present a single step, second-order accurate Godunov scheme for ideal MHD which is an extension of the method described in [T.A. Gardiner, J.M. Stone, An unsplit godunov method for ideal MHD via constrained transport, J. Comput. Phys. 205 (2005) 509] to three dimensions. This algorithm combines the corner transport upwind (CTU) method of Colella for multidimensional integration, and the constrained transport (CT) algorithm for preserving the divergence-free constraint on the magnetic field. We describe the calculation of the PPM interface states for 3D ideal MHD which must include multidimensional "MHD source terms" and naturally respect the balance implicit in these terms by the ∇ · B = 0 condition. We compare two different forms for the CTU integration algorithm which require either 6- or 12-solutions of the Riemann problem per cell per time-step, and present a detailed description of the 6-solve algorithm. Finally, we present solutions for test problems to demonstrate the accuracy and robustness of the algorithm. © 2007 Elsevier Inc. All rights reserved.},
+	number = {8},
+	journal = {Journal of Computational Physics},
+	author = {Gardiner, Thomas A. and Stone, James M.},
+	month = apr,
+	year = {2008},
+	note = {Publisher: Academic Press Inc.},
+	keywords = {Magnetohydrodynamics, Compressible flow, Numerical methods},
+	pages = {4123--4141},
+	file = {PDF:/Users/Bob/Zotero/storage/JYAR4JNB/Gardiner & Stone 2008.pdf:application/pdf},
+}
+
+@article{felker_2020,
+	title = {The {Athena}++ {Adaptive} {Mesh} {Refinement} {Framework}: {Design} and {Magnetohydrodynamic} {Solvers}},
+	volume = {249},
+	issn = {1538-4365},
+	shorttitle = {The {Athena}++ {Adaptive} {Mesh} {Refinement} {Framework}},
+	url = {https://iopscience.iop.org/article/10.3847/1538-4365/ab929b},
+	doi = {10.3847/1538-4365/ab929b},
+	abstract = {The design and implementation of a new framework for adaptive mesh reﬁnement calculations are described. It is intended primarily for applications in astrophysical ﬂuid dynamics, but its ﬂexible and modular design enables its use for a wide variety of physics. The framework works with both uniform and nonuniform grids in Cartesian and curvilinear coordinate systems. It adopts a dynamic execution model based on a simple design called a “task list” that improves parallel performance by overlapping communication and computation, simpliﬁes the inclusion of a diverse range of physics, and even enables multiphysics models involving different physics in different regions of the calculation. We describe physics modules implemented in this framework for both nonrelativistic and relativistic magnetohydrodynamics (MHD). These modules adopt mature and robust algorithms originally developed for the Athena MHD code and incorporate new extensions: support for curvilinear coordinates, higherorder time integrators, more realistic physics such as a general equation of state, and diffusion terms that can be integrated with super-time-stepping algorithms. The modules show excellent performance and scaling, with well over 80\% parallel efﬁciency on over half a million threads. The source code has been made publicly available.},
+	language = {en},
+	number = {1},
+	urldate = {2022-06-01},
+	journal = {The Astrophysical Journal Supplement Series},
+	author = {Stone, James M. and Tomida, Kengo and White, Christopher J. and Felker, Kyle G.},
+	month = jun,
+	year = {2020},
+	pages = {4},
+	file = {Stone et al. - 2020 - The Athena++ Adaptive Mesh Refinement Framework D.pdf:/Users/Bob/Zotero/storage/K7VX6423/Stone et al. - 2020 - The Athena++ Adaptive Mesh Refinement Framework D.pdf:application/pdf},
+}
+
+
+@article{hlld_2005,
+	title = {A multi-state {HLL} approximate {Riemann} solver for ideal magnetohydrodynamics},
+	volume = {208},
+	issn = {00219991},
+	doi = {10.1016/j.jcp.2005.02.017},
+	abstract = {A new multi-state Harten-Lax-van Leer (HLL) approximate Riemann solver for the ideal magnetohydrodynamic (MHD) equations is developed based on the assumption that the normal velocity is constant over the Riemann fan. This assumption is same as that used in the HLLC ("C" denotes Contact) approximate Riemann solver for the Euler equations. From the assumption, it is naturally derived that the Riemann fan should consist of four intermediate states for Bx ≠ 0, whereas the number of the intermediate states is reduced to two when Bx = 0. Since the intermediate states satisfied with all jump conditions in this approximate Riemann system are analytically obtained, the multi-state HLL Riemann solver can be constructed straightforwardly. It is shown that this solver can exactly resolve isolated discontinuities formed in the MHD system, and hence named as HLLD Riemann solver. (Here, "D" stands for Discontinuities.) It is also analytically proved that the HLLD Riemann solver is positively conservative like the HLLC Riemann solver. Indeed, the HLLD Riemann solver corresponds to the HLLC Riemann solver when the magnetic field vanishes. Numerical tests demonstrate that the HLLD Riemann solver is more robust and efficient than the linearized Riemann solver, and its resolution is equally good. It indicates that the HLLD solver must be useful in practical applications for the ideal MHD equations. © 2005 Elsevier Inc. All rights reserved.},
+	number = {1},
+	journal = {Journal of Computational Physics},
+	author = {Miyoshi, Takahiro and Kusano, Kanya},
+	month = sep,
+	year = {2005},
+	note = {Publisher: Academic Press Inc.},
+	keywords = {Magnetohydrodynamics, HLL, HLLC, Approximate Riemann solver, HLLD, Positivity},
+	pages = {315--344},
+	annote = {Annotations(2/7/2022, 11:17:53 AM)
+(Miyoshi and Kusano, 2005, p. 316) FVS = Flux Vector Splitting
+“The organization of the paper is as follows: After introduction, the MHD equations and their nature are presented in Section 2. We briefly review the single-state and two-state HLL approximate Riemann solvers in Sections 3 and 4. In Section 5.1, new multi-state approximate Riemann solver for MHD, called HLLD solver, is proposed. The important properties of the HLLD solver such as an exact resolution of discontinuities and a positivity preserving property are argued in Sections 5.2 and 5.3. In Section 6, several numerical tests are performed, and those results are discussed. Finally, concluding remarks are given in Section 7.” (Miyoshi and Kusano, 2005, p. 317)
+(Miyoshi and Kusano, 2005, p. 317) Table of Contents1. Intro (p315)2. MHD Equations (p317)3. HLL Solvers (p318)4. HLLC Solvers (p320)5. HLLD (p324)6. Numerical Tests (p332)7. Conclusions (p342)
+“Bx is given as a constant in one dimension.” (Miyoshi and Kusano, 2005, p. 317)
+(Miyoshi and Kusano, 2005, p. 324) HLLD Solver
+(Miyoshi and Kusano, 2005, p. 324) The HLLD Solver ignores slow shocks (the slow magnetoacoustic wave)
+“Slow shocks cannot be formed inside the Riemann fan.” (Miyoshi and Kusano, 2005, p. 324)
+(Miyoshi and Kusano, 2005, p. 324) Check if their S\_M is the same as mine (except with total pressure instead of just regular pressure)
+(Miyoshi and Kusano, 2005, p. 325) y and z velocity and magnetic field in star region
+(Miyoshi and Kusano, 2005, p. 326) Might need a check for divide by zero errors
+“Note that the numerical operations of 0/0 seem to appear in (44)–(47) if SM = ua, Sa ¼ ua cf a, Bya ¼ Bza ¼ 0, and B2 x P cpa. In these cases, (44)–(47) can be simply replaced by v a ¼ va; w a ¼ wa, and B ya ¼ B za ¼ 0 since there is no shock across Sa i.e., q a ¼ qa; u a ¼ ua; and p Ta ¼ p” (Miyoshi and Kusano, 2005, p. 326)
+(Miyoshi and Kusano, 2005, p. 327) Fluxes
+“Note also that the HLLC solver for the Euler equations [2,29] is included in the HLLD solver for the MHD equations as the limit of zero magnetic field” (Miyoshi and Kusano, 2005, p. 328)
+(Miyoshi and Kusano, 2005, p. 333) Excellent tests for my HLLD Solver including a Sod equivalent
+“Dai and Woodward” (Miyoshi and Kusano, 2005, p. 333)
+“nd many others, where the initial states are given by ðq; p; u; v; w; By; BzÞ¼ð1:08; 0:95; 1:2; 0:01; 0:5; 3:6= ffiffiffiffiffiffi 4p p ; 2= ffiffiffiffiffiffi 4p p Þ for x {\textless}0,ð1; 1; 0; 0; 0; 4= ffiffiffiffiffiffi 4p p ; 2= ffiffiffiffiffiffi 4p p Þ for x {\textgreater} 0, with Bx ¼ 4= ffiffiffiffiffiffi 4p p .” (Miyoshi and Kusano, 2005, p. 333)
+“We also test a standard shock tube problem first discussed by Brio and Wu [4] and tested by many others, where the initial states are (q, p, u, v, w, By, Bz) = (1, 1, 0, 0, 0, 1, 0) for x {\textless} 0, (0.125, 0.1, 0, 0, 0, 1, 0) for x {\textgreater} 0, with Bx = 0.75. Although c = 2 in the original test, our test follows the corresponding test by Ryu and Jones [27] with c = 5/3” (Miyoshi and Kusano, 2005, p. 333)
+(Miyoshi and Kusano, 2005, p. 333) My shock tube
+(Miyoshi and Kusano, 2005, p. 338) Applicability to Multi-Dimensional problems
+“The HLLD Riemann solver was constructed under the assumption that the normal velocity is constant over the Riemann fan” (Miyoshi and Kusano, 2005, p. 342)
+“W. Dai, P.R. Woodward, An approximate Riemann solver for ideal magnetohydrodynamics, J. Comput. Phys. 111 (1994) 354.” (Miyoshi and Kusano, 2005, p. 343)
+},
+	file = {PDF:/Users/Bob/Zotero/storage/RBY456WH/Miyoshi & Kusano 2005.pdf:application/pdf},
+}

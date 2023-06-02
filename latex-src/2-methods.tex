@@ -1,34 +1,14 @@
 \section{Methods}
 \label{sec:methods}
 
-\subsection{VL+CT Integrator}
+\subsection*{Overview of the VL+CT Integrator}
 
-This is a step through of the VL+CT (Van Leer plus Constrained Transport) added too Cholla. The specific algorithm is from \citeyear[Stone \& Gardiner][]{stone_2009}.
+The MHD integrator in Cholla uses the VL+CT (Van Leer plus Constrained Transport) integrator introduced in \cite{stone_2009} and used in Athena and Athena++ since then. The specific algorithm is from \cite{stone_2009} with some clarifying details from \cite{gardiner_2005,gardiner_unsplit_2008,stone_athena_2008} and the piecewise parabolic method from \cite{felker_2020}. We also use the HLLD Riemann solver from \cite{hlld_2005}.
 
-Overall the algorithm is very similar to the Van Leer algorithm, though with significant new additions for Constrained Transport (CT). CT treats the magnetic field as surface, rather than volume, averaged quantities then updates using edge averaged EMF (Electromotive Force). By updating with EMF you automatically fulfill the divergence free condition for magnetic fields so no magnetic monopoles will appear, assuming that the initial conditions are divergence free.
-
-\subsection*{Glossary of Symbols}
-
-\begin{enumerate}
-    \item $ \vec{U} $, Vector of conserved variables. Note that the magnetic field is the face averaged value at the $ i-1/2 $ interface whereas all the other values are volume
-    \item $ \vec{W} $, Vector of primitive variables.
-    \item $ \vec{F} $, The flux vector
-    \item $ x, y, \text{or} z $, Subscript to indicate which vector element is in use
-    \item $ i, j, k $, Subscript indices to indicate which cell the value is in
-    \item $ n $, Superscript index to indicate the time step
-    \item $ \delta t $, the time step
-    \item $ \delta x, \delta y, \delta z $, the size of each cell in the $x$, $y$, or $z$ direction
-    \item $\rho  $, Density
-    \item $p  $, Pressure
-    \item $E $, Energy
-    \item $v  $, Velocity
-    \item $B $, Magnetic Flux Density, also called just the Magnetic Field
-    \item $p_T $, Total pressure
-    \item $ \mathcal{E} $, the EMF (Electromotive Force), in this application it can be used interchangeably with the electric fields. See the section on the CT fields for details
-    \item $ C_{CFL} $, the CFL number, must be less than $1/2$
-\end{enumerate}
+Overall, the integrator is very similar to the Van Leer integrator, though with significant new additions for Constrained Transport (CT). Constrained transport treats the magnetic field as surface averaged quantity centered at cell interfaces rather than a volume averaged, cell centered quantity like the hydro variables. The magnetic field is then updated with edge averaged EMFs (Electromotive Force) computed from the magnetic flux returned by the Riemann solver. By updating with EMF you automatically fulfill the divergence free condition for magnetic fields so no magnetic monopoles will appear, assuming that the initial conditions are divergence free.
 
 \subsection{Step 1: Compute the Time Step}
+\label{vlct:dt}
 
 The first thing we need to do is compute the time step which is done with this equation
 
@@ -40,7 +20,9 @@ $$
     \right).
 $$
 
-Where $ C^n_f $ is the fast magnetosonic wave-speed computed using \emph{cell centered} values. Computing the cell centered magnetic field is done with a direct average of the face centered values. This cell centered magnetic field will be needed in the next two steps so make sure to keep it.
+Where $\delta t$ is the time step, $C_{CFL} \leq 0.5$ is the CFL number, $\mid v^n_{l,i,j,k}\mid $ is the magnitude of the velocity in the $l$ direction velocity in the ${i,j,k}$ cell, and $C^n_f $ is the fast magnetosonic wave-speed computed using \emph{cell centered} values. This computed the minimum crossing time of a wave in a specific cell and then a global reduction is performed to find the minimum in the entire grid; that minimum is used as the time step $\delta t$.
+
+Computing the cell centered magnetic field is done with a direct average of the face centered values. These cell centered values for the magnetic field will the used several times throughout the integrator.
 
 $$
     \begin{aligned}
@@ -51,15 +33,15 @@ $$
 $$
 
 \subsection{Step 2: First Riemann Solve}
+\label{vlct:first-riemann-solve}
 
-The next step is the solve the Riemann problem with the first order variables. This is identical to the standard Van Leer integrator for the hydrodynamic variables; the magnetic field is a bit more complicated since the magnetic field is stored as surface averages. The longitudinal field (i.e. the field that is stored at the interface itself) does not require reconstruction and can be used directly. The transverse fields (i.e. the fields parallel to the interface) are reconstructed using a straight average, which has already been done in step 1.
+The next step is the solve the Riemann problem with the first order interface states. This is identical to the standard Van Leer integrator for the hydrodynamic variables; the magnetic field is more complex since the magnetic field is stored as surface averages. The longitudinal field (i.e. the field that is stored at the interface itself) does not require reconstruction and can be used directly. The transverse fields (i.e. the fields parallel to the interface) are reconstructed using an average as shown in section \ref{vlct:dt}.
 
-The magnetic fluxes that are returned by the Riemann solver are the face centered EMFs (section 5.3 of \citeyear[Stone et. al][]{stone_athena_2008}) however it's not trivial to convert them. According to the Athena source code this is the correct way to convert them into EMFs.
-
-\emph{Note that the directions used here are relative to the internal workings of the HLLD solver. Since the HLLD solver is inherently 1D we run it three times, once for each direction. So in the case where the solver is running in the Y direction the solver's Y field is actually the Z field and the solvers Z field is actually the X field, cyclically extended for the Z direction}
+The magnetic fluxes that are returned by the Riemann solver are the face centered EMFs (section 5.3 of \cite{stone_athena_2008}), however it's not immediately clear which face centered EMFs they are. Table \ref{table:emf} details which flux is which EMF.
 
 \begin{table}[!ht]
     \centering
+        \caption{Magnetic Flux to Face Centered EMF}
     \begin{tabular}{|l|l|l|l|}
     \hline
         HLLD solve Direction & Equation for Magnetic Flux & Eqn. as a Cross Product & EMF \\ \hline
@@ -70,9 +52,12 @@ The magnetic fluxes that are returned by the Riemann solver are the face centere
         $ Z $ & $ V_x B_y - B_x V_y $ & $  (V \times B)_z $ & $ -\varepsilon_y $ \\ \hline
         $ Z $ & $ V_x B_z - B_x V_z $ & $ -(V \times B)_y $ & $  \varepsilon_x $ \\ \hline
     \end{tabular}
+    \tablecomments{The directions used here are relative to the internal workings of the HLLD solver. Since the HLLD solver is inherently 1D we run it three times, once for each direction. So in the case where the solver is running in the Y direction the solver's Y field is actually the Z field and the solvers Z field is actually the X field, cyclically extended for the Z direction}
+    \label{table:emf}
 \end{table}
 
 \subsection{Step 3: Compute the Constrained Transport EMF}
+\label{vlct:emf}
 
 Now we need to calculate the CT EMF. These fields are \emph{line averaged} along each cell edge. These line averaged fields are constructed by a complicated average of the face centered EMF and their slopes which are given by the flux of the magnetic field from the Riemann solve in the previous step; i.e. the magnetic flux at a given interface is the EMF at that interface.
 
@@ -131,6 +116,7 @@ The easiest way to see how to compute these derivatives is with the following di
 \includegraphics[scale=0.15]{assets/2-methods/CT-edge-field-figures-Z.pdf}
 
 \subsection{Step 4. Perform the Half Time-step Update}
+\label{vlct:half-dt-update}
 
 Update all the hydro variables using this equation
 
@@ -170,6 +156,7 @@ $$
 $$
 
 \subsection{Step 5. Compute Cell Centered Magnetic Fields}
+\label{vlct:2nd-cell-centered-magnetic-fields}
 
 Average the values on the faces to compute the cell centered magnetic fields.
 We'll need this for the second order reconstruction.
@@ -183,6 +170,7 @@ $$
 $$
 
 \subsection{Step 6. Half Time-step Second Order Reconstruction}
+\label{vlct:higher-order-reconstruction}
 
 \textcolor{red}{This section needs updated for the characteristic step and to add PPMC}
 
@@ -206,14 +194,17 @@ Now we need to perform the high order reconstruction. I will show the algorithm 
     slope.
 
 \subsection{Step 7. Second Riemann Solve}
+\label{vlct:2nd-riemann-solve}
 
 Solve the Riemann problem again with the half time step MHD interface states from step 6.
 
 \subsection{Step 8. Compute the Constrained Transport Electric Fields}
+\label{vlct:2nd-emf}
 
 Repeat step 3 but using the fluxes from the second Riemann solve and the half time step MHD variables.
 
 \subsection{Step 9. Perform the Full Time-step Update}
+\label{vlct:full-dt-update}
 
 Update all the hydro variables using the below equations. Note that this is almost identical to step 3 except we're updating the $ t = n $ state with the $ t=n+1/2 $ fluxes/CT fields instead of the $ t=n $ fluxes/CT fields.
 
@@ -253,5 +244,6 @@ $$
 $$
 
 \subsection{Step 10. Increment the Time by \texorpdfstring{$\delta t$}{dt}}
+\label{vlct:increment-time}
 
 And that's it! Just loop this until you've reached or exceed max time and you're done!
