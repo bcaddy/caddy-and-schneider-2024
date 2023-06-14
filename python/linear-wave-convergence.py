@@ -111,7 +111,7 @@ def runCholla(rootPath):
             for resolution in resolutions:
                 # Generate Cholla run command
                 chollaPath = exe_path / f'cholla.mhd.c3po.{reconstructor}'
-                paramFilePath = data_from_path / f'{wave}.txt'
+                paramFilePath = data_from_path / 'cholla-config-files' / f'{wave}.txt'
                 logFile = rootPath / 'cholla.log'
                 command = f'{chollaPath} {paramFilePath} nx={resolution} {offAxisResolution} >> {logFile} 2>&1'
 
