@@ -25,6 +25,8 @@ import sys
 import argparse
 import pathlib
 
+import shared_tools
+
 plt.close('all')
 
 # 1. (optionally) Run Cholla
@@ -68,7 +70,8 @@ def main():
     if args.figure == 'True':
         L2Norms = computeL2Norm(rootPath)
         plotL2Norm(L2Norms, OutPath)
-        # plotL2Norm(L2Norms, OutPath, True) # This line plots the normalized versions
+        shared_tools.update_plot_entry('linear_wave_convergence', 'python/linear-wave-convergence.py')
+
 # ==============================================================================
 
 # ==============================================================================
@@ -166,6 +169,7 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
     subtitle_font_size = 10
     axslabel_font_size = 10
     legend_font_size   = 7.5
+    tick_font_size     = 7.5
 
     # Plot the L2 Norm data
     fig, subPlot = plt.subplots(2, 2, sharex=True, sharey=True)
@@ -217,7 +221,7 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
         subPlot[subplot_idx].set_xlim(1E1, 1E3)
 
         # Set ticks and grid
-        subPlot[subplot_idx].tick_params(axis='both', direction='in', which='both', labelsize=annotate_font_size, bottom=True, top=True, left=True, right=True)
+        subPlot[subplot_idx].tick_params(axis='both', direction='in', which='both', labelsize=tick_font_size, bottom=True, top=True, left=True, right=True)
 
         # Set axis titles
         if (subplot_idx[0] == 1):
