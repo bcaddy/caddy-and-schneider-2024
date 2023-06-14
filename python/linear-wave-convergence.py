@@ -154,14 +154,18 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
     # Plotting info
     data_linestyle     = '-'
     linewidth          = 1
-    data_marker        = '.'
+    plmc_marker        = '.'
+    ppmc_marker        = '^'
     data_markersize    = 10
     scaling_linestyle  = '--'
     alpha              = 0.6
     scaling_color      = 'black'
     plmc_color         = 'red'
     ppmc_color         = 'blue'
-    annotate_font_size = 13
+    suptitle_font_size = 15
+    subtitle_font_size = 10
+    axslabel_font_size = 10
+    legend_font_size   = 7.5
 
     # Plot the L2 Norm data
     fig, subPlot = plt.subplots(2, 2, sharex=True, sharey=True)
@@ -181,18 +185,31 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
             norm_name = ''
 
         # Plot raw data
-        subPlot[subplot_idx].plot(resolutions, plmc_data, color=plmc_color, linestyle=data_linestyle, linewidth=linewidth, marker=data_marker, markersize=data_markersize, label='PLMC')
-        subPlot[subplot_idx].plot(resolutions, ppmc_data, color=ppmc_color, linestyle=data_linestyle, linewidth=linewidth, marker=data_marker, markersize=data_markersize, label='PPMC')
+        subPlot[subplot_idx].plot(resolutions,
+                                  plmc_data,
+                                  color      = plmc_color,
+                                  linestyle  = data_linestyle,
+                                  linewidth  = linewidth,
+                                  marker     = plmc_marker,
+                                  markersize = data_markersize,
+                                  label      = 'PLMC')
+        subPlot[subplot_idx].plot(resolutions,
+                                  ppmc_data,
+                                  color      = ppmc_color,
+                                  linestyle  = data_linestyle,
+                                  linewidth  = linewidth,
+                                  marker     = ppmc_marker,
+                                  markersize = 0.5*data_markersize,
+                                  label      = 'PPMC')
 
         # Plot the scaling lines
         scalingRes = [resolutions[0], resolutions[1], resolutions[-1]]
         # loop through the different scaling powers
         for i in [2]:
+            label = r'$\mathcal{O}(\Delta x^' + str(i) + r')$'
             norm_point = plmc_data[1]
             scaling_data = np.array([norm_point / np.power(scalingRes[0]/scalingRes[1], i), norm_point, norm_point / np.power(scalingRes[-1]/scalingRes[1], i)])
-            plt.plot(scalingRes, scaling_data, color=scaling_color, alpha=alpha, linestyle=scaling_linestyle, linewidth=linewidth)
-            label = r'$\mathcal{O}(\Delta x^' + str(i) + r')$'
-            plt.annotate(label, xy=(scalingRes[-1], scaling_data[-1]), fontsize=annotate_font_size, textcoords='offset points', xytext=(2, -8))
+            subPlot[subplot_idx].plot(scalingRes, scaling_data, color=scaling_color, alpha=alpha, linestyle=scaling_linestyle, linewidth=linewidth, label=label)
 
         # Set axis parameters
         subPlot[subplot_idx].set_xscale('log')
@@ -203,17 +220,19 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
         subPlot[subplot_idx].tick_params(axis='both', direction='in', which='both', labelsize=annotate_font_size, bottom=True, top=True, left=True, right=True)
 
         # Set axis titles
-        subPlot[subplot_idx].set_xlabel('Resolution')
-        subPlot[subplot_idx].set_ylabel(f'{norm_name}L2 Error')
-        subPlot[subplot_idx].title.set_text(f'{pretty_names[wave]}')
+        if (subplot_idx[0] == 1):
+            subPlot[subplot_idx].set_xlabel('Resolution', fontsize=axslabel_font_size)
+        if (subplot_idx[1] == 0):
+            subPlot[subplot_idx].set_ylabel(f'{norm_name}L2 Error', fontsize=axslabel_font_size)
+        subPlot[subplot_idx].set_title(f'{pretty_names[wave]}', fontsize=subtitle_font_size)
 
-        subPlot[subplot_idx].legend()
+        subPlot[subplot_idx].legend(fontsize=legend_font_size)
 
     # Legend
     # fig.legend()
 
     # Whole plot settings
-    fig.suptitle(f'{norm_name}MHD Linear Wave Convergence')
+    fig.suptitle(f'{norm_name}MHD Linear Wave Convergence', fontsize=suptitle_font_size)
 
     plt.tight_layout()
     plt.savefig(outPath / f'linear_convergence.pdf', transparent = True)
