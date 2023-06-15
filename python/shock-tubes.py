@@ -38,6 +38,26 @@ plt.close('all')
 
 # Global Variables
 shock_tubes = ['b&w', 'd&w', 'rj1a', 'rj4d', 'einfeldt']
+reconstructor = 'ppmc'
+
+# Setup shock tube parameters
+shock_tube_params = {}
+coef = 1.0 / np.sqrt(4 * np.pi)
+shock_tube_params['b&w']      = f'gamma=2.0 tout=0.1 outstep=0.1 diaph=0.5 '\
+                                f'rho_l=1.0 vx_l=0 vy_l=0 vz_l=0 P_l=1.0 Bx_l=0.75 By_l=1.0 Bz_l=0.0 '\
+                                f'rho_r=0.128 vx_r=0 vy_r=0 vz_r=0 P_r=0.1 Bx_r=0.75 By_r=-1.0 Bz_r=0.0'
+shock_tube_params['d&w']      = f'gamma={5./3.} tout=0.2 outstep=0.2 diaph=0.5 '\
+                                f'rho_l=1.08 vx_l=1.2 vy_l=0.01 vz_l=0.5 P_l=0.95 Bx_l={2.*coef} By_l={3.6*coef} Bz_l={2.*coef} '\
+                                f'rho_r=1.0 vx_r=0 vy_r=0 vz_r=0 P_r=1.0 Bx_r={2.*coef} By_r={4.*coef} Bz_r={2.*coef}'
+shock_tube_params['einfeldt'] = f'gamma=1.4 tout=0.16 outstep=0.16 diaph=0.5 '\
+                                f'rho_l=1.0 vx_l=-2.0 vy_l=0 vz_l=0 P_l=0.45 Bx_l=0.0 By_l=0.5 Bz_l=0.0 '\
+                                f'rho_r=1.0 vx_r=2.0 vy_r=0 vz_r=0 P_r=0.45 Bx_r=0.0 By_r=0.5 Bz_r=0.0'
+shock_tube_params['rj1a']     = f'gamma={5./3.} tout=0.08 outstep=0.08 diaph=0.5 '\
+                                f'rho_l=1.0 vx_l=10.0 vy_l=0 vz_l=0 P_l=20.0 Bx_l={5.0*coef} By_l={5.0*coef} Bz_l=0.0 '\
+                                f'rho_r=1.0 vx_r=-10.0 vy_r=0 vz_r=0 P_r=1.0 Bx_r={5.0*coef} By_r={5.0*coef} Bz_r=0.0'
+shock_tube_params['rj4d']     = f'gamma={5./3.} tout=0.16 outstep=0.16 diaph=0.5 '\
+                                f'rho_l=1.0 vx_l=0 vy_l=0 vz_l=0 P_l=1.0 Bx_l=0.7 By_l=0.0 Bz_l=0.0 '\
+                                f'rho_r=0.3 vx_r=0 vy_r=0 vz_r=1.0 P_r=0.2 Bx_r=0.7 By_r=1.0 Bz_r=0.0'
 
 # ==============================================================================
 def main():
@@ -47,7 +67,7 @@ def main():
     parser.add_argument('-o', '--out_path', help='The path of the directory to write the plots out to. Defaults to writing in the same directory as the input files')
     parser.add_argument('-r', '--run_cholla', default=False, help='Runs cholla to generate all the scaling data')
     parser.add_argument('-f', '--figure', default=False, help='Plot the L2 Norms')
-    parser.add_argument('-t', '--tube', default='all', nargs='+', help="List of tubes to run and/or plot. Options are 'b&w', 'd&w', 'rj1a', 'rj4d', 'einfeldt', and 'all'")
+    parser.add_argument('-t', '--tube', default=['all'], nargs='+', help="List of tubes to run and/or plot. Options are 'b&w', 'd&w', 'rj1a', 'rj4d', 'einfeldt', and 'all'")
 
     args = parser.parse_args()
 
@@ -69,8 +89,7 @@ def main():
         shock_tubes = args.tube
 
     if args.run_cholla == 'True':
-        print('running cholla')
-        # runCholla(rootPath)
+        runCholla(rootPath)
 
     if args.figure == 'True':
         print('making plots')
@@ -81,37 +100,42 @@ def main():
 # ==============================================================================
 
 # ==============================================================================
-# def runCholla(rootPath):
-#     # Basic Settings
-#     offAxisResolution = 'ny=16 nz=16'
-#     exe_path = rootPath / 'cholla' / 'bin'
-#     data_from_path = rootPath / 'python'
-#     data_to_path = rootPath / 'data'
+def runCholla(rootPath):
+    # Paths
+    exe_path = rootPath / 'cholla' / 'bin'
+    data_from_path = rootPath / 'python'
+    data_to_path = rootPath / 'data'
+    # Check that the output directory exists
+    data_to_path.mkdir(parents=True, exist_ok=True)
 
-#     # Check that the output directory exists
-#     data_to_path.mkdir(parents=True, exist_ok=True)
+    # Cholla settings
+    common_settings = 'nx=512 ny=16 nz=16 init=Riemann ' \
+                      'xmin=0.0 ymin=0.0 zmin=0.0 xlen=1.0 ylen=1.0 zlen=1.0 '\
+                      'xl_bcnd=3 xu_bcnd=3 yl_bcnd=3 yu_bcnd=3 zl_bcnd=3 zu_bcnd=3 '\
+                      'outdir=./'
 
-#     # Loop over the lists and run cholla for each combination
-#     for reconstructor in reconstructors:
-#         for wave in waves:
-#             for resolution in resolutions:
-#                 # Generate Cholla run command
-#                 chollaPath = exe_path / f'cholla.mhd.c3po.{reconstructor}'
-#                 paramFilePath = data_from_path / 'cholla-config-files' / f'{wave}.txt'
-#                 logFile = rootPath / 'cholla.log'
-#                 command = f'{chollaPath} {paramFilePath} nx={resolution} {offAxisResolution} >> {logFile} 2>&1'
+    # Loop over the lists and run cholla for each combination
+    for shock_tube in shock_tubes:
+        # Generate Cholla run command
+        chollaPath = exe_path / f'cholla.mhd.c3po.{reconstructor}'
+        paramFilePath = data_from_path / 'cholla-config-files' / f'blank_settings_file.txt'
+        logFile = rootPath / 'cholla.log'
+        command = f'{chollaPath} {paramFilePath} {common_settings} {shock_tube_params[shock_tube]} >> {logFile} 2>&1'
 
-#                 # Run Cholla
-#                 os.system(command)
+        # Run Cholla
+        os.system(command)
 
-#                 # Move data files
-#                 initialFile = data_from_path / '0.h5.0'
-#                 finalFile = data_from_path / '1.h5.0'
-#                 initialFile.rename(data_to_path / f'{reconstructor}_{wave}_{resolution}_initial.h5')
-#                 finalFile.rename(data_to_path / f'{reconstructor}_{wave}_{resolution}_final.h5')
+        # Move data file
+        finalFile = data_from_path / '1.h5.0'
+        finalFile.rename(data_to_path / f'{shock_tube}.h5')
 
-#                 # Print status
-#                 print(f'Finished with {resolution}, {wave}, {reconstructor}')
+        # Remove unused files
+        (data_from_path / '0.h5.0').unlink()
+        (data_from_path / 'run_output.log').unlink()
+        (data_from_path / 'run_timing.log').unlink()
+
+        # Print status
+        print(f'Finished with {shock_tube}, {reconstructor}')
 # ==============================================================================
 
 # ==============================================================================
