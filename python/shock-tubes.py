@@ -39,6 +39,8 @@ plt.close('all')
 # Global Variables
 shock_tubes = ['b&w', 'd&w', 'rj1a', 'rj4d', 'einfeldt']
 reconstructor = 'ppmc'
+resolution = {'nx':512, 'ny':16, 'nz':16}
+physical_size = 1.0
 
 # Setup shock tube parameters
 shock_tube_params = {}
@@ -92,10 +94,9 @@ def main():
         runCholla(rootPath)
 
     if args.figure == 'True':
-        print('making plots')
-        # L2Norms = computeL2Norm(rootPath)
-        # plotL2Norm(L2Norms, OutPath)
-        # shared_tools.update_plot_entry('linear_wave_convergence', 'python/linear-wave-convergence.py')
+        plotShockTubes(rootPath, OutPath)
+        for tube in shock_tubes:
+            shared_tools.update_plot_entry(tube, 'python/shock-tubes.py')
 
 # ==============================================================================
 
@@ -109,10 +110,10 @@ def runCholla(rootPath):
     data_to_path.mkdir(parents=True, exist_ok=True)
 
     # Cholla settings
-    common_settings = 'nx=512 ny=16 nz=16 init=Riemann ' \
-                      'xmin=0.0 ymin=0.0 zmin=0.0 xlen=1.0 ylen=1.0 zlen=1.0 '\
-                      'xl_bcnd=3 xu_bcnd=3 yl_bcnd=3 yu_bcnd=3 zl_bcnd=3 zu_bcnd=3 '\
-                      'outdir=./'
+    common_settings = f"nx={resolution['nx']} ny={resolution['ny']} nz={resolution['nz']} init=Riemann " \
+                      f"xmin=0.0 ymin=0.0 zmin=0.0 xlen={physical_size} ylen={physical_size} zlen={physical_size} "\
+                       "xl_bcnd=3 xu_bcnd=3 yl_bcnd=3 yu_bcnd=3 zl_bcnd=3 zu_bcnd=3 "\
+                       "outdir=./"
 
     # Loop over the lists and run cholla for each combination
     for shock_tube in shock_tubes:
@@ -139,100 +140,132 @@ def runCholla(rootPath):
 # ==============================================================================
 
 # ==============================================================================
-# def plotL2Norm(L2Norms, outPath, normalize = False):
-#     # Pretty names
-#     pretty_names = {'alfven_wave':r'Alfven Wave',
-#                     'fast_magnetosonic':'Fast Magnetosonic Wave',
-#                     'mhd_contact_wave':'Entropy Wave',
-#                     'slow_magnetosonic':'Slow Magnetosonic Wave'}
+def loadDataField(rootPath, shock_tube):
+    # Open the file and prep for loading
+    file = h5py.File(rootPath / 'data' / (shock_tube + '.h5'), 'r')
+    y_slice_loc = resolution['ny']//2
+    z_slice_loc = resolution['nz']//2
 
-#     # Plotting info
-#     data_linestyle     = '-'
-#     linewidth          = 1
-#     plmc_marker        = '.'
-#     ppmc_marker        = '^'
-#     data_markersize    = 10
-#     scaling_linestyle  = '--'
-#     alpha              = 0.6
-#     scaling_color      = 'black'
-#     plmc_color         = 'red'
-#     ppmc_color         = 'blue'
-#     suptitle_font_size = 15
-#     subtitle_font_size = 10
-#     axslabel_font_size = 10
-#     legend_font_size   = 7.5
-#     tick_font_size     = 7.5
+    # Load all the raw data
+    gamma = file.attrs['gamma'][0]
+    density    = file['density'][:, y_slice_loc, z_slice_loc]
+    velocity_x = file['momentum_x'][:, y_slice_loc, z_slice_loc] / density
+    velocity_y = file['momentum_y'][:, y_slice_loc, z_slice_loc] / density
+    velocity_z = file['momentum_z'][:, y_slice_loc, z_slice_loc] / density
+    magnetic_x = file['magnetic_x'][:, y_slice_loc, z_slice_loc]
+    magnetic_y = 0.5 * (file['magnetic_y'][:, y_slice_loc, z_slice_loc] + file['magnetic_y'][:, y_slice_loc-1, z_slice_loc])
+    magnetic_z = 0.5 * (file['magnetic_z'][:, y_slice_loc, z_slice_loc] + file['magnetic_z'][:, y_slice_loc, z_slice_loc-1])
+    energy     = file['Energy'][:, y_slice_loc, z_slice_loc]
 
-#     # Plot the L2 Norm data
-#     fig, subPlot = plt.subplots(2, 2, sharex=True, sharey=True)
+    # Compute the Pressure
+    magnetic_x_centered = 0.5 * (magnetic_x[1:] + magnetic_x[:-1])
+    velocity_squared = velocity_x**2 + velocity_y**2 + velocity_z**2
+    magnetic_squared = magnetic_x_centered**2 + magnetic_y**2 + magnetic_z**2
+    pressure = (gamma - 1) * (energy - 0.5 * density * (velocity_squared) - 0.5 * (magnetic_squared))
 
-#     wave_position = {'alfven_wave':(1,0), 'fast_magnetosonic':(0,1), 'mhd_contact_wave':(1,1), 'slow_magnetosonic':(0,0)}
+    return {'density':density, 'pressure':pressure, 'energy':energy,
+            'velocity_x':velocity_x, 'velocity_y':velocity_y, 'velocity_z':velocity_z,
+            'magnetic_x':magnetic_x, 'magnetic_y':magnetic_y, 'magnetic_z':magnetic_z}
+# ==============================================================================
 
-#     for wave in waves:
-#         subplot_idx = wave_position[wave]
-#         # Optionally, normalize the data
-#         if normalize:
-#             plmc_data = L2Norms[f'plmc_{wave}'] / L2Norms[f'plmc_{wave}'][0]
-#             ppmc_data = L2Norms[f'ppmc_{wave}'] / L2Norms[f'ppmc_{wave}'][0]
-#             norm_name = "Normalized "
-#         else:
-#             plmc_data = L2Norms[f'plmc_{wave}']
-#             ppmc_data = L2Norms[f'ppmc_{wave}']
-#             norm_name = ''
+# ==============================================================================
+def plotShockTubes(rootPath, outPath):
+    # Pretty names
+    pretty_names = {'b&w':'Brio & Wu',
+                    'd&w':'Dai & Woodward',
+                    'einfeldt':'Einfeldt Strong Rarefaction',
+                    'rj1a':'Ryu & Jones 1a',
+                    'rj4d':'Ryu & Jones 4d',
+                    'density':'Density',
+                    'pressure':'Pressure',
+                    'energy':'Energy',
+                    'velocity_x':'X-Velocity',
+                    'velocity_y':'Y-Velocity',
+                    'velocity_z':'Z-Velocity',
+                    'magnetic_x':'X-Magnetic Field',
+                    'magnetic_y':'Y-Magnetic Field',
+                    'magnetic_z':'Z-Magnetic Field'}
 
-#         # Plot raw data
-#         subPlot[subplot_idx].plot(resolutions,
-#                                   plmc_data,
-#                                   color      = plmc_color,
-#                                   linestyle  = data_linestyle,
-#                                   linewidth  = linewidth,
-#                                   marker     = plmc_marker,
-#                                   markersize = data_markersize,
-#                                   label      = 'PLMC')
-#         subPlot[subplot_idx].plot(resolutions,
-#                                   ppmc_data,
-#                                   color      = ppmc_color,
-#                                   linestyle  = data_linestyle,
-#                                   linewidth  = linewidth,
-#                                   marker     = ppmc_marker,
-#                                   markersize = 0.5*data_markersize,
-#                                   label      = 'PPMC')
+    # Plotting info
+    data_linestyle     = '-'
+    linewidth          = 1
+    data_marker        = '.'
+    data_markersize    = 10
+    suptitle_font_size = 15
+    subtitle_font_size = 10
+    axslabel_font_size = 10
+    tick_font_size     = 7.5
 
-#         # Plot the scaling lines
-#         scalingRes = [resolutions[0], resolutions[1], resolutions[-1]]
-#         # loop through the different scaling powers
-#         for i in [2]:
-#             label = r'$\mathcal{O}(\Delta x^' + str(i) + r')$'
-#             norm_point = plmc_data[1]
-#             scaling_data = np.array([norm_point / np.power(scalingRes[0]/scalingRes[1], i), norm_point, norm_point / np.power(scalingRes[-1]/scalingRes[1], i)])
-#             subPlot[subplot_idx].plot(scalingRes, scaling_data, color=scaling_color, alpha=alpha, linestyle=scaling_linestyle, linewidth=linewidth, label=label)
+    # Field info
+    fields = ['density', 'pressure', 'Energy', 'velocity_x', 'velocity_y', 'velocity_z',  'magnetic_x', 'magnetic_y', 'magnetic_z']
+    field_indices = {'density':(0,0), 'pressure':(0,1), 'energy':(0,2),
+                     'vx':(1,0), 'vy':(1,1), 'vz':(1,2),
+                     'bx':(2,0), 'by':(2,1), 'bz':(2,2)}
 
-#         # Set axis parameters
-#         subPlot[subplot_idx].set_xscale('log')
-#         subPlot[subplot_idx].set_yscale('log')
-#         subPlot[subplot_idx].set_xlim(1E1, 1E3)
+    # Plot the shock tubes data
+    for shock_tube in shock_tubes:
+        # Setup figure
+        fig, subPlot = plt.subplots(2, 2, sharex=True, sharey=True)
 
-#         # Set ticks and grid
-#         subPlot[subplot_idx].tick_params(axis='both', direction='in', which='both', labelsize=tick_font_size, bottom=True, top=True, left=True, right=True)
+        # Load data
+        data = loadDataField(rootPath, shock_tube)
 
-#         # Set axis titles
-#         if (subplot_idx[0] == 1):
-#             subPlot[subplot_idx].set_xlabel('Resolution', fontsize=axslabel_font_size)
-#         if (subplot_idx[1] == 0):
-#             subPlot[subplot_idx].set_ylabel(f'{norm_name}L2 Error', fontsize=axslabel_font_size)
-#         subPlot[subplot_idx].set_title(f'{pretty_names[wave]}', fontsize=subtitle_font_size)
+        for field in fields:
+            pass
 
-#         subPlot[subplot_idx].legend(fontsize=legend_font_size)
+        # Plot raw data
+    #     subPlot[subplot_idx].plot(resolutions,
+    #                               plmc_data,
+    #                               color      = plmc_color,
+    #                               linestyle  = data_linestyle,
+    #                               linewidth  = linewidth,
+    #                               marker     = plmc_marker,
+    #                               markersize = data_markersize,
+    #                               label      = 'PLMC')
+    #     subPlot[subplot_idx].plot(resolutions,
+    #                               ppmc_data,
+    #                               color      = ppmc_color,
+    #                               linestyle  = data_linestyle,
+    #                               linewidth  = linewidth,
+    #                               marker     = ppmc_marker,
+    #                               markersize = 0.5*data_markersize,
+    #                               label      = 'PPMC')
 
-#     # Legend
-#     # fig.legend()
+    #     # Plot the scaling lines
+    #     scalingRes = [resolutions[0], resolutions[1], resolutions[-1]]
+    #     # loop through the different scaling powers
+    #     for i in [2]:
+    #         label = r'$\mathcal{O}(\Delta x^' + str(i) + r')$'
+    #         norm_point = plmc_data[1]
+    #         scaling_data = np.array([norm_point / np.power(scalingRes[0]/scalingRes[1], i), norm_point, norm_point / np.power(scalingRes[-1]/scalingRes[1], i)])
+    #         subPlot[subplot_idx].plot(scalingRes, scaling_data, color=scaling_color, alpha=alpha, linestyle=scaling_linestyle, linewidth=linewidth, label=label)
 
-#     # Whole plot settings
-#     fig.suptitle(f'{norm_name}MHD Linear Wave Convergence', fontsize=suptitle_font_size)
+    #     # Set axis parameters
+    #     subPlot[subplot_idx].set_xscale('log')
+    #     subPlot[subplot_idx].set_yscale('log')
+    #     subPlot[subplot_idx].set_xlim(1E1, 1E3)
 
-#     plt.tight_layout()
-#     plt.savefig(outPath / f'linear_convergence.pdf', transparent = True)
-#     plt.close()
+    #     # Set ticks and grid
+    #     subPlot[subplot_idx].tick_params(axis='both', direction='in', which='both', labelsize=tick_font_size, bottom=True, top=True, left=True, right=True)
+
+    #     # Set axis titles
+    #     if (subplot_idx[0] == 1):
+    #         subPlot[subplot_idx].set_xlabel('Resolution', fontsize=axslabel_font_size)
+    #     if (subplot_idx[1] == 0):
+    #         subPlot[subplot_idx].set_ylabel(f'{norm_name}L2 Error', fontsize=axslabel_font_size)
+    #     subPlot[subplot_idx].set_title(f'{pretty_names[wave]}', fontsize=subtitle_font_size)
+
+    #     subPlot[subplot_idx].legend(fontsize=legend_font_size)
+
+    # # Legend
+    # # fig.legend()
+
+    # # Whole plot settings
+    # fig.suptitle(f'{norm_name}MHD Linear Wave Convergence', fontsize=suptitle_font_size)
+
+    # plt.tight_layout()
+    # plt.savefig(outPath / f'linear_convergence.pdf', transparent = True)
+    # plt.close()
 # ==============================================================================
 
 
