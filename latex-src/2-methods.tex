@@ -3,7 +3,7 @@
 %  - [ ] How was this implemented on GPUs and what made it different
 %    - [ ] what does Cholla do when I press go?
 %      - [ ] allocations, data movement, etc
-%  - [ ] here's the details on all the math
+%  - [x] here's the details on all the math
 
 \section{Methods}
 \label{sec:methods}
@@ -28,6 +28,16 @@ The steps of the VL+CT integrator are as follows; more detailed discussion of ea
     \item Compute the edge centered electric fields
     \item Update the $t=n$ conserved variables to $t=n+\delta t$ using the half time step fluxes and electric fields
 \end{enumerate}
+
+\subsection{Implementation on GPUs}
+
+While the implementation of MHD on GPUs is similar to the implementation on CPUs there are some crucial differences, especially in data handling and movement. Compared to CPUs, GPUs have high memory bandwidth and extremely high FLOPS but limited memory capacity and limited functionality due to their fundamentally SIMD nature. As an example of this, where Athena++ computed their centered magnetic fields once and then saves them to memory Cholla recomputes them as needed. This saves a considerable amount of GPU memory and has minimal impact on performance due to the high memory bandwidth and FLOPS of GPUs.
+
+Another major change has been keeping as much data as possible on the GPU memory and not moving it to and from main system memory. Historically Cholla, and many other GPU codes, have kept the "primary" data on the CPU memory, copied whatever data needed worked on to the GPU, computed with it, then copied the data back. As GPUs have gotten dramatically faster and with much more memory over the last decade it had gotten to the point where these copies to and fro dominate the run time. In addition new supercomputers, such as Frontier, have the network connections directly connected to the GPUs instead of connected to the CPU and so any MPI communication has to go through GPU memory. Between these two things it's critical that all the data lives on the GPU and stays there during the entire simulation. Cholla has successfully moved all computations and MPI communication to the GPU. The only work that remains on the CPU is the setting of the initial conditions, which only occurs once, and reading and writing the HDF5 files since, at the time of writing, the HDF5 library does not support writing files directly from GPU memory.
+
+These, and other changes (TODO: EVAN, what else should we add?) has dramatically improved Cholla performance over the last few years; in total a NUMBERX speed up on the same hardware and a NUMBERX total speed up moving from running on Summit on 2019 to Frontier in 2023.
+
+INSERT 2019 vs. 2023 SCALING PLOT HERE.
 
 % ===========================================================================
 \subsection{VL+CT Integrator in Detail}
