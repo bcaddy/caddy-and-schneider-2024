@@ -21,3 +21,71 @@
     \item $ \mathcal{E} $, the EMF (Electromotive Force), in this application it can be used interchangeably with the electric fields. See the section on the CT fields for details
     \item $ C_{CFL} $, the CFL number, must be less than $1/2$
 \end{enumerate}
+
+
+\begin{equation}
+    \vec{U}_k = \begin{bmatrix}
+            \rho_k \\
+            \rho_k v_{x,k} \\
+            \rho_k v_{y,k} \\
+            \rho_k v_{z,k} \\
+            B_x \\
+            B_y \\
+            B_z \\
+            E
+         \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+    \vec{F}_k = \begin{bmatrix}
+            \rho_k v_{x,k} \\
+            \rho_k v_{x,k}^2 + p_{T,k} - B_{x,k}^2 \\
+            \rho v_{x,k} v_{y,k} - B_{x,k} B_{y,k} \\
+            \rho v_{x,k} v_{z,k} - B_{x,k} B_{z,k} \\
+            0 \\
+            B_{y,k} v_{x,k} - B_{x,k} v_{y,k} \\
+            B_{z,k} v_{x,k} - B_{x,k} v_{z,k} \\
+            v_{x,k} \left( E_k + p_{T,k} \right) - B_{x,k} \left( \vec{v_k} \cdot \vec{B_k} \right)
+         \end{bmatrix}
+\end{equation}
+
+Eigenvalues
+
+\begin{equation}
+    \lambda_{2,6} = v_x \mp c_a, \;
+    \lambda_{1,7} = v_x \mp c_f, \;
+    \lambda_{3,5} = v_x \mp c_s, \;
+    \lambda_{4} = v_x
+\end{equation}
+
+Alfv\'en Wave Speed
+
+\begin{equation}
+    c_a = \frac{\mid B_x \mid}{\sqrt{\rho}}
+\end{equation}
+
+Fast \& Slow Magnetosonic Wave speeds
+
+\begin{equation}
+    c_{f,s} = \sqrt{\frac
+    {\gamma p + \mid \vec{B} \mid^2 \pm \sqrt{\left( \gamma p \;+ \mid \vec{B} \mid^2 \right)^2 - 4\gamma p B_x^2 } }
+    {2\rho}}
+\end{equation}
+
+Pressure
+
+\begin{equation}
+    p = \left( \gamma - 1 \right)
+        \left( E - \frac{1}{2} \rho \mid \vec{v}\mid ^2 - \frac{1}{2} \mid \vec{B} \mid ^2 \right)
+\end{equation}
+
+\begin{equation}
+    p_T = p_{Total} = p + \frac{1}{2} \mid \vec{B} \mid ^2
+\end{equation}
+
+Energy
+
+\begin{equation}
+    E = \frac{p}{\gamma - 1} + \frac{1}{2}\left( \rho \mid \vec{v} \mid ^2 + \mid \vec{B} \mid ^2\right)
+      = \frac{p_T - \frac{1}{2}\mid \vec{B} \mid^2 }{\gamma - 1} + \frac{1}{2}\left( \rho \mid \vec{v} \mid ^2 + \mid \vec{B} \mid ^2\right)
+\end{equation}
