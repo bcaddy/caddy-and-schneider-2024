@@ -95,8 +95,8 @@ def main():
 
     if args.figure == 'True':
         plotShockTubes(rootPath, OutPath)
-        for tube in shock_tubes:
-            shared_tools.update_plot_entry(tube, 'python/shock-tubes.py')
+        # for tube in shock_tubes:
+        #     shared_tools.update_plot_entry(tube, 'python/shock-tubes.py')
 
 # ==============================================================================
 
@@ -179,93 +179,84 @@ def plotShockTubes(rootPath, outPath):
                     'density':'Density',
                     'pressure':'Pressure',
                     'energy':'Energy',
-                    'velocity_x':'X-Velocity',
-                    'velocity_y':'Y-Velocity',
-                    'velocity_z':'Z-Velocity',
-                    'magnetic_x':'X-Magnetic Field',
-                    'magnetic_y':'Y-Magnetic Field',
-                    'magnetic_z':'Z-Magnetic Field'}
+                    'velocity_x':'$V_x$',
+                    'velocity_y':'$V_y$',
+                    'velocity_z':'$V_z$',
+                    'magnetic_x':'$B_x$',
+                    'magnetic_y':'$B_y$',
+                    'magnetic_z':'$B_z$'}
 
     # Plotting info
-    data_linestyle     = '-'
-    linewidth          = 1
     data_marker        = '.'
-    data_markersize    = 10
+    data_markersize    = 5
+    data_linestyle     = '-'
+    linewidth          = 0.1 * data_markersize
     suptitle_font_size = 15
     subtitle_font_size = 10
     axslabel_font_size = 10
     tick_font_size     = 7.5
 
+    colors = {'density':'blue', 'pressure':'green', 'energy':'red',
+              'velocity_x':'purple', 'velocity_y':'purple', 'velocity_z':'purple',
+              'magnetic_x':'orange', 'magnetic_y':'orange', 'magnetic_z':'orange'}
+
     # Field info
-    fields = ['density', 'pressure', 'Energy', 'velocity_x', 'velocity_y', 'velocity_z',  'magnetic_x', 'magnetic_y', 'magnetic_z']
+    fields = ['density', 'pressure', 'energy', 'velocity_x', 'velocity_y', 'velocity_z',  'magnetic_x', 'magnetic_y', 'magnetic_z']
     field_indices = {'density':(0,0), 'pressure':(0,1), 'energy':(0,2),
-                     'vx':(1,0), 'vy':(1,1), 'vz':(1,2),
-                     'bx':(2,0), 'by':(2,1), 'bz':(2,2)}
+                     'velocity_x':(1,0), 'velocity_y':(1,1), 'velocity_z':(1,2),
+                     'magnetic_x':(2,0), 'magnetic_y':(2,1), 'magnetic_z':(2,2)}
 
     # Plot the shock tubes data
     for shock_tube in shock_tubes:
         # Setup figure
-        fig, subPlot = plt.subplots(2, 2, sharex=True, sharey=True)
+        figSizeScale = 2.                 # Scaling factor for the figure size
+        figHeight    = 4.8 * figSizeScale # height of the plot in inches, default is 4.8
+        figWidth     = 7.0 * figSizeScale # width of the plot in inches, default is 6.4
+        fig, subPlot = plt.subplots(3, 3, sharex=True, figsize = (figWidth, figHeight))
+
+        # Whole plot settings
+        fig.suptitle(f'{pretty_names[shock_tube]}', fontsize=suptitle_font_size)
+        fig.tight_layout(pad = 1.5, w_pad = 1.5)
 
         # Load data
         data = loadDataField(rootPath, shock_tube)
 
         for field in fields:
-            pass
+            # Get info for this field
+            subplot_idx = field_indices[field]
 
-        # Plot raw data
-    #     subPlot[subplot_idx].plot(resolutions,
-    #                               plmc_data,
-    #                               color      = plmc_color,
-    #                               linestyle  = data_linestyle,
-    #                               linewidth  = linewidth,
-    #                               marker     = plmc_marker,
-    #                               markersize = data_markersize,
-    #                               label      = 'PLMC')
-    #     subPlot[subplot_idx].plot(resolutions,
-    #                               ppmc_data,
-    #                               color      = ppmc_color,
-    #                               linestyle  = data_linestyle,
-    #                               linewidth  = linewidth,
-    #                               marker     = ppmc_marker,
-    #                               markersize = 0.5*data_markersize,
-    #                               label      = 'PPMC')
+            # Compute the positional data
+            positions = np.linspace(0, physical_size, data[field].size)
 
-    #     # Plot the scaling lines
-    #     scalingRes = [resolutions[0], resolutions[1], resolutions[-1]]
-    #     # loop through the different scaling powers
-    #     for i in [2]:
-    #         label = r'$\mathcal{O}(\Delta x^' + str(i) + r')$'
-    #         norm_point = plmc_data[1]
-    #         scaling_data = np.array([norm_point / np.power(scalingRes[0]/scalingRes[1], i), norm_point, norm_point / np.power(scalingRes[-1]/scalingRes[1], i)])
-    #         subPlot[subplot_idx].plot(scalingRes, scaling_data, color=scaling_color, alpha=alpha, linestyle=scaling_linestyle, linewidth=linewidth, label=label)
+            subPlot[subplot_idx].plot(positions,
+                                      data[field],
+                                      color      = colors[field],
+                                      linestyle  = data_linestyle,
+                                      linewidth  = linewidth,
+                                      marker     = data_marker,
+                                      markersize = data_markersize,
+                                      label      = 'PLMC')
 
-    #     # Set axis parameters
-    #     subPlot[subplot_idx].set_xscale('log')
-    #     subPlot[subplot_idx].set_yscale('log')
-    #     subPlot[subplot_idx].set_xlim(1E1, 1E3)
+            # Set ticks and grid
+            subPlot[subplot_idx].tick_params(axis='both',
+                                             direction='in',
+                                             which='both',
+                                             labelsize=tick_font_size,
+                                             bottom=True,
+                                             top=True,
+                                             left=True,
+                                             right=True)
 
-    #     # Set ticks and grid
-    #     subPlot[subplot_idx].tick_params(axis='both', direction='in', which='both', labelsize=tick_font_size, bottom=True, top=True, left=True, right=True)
+            # Set titles
+            subPlot[subplot_idx].set_ylabel(f'{pretty_names[field]}', fontsize=axslabel_font_size)
+            if (subplot_idx[0] == 2):
+                subPlot[subplot_idx].set_xlabel('Position', fontsize=axslabel_font_size)
 
-    #     # Set axis titles
-    #     if (subplot_idx[0] == 1):
-    #         subPlot[subplot_idx].set_xlabel('Resolution', fontsize=axslabel_font_size)
-    #     if (subplot_idx[1] == 0):
-    #         subPlot[subplot_idx].set_ylabel(f'{norm_name}L2 Error', fontsize=axslabel_font_size)
-    #     subPlot[subplot_idx].set_title(f'{pretty_names[wave]}', fontsize=subtitle_font_size)
+        # Save the figure and close it
+        plt.savefig(outPath / f'{shock_tube}.pdf', transparent = True)
+        plt.close()
 
-    #     subPlot[subplot_idx].legend(fontsize=legend_font_size)
-
-    # # Legend
-    # # fig.legend()
-
-    # # Whole plot settings
-    # fig.suptitle(f'{norm_name}MHD Linear Wave Convergence', fontsize=suptitle_font_size)
-
-    # plt.tight_layout()
-    # plt.savefig(outPath / f'linear_convergence.pdf', transparent = True)
-    # plt.close()
+        print(f'Finished with {pretty_names[shock_tube]} plot.')
 # ==============================================================================
 
 
