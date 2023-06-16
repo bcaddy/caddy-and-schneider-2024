@@ -149,7 +149,7 @@ def computeL2Norm(rootPath):
 # ==============================================================================
 def plotL2Norm(L2Norms, outPath, normalize = False):
     # Pretty names
-    pretty_names = {'alfven_wave':r'Alfven Wave',
+    pretty_names = {'alfven_wave':r'Alfvén Wave',
                     'fast_magnetosonic':'Fast Magnetosonic Wave',
                     'mhd_contact_wave':'Entropy Wave',
                     'slow_magnetosonic':'Slow Magnetosonic Wave'}
@@ -172,7 +172,7 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
     tick_font_size     = 7.5
 
     # Plot the L2 Norm data
-    fig, subPlot = plt.subplots(2, 2, sharex=True, sharey=True)
+    fig, subPlot = plt.subplots(2, 2)#, sharex=True, sharey=True)
 
     wave_position = {'alfven_wave':(1,0), 'fast_magnetosonic':(0,1), 'mhd_contact_wave':(1,1), 'slow_magnetosonic':(0,0)}
 
