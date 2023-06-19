@@ -95,8 +95,8 @@ def main():
 
     if args.figure == 'True':
         plotShockTubes(rootPath, OutPath)
-        # for tube in shock_tubes:
-        #     shared_tools.update_plot_entry(tube, 'python/shock-tubes.py')
+        for tube in shock_tubes:
+            shared_tools.update_plot_entry(tube, 'python/shock-tubes.py')
 
 # ==============================================================================
 
@@ -140,7 +140,7 @@ def runCholla(rootPath):
 # ==============================================================================
 
 # ==============================================================================
-def loadDataField(rootPath, shock_tube):
+def loadData(rootPath, shock_tube):
     # Open the file and prep for loading
     file = h5py.File(rootPath / 'data' / (shock_tube + '.h5'), 'r')
     y_slice_loc = resolution['ny']//2
@@ -219,17 +219,24 @@ def plotShockTubes(rootPath, outPath):
         fig.tight_layout(pad = 1.5, w_pad = 1.5)
 
         # Load data
-        data = loadDataField(rootPath, shock_tube)
+        data = loadData(rootPath, shock_tube)
 
         for field in fields:
             # Get info for this field
             subplot_idx = field_indices[field]
+            field_data  = data[field]
 
             # Compute the positional data
             positions = np.linspace(0, physical_size, data[field].size)
 
+            # Check the range. If it's just noise then set y-limits
+            if np.abs(field_data.max() - field_data.min()) < 1E-10:
+                mean = field_data.mean()
+                subPlot[subplot_idx].set_ylim(mean - 0.5, mean + 0.5)
+
+            # Plot the data
             subPlot[subplot_idx].plot(positions,
-                                      data[field],
+                                      field_data,
                                       color      = colors[field],
                                       linestyle  = data_linestyle,
                                       linewidth  = linewidth,
