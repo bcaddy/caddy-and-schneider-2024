@@ -35,13 +35,3 @@ def update_plot_entry(key, script_name):
     data[key] = link
 
     pickle_dictionary(data)
-
-def main():
-    dictionary = {'a':1, 'b':2, 'charlie':47, 'test_link':'https://docs.python.org/3/library/pathlib.html'}
-
-    pickle_dictionary(dictionary, pickle_filepath)
-    print(unpickle_dictionary(pickle_filepath))
-
-
-if __name__ == '__main__':
-    main()
