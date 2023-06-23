@@ -1,0 +1,39 @@
+\begin{figure}[ht!]
+    % \epsscale{0.5}
+    \plotone{assets/3-mhd-tests/b&w.pdf}
+    \caption{Brio \& Wu Shock Tube solution. This is essentially the Sod shock tube with a magnetic field. However, this shock tube is an excellent stress test for the PPM reconstruction as PPM methods tend to create large oscillations in the solution due to the slowly moving shocks. To minimize these oscillations we implemented a new PPM reconstruction algorithm based on \cite{felker_2020} which reduced the oscillations to a reasonable level. No oscillation is present when using PLM reconstruction.
+    \input{|python ../python/get_links.py 'b&w'}}
+    \label{fig:brio-and-wu}
+\end{figure}
+
+\begin{figure}[ht!]
+    % \epsscale{0.5}
+    \plotone{assets/3-mhd-tests/d&w.pdf}
+    \caption{Dai \& Woodward Shock Tube (also called Ryu \& Jones 2a) solution. This shock tube produces all seven possible MHD waves: from left to right a fast shock, Alfvén wave, slow shock, contact discontinuity, slow shock, Alfvén wave, and fast shock. This makes it an excellent laboratory for checking that the full spread of mave modes are well resolved
+    \input{|python ../python/get_links.py 'd&w'}}
+    \label{fig:dai-and-woodward}
+\end{figure}
+
+\begin{figure}[ht!]
+    % \epsscale{0.5}
+    \plotone{assets/3-mhd-tests/rj1a.pdf}
+    \caption{Ryu \& Jones 1a Shock Tube solution. This shock tube has a fairly simple wave structure without any spikes which makes it easy to use for debugging purposes and a good test for over/undershoot of the solution near discontinuities.
+    \input{|python ../python/get_links.py 'rj1a'}}
+    \label{fig:rj-1a}
+\end{figure}
+
+\begin{figure}[ht!]
+    % \epsscale{0.5}
+    \plotone{assets/3-mhd-tests/rj4d.pdf}
+    \caption{Ryu \& Jones 4d Shock Tube solution. This test features a switch-on slow shock. Switch-on waves increase the strength of the transverse magnetic field while reducing the thermal pressure to maintain energy conservation. This is a simplified example of a potential type of magnetic field amplification in galaxies and as such it is important that we replicate it accurately. A "switch-off" wave does the inverse.
+    \input{|python ../python/get_links.py 'rj4d'}}
+    \label{fig:rj-4d}
+\end{figure}
+
+\begin{figure}[ht!]
+    % \epsscale{0.5}
+    \plotone{assets/3-mhd-tests/einfeldt.pdf}
+    \caption{MHD Einfeldt Strong Rarefaction solution. This Riemann problem simulates a strong outflow and central vacuum state. These diverging fluids lead to an extremely strong and fast rarefaction where the energy is dominated by kinetic energy and as such can often reveal issues in code accuracy since it can lead to nonphysical states with negative density or negative internal energy. High values of the outflow velocity ($V_{out}\ge3$) can lead to spurious oscillations so $V_{out} = 2$ was chosen\citep{charm_2011}.
+    \input{|python ../python/get_links.py 'einfeldt'}}
+    \label{fig:einfeldt}
+\end{figure}

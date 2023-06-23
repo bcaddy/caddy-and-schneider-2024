@@ -2,68 +2,62 @@
 \label{sec:mhd-tests}
 
 \subsection{Linear Wave Convergence}
+\label{sec:lwc}
+
+The propagation of the four MHD linear waves provide an excellent quantitative measure of the accuracy of computation methods \citep{stone_2009}. The tests use a domain of $1.0\times1.0\times1.0$ and a resolution of $N\times16\times16$ where $N$ goes from 16 to 512 in powers of 2. The equation of the wave is
+
+\begin{equation}
+    q = \overline{q} + A R_w \sin{\frac{2\pi x}{\lambda}}
+\end{equation}
+
+where $q$ is the conserved variable, $\overline{q}$ is the mean background state, $A=10^{-6}$ is the amplitude of the wave, $R_w$ is the right eigenvector in conserved variables for the wave mode $w$, $x$ is the position, and $\lambda=1$ is the wavelength of the wave. The adiabatic index $\gamma$ is $5/3$ and the background state is: 
+$\overline{\rho}=1.0$,
+$\overline{v_x}=\overline{v_y}=\overline{v_z}=0$ (except for the contact wave where $\overline{v_x} = 1$),
+$\overline{P}=1/\gamma$,
+$\overline{B_x}=1$,
+$\overline{B_y}=1.5$,
+$\overline{B_z}=0$ 
+and the right eigenvectors for this state are given in Appendix A of \cite{gardiner_unsplit_2008}. 
+
+The wave is propagated for one period and then the error between the initial and final state is the L2 norm of the L1 error vector. First we compute the L1 norm of the absolute difference for each conserved variable between the initial and final state
+
+\begin{equation}
+    \delta q_s = \frac{1}{n_x n_y n_z} \sum_{i,j,k} \mid q^f_{i,j,k,s} - q^i_{i,j,k,s} \mid
+\end{equation}
+
+where $q_s$ is a specific conserved variable. We then compute the L2 norm of this vector of L1 norms
+
+\begin{equation}
+    \mid \mid \delta q \mid \mid = \sqrt{\sum_s \left( \delta q_s \right)^2}.
+\end{equation}
+
+These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both the PLM and PPM reconstructions. The results are comparable to the results in \cite{stone_2009} and demonstrate the expected second order convergence for this second order method. Using PPM does improve the accuracy of the method but maintains the second order convergence due to the second order nature of the integrator. These tests have been run in all three directions with the waves moving in the positive or negative directions and gotten identical results.
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/linear_convergence.pdf}
-    \caption{Linear Wave Convergence plots. 
-    \input{|python ../python/get_links.py 'linear_wave_convergence'}}
+    \caption{Linear Wave Convergence of all four MHD waves using PLM and PPM reconstruction. \input{|python ../python/get_links.py 'linear_wave_convergence'}}
     \label{fig:linear-wave-convergence}
 \end{figure}
 
 \subsection{Circularly Polarized Alfv\'en Wave}
 \subsection{Advecting Field Loop}
-\subsection{Brio \& Wu Shock Tube}
+\label{sec:afl}
 
-\begin{figure}[ht!]
-    % \epsscale{0.5}
-    \plotone{assets/3-mhd-tests/b&w.pdf}
-    \caption{Brio \& Wu Shock Tube. 
-    \input{|python ../python/get_links.py 'b&w'}}
-    \label{fig:brio-and-wu}
-\end{figure}
+\subsection{MHD Riemann Problems}
+\label{sec:riemann}
 
-\subsection{Dai \& Woodward Shock Tube}
+MHD Riemann problems are staple tests for new MHD codes and methods due to their mix of different flow types and extreme conditions. While there are a variety of different MHD Riemann problems in the literature \citep{brio_wu_1988, einfeldt_1991, ryu_jones_1995, dai_woodward_1998} we have chosen five that present a variety of challenging cases. 
 
-\begin{figure}[ht!]
-    % \epsscale{0.5}
-    \plotone{assets/3-mhd-tests/d&w.pdf}
-    \caption{Dai \& Woodward Shock Tube (also called Ryu \& Jones 2a).
-    \input{|python ../python/get_links.py 'd&w'}}
-    \label{fig:dai-and-woodward}
-\end{figure}
+The Riemann problem is defined as having a single state for half of the domain which suddenly switches to a different state on the other half of the domain. All of Riemann problems here have a domain of $1\times1\times1$ and resolution of $512\times16\times16$ and are run until the $t_{max}$ for that particular Riemann problem. All have been run in all three spatial directions with both possible orientations of the two states and achieved identical results. The details of each left and right state are in Table \ref{table:riemann} and the details of each Riemann problem are discussed in the captions of Figures \ref{fig:brio-and-wu}-\ref{fig:einfeldt}.
 
-\subsection{Ryu \& Jones 1a Shock Tube}
+\input{../assets/3-mhd-tests/riemann-table.tex}
 
-\begin{figure}[ht!]
-    % \epsscale{0.5}
-    \plotone{assets/3-mhd-tests/rj1a.pdf}
-    \caption{Ryu \& Jones 1a Shock Tube. 
-    \input{|python ../python/get_links.py 'rj1a'}}
-    \label{fig:rj-1a}
-\end{figure}
-
-\subsection{Ryu \& Jones 4d Shock Tube}
-
-\begin{figure}[ht!]
-    % \epsscale{0.5}
-    \plotone{assets/3-mhd-tests/rj4d.pdf}
-    \caption{Ryu \& Jones 4d Shock Tube. 
-    \input{|python ../python/get_links.py 'rj4d'}}
-    \label{fig:rj-4d}
-\end{figure}
-
-\subsection{Einfeldt Strong Rarefaction}
-
-\begin{figure}[ht!]
-    % \epsscale{0.5}
-    \plotone{assets/3-mhd-tests/einfeldt.pdf}
-    \caption{MHD Einfeldt Strong Rarefaction.
-    \input{|python ../python/get_links.py 'einfeldt'}}
-    \label{fig:einfeldt}
-\end{figure}
+\input{../assets/3-mhd-tests/riemann-figures.tex}
 
 \subsection{MHD Blast Wave in a Strongly Magnetized Medium}
+\label{sec:mhd-blast}
+
 \subsection{Orszag-Tang Vortex}
 
 
