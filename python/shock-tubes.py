@@ -28,14 +28,6 @@ import shared_tools
 
 plt.close('all')
 
-# 1. (optionally) Run Cholla
-#   a. Resolutions: 16, 32, 64, 128, 256, 512
-#   b. All 4 waves
-#   c. PLMC and PPMC
-# 2. (optionally) Compute all the L2 Norms
-# 3. (optionally) Plot the results
-#   a. Plot specific scaling lines
-
 # Global Variables
 shock_tubes = ['b&w', 'd&w', 'rj1a', 'rj4d', 'einfeldt']
 reconstructor = 'ppmc'
@@ -67,8 +59,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--in_path', help='The path to the directory that the source files are located in. Defaults to "~/Code/cholla/bin"')
     parser.add_argument('-o', '--out_path', help='The path of the directory to write the plots out to. Defaults to writing in the same directory as the input files')
-    parser.add_argument('-r', '--run_cholla', default=False, help='Runs cholla to generate all the scaling data')
-    parser.add_argument('-f', '--figure', default=False, help='Plot the L2 Norms')
+    parser.add_argument('-r', '--run_cholla', action="store_true", help='Runs cholla to generate all the scaling data')
+    parser.add_argument('-f', '--figure', action="store_true", help='Plot the L2 Norms')
     parser.add_argument('-t', '--tube', default=['all'], nargs='+', help="List of tubes to run and/or plot. Options are 'b&w', 'd&w', 'rj1a', 'rj4d', 'einfeldt', and 'all'")
 
     args = parser.parse_args()

@@ -48,8 +48,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--in_path', help='The path to the directory that the source files are located in. Defaults to "~/Code/cholla/bin"')
     parser.add_argument('-o', '--out_path', help='The path of the directory to write the plots out to. Defaults to writing in the same directory as the input files')
-    parser.add_argument('-r', '--run_cholla', default=False, help='Runs cholla to generate all the scaling data')
-    parser.add_argument('-f', '--figure', default=False, help='Plot the L2 Norms')
+    parser.add_argument('-r', '--run_cholla', action="store_true", help='Runs cholla to generate all the scaling data')
+    parser.add_argument('-f', '--figure', action="store_true", help='Plot the L2 Norms')
 
 
     args = parser.parse_args()
