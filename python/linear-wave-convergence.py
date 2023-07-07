@@ -125,8 +125,6 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
     scaling_linestyle  = '--'
     alpha              = 0.6
     scaling_color      = 'black'
-    plmc_color         = 'red'
-    ppmc_color         = 'blue'
     suptitle_font_size = 15
     subtitle_font_size = 10
     axslabel_font_size = 10
@@ -153,7 +151,7 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
         # Plot raw data
         subPlot[subplot_idx].plot(resolutions,
                                   plmc_data,
-                                  color      = plmc_color,
+                                  color      = shared_tools.colors['plmc'],
                                   linestyle  = data_linestyle,
                                   linewidth  = linewidth,
                                   marker     = plmc_marker,
@@ -161,7 +159,7 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
                                   label      = 'PLMC')
         subPlot[subplot_idx].plot(resolutions,
                                   ppmc_data,
-                                  color      = ppmc_color,
+                                  color      = shared_tools.colors['ppmc'],
                                   linestyle  = data_linestyle,
                                   linewidth  = linewidth,
                                   marker     = ppmc_marker,

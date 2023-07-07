@@ -54,8 +54,10 @@ pretty_names = {'density':'Density',
 
 # The colors for various quantities
 colors = {'density':'blue', 'gas_pressure':'green', 'energy':'red',
-            'velocity_x':'purple', 'velocity_y':'purple', 'velocity_z':'purple',
-            'magnetic_x':'orange', 'magnetic_y':'orange', 'magnetic_z':'orange'}
+          'velocity_x':'purple', 'velocity_y':'purple', 'velocity_z':'purple',
+          'magnetic_x':'orange', 'magnetic_y':'orange', 'magnetic_z':'orange',
+          'plmc':'red', 'ppmc':'blue'}
+
 
 # ==============================================================================
 # Various useful functions
