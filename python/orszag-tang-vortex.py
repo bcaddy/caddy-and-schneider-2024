@@ -57,7 +57,7 @@ def main():
 
     if args.figure:
         plotOTV(rootPath, OutPath)
-        # shared_tools.update_plot_entry('otv', 'python/orszag-tang-vortex.py')
+        shared_tools.update_plot_entry('otv', 'python/orszag-tang-vortex.py')
 
 # ==============================================================================
 
