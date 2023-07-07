@@ -9,17 +9,8 @@
 """
 
 from timeit import default_timer
-
-import collections
-import functools
-
-import matplotlib
-import matplotlib.animation as animation
 import matplotlib.pyplot as plt
-
 import numpy as np
-import h5py
-
 import argparse
 import pathlib
 
