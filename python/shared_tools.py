@@ -11,6 +11,8 @@ import pathlib
 import pickle
 import subprocess
 import os
+import h5py
+import numpy as np
 
 # ==============================================================================
 # Variables that are commonly used across many scripts
@@ -30,7 +32,7 @@ github_url_root = 'https://github.com/bcaddy/caddy-et-al-2023/blob'
 
 # The titles of plots with their pretty formatting
 pretty_names = {'density':'Density',
-                'pressure':'Pressure',
+                'gas_pressure':'Gas Pressure',
                 'energy':'Energy',
                 'velocity_x':'$V_x$',
                 'velocity_y':'$V_y$',
@@ -105,6 +107,139 @@ def cholla_runner(exe_path: pathlib.Path = repo_root / 'cholla' / 'bin',
 
     (data_source_dir / 'run_output.log').unlink()
     (data_source_dir / 'run_timing.log').unlink()
+# ==============================================================================
+
+# ==============================================================================
+# This next section is all the functions for loading and managing the data
+# ==============================================================================
+
+# ==============================================================================
+def load_conserved_data(file_name: str) -> dict:
+    """Load the conserved variables from the HDF5 file
+
+    Args:
+        file_name (str): The name of the HDF5 file, no extension
+
+    Returns:
+        dict: The dictionary containing all the conserved data
+    """
+    file = h5py.File(data_files_path / f'{file_name}.h5', 'r')
+
+    output = {}
+    output['resolution'] = file.attrs['dims']
+    output['gamma']      = file.attrs['gamma']
+    output['density']    = np.array(file['density'])
+    output['energy']     = np.array(file['Energy'])
+    output['momentum_x'] = np.array(file['momentum_x'])
+    output['momentum_y'] = np.array(file['momentum_y'])
+    output['momentum_z'] = np.array(file['momentum_z'])
+    output['magnetic_x'] = np.array(file['magnetic_x'])
+    output['magnetic_y'] = np.array(file['magnetic_y'])
+    output['magnetic_z'] = np.array(file['magnetic_z'])
+
+    return output
+# ==============================================================================
+
+# ==============================================================================
+def center_magnetic_fields(data: dict) -> dict:
+    """Compute the centered magnetic fields
+
+    Args:
+        data (dict): All the input data
+
+    Returns:
+        dict: The input data with new centered magnetic field data
+    """
+    data['magnetic_x_centered'] = 0.5 * (data['magnetic_x'][1:, :, :]
+                                         + data['magnetic_x'][:-1, :, :])
+    data['magnetic_y_centered'] = 0.5 * (data['magnetic_y'][:, 1:, :]
+                                         + data['magnetic_y'][:, :-1, :])
+    data['magnetic_z_centered'] = 0.5 * (data['magnetic_z'][:, :, 1:]
+                                         + data['magnetic_z'][:, :, :-1])
+
+    return data
+# ==============================================================================
+
+# ==============================================================================
+def slice_data(data: dict,
+               x_slice_loc: int = None,
+               y_slice_loc: int = None,
+               z_slice_loc: int = None) -> dict:
+    """Slice all fields of the given data
+
+    Args:
+        data (dict): The given data
+        x_slice_loc (int, optional): The x location to slice at. Defaults to None.
+        y_slice_loc (int, optional): The y location to slice at. Defaults to None.
+        z_slice_loc (int, optional): The z location to slice at. Defaults to None.
+
+    Returns:
+        dict: The sliced data
+    """
+
+    def limits(slice_loc, slice_dir, field):
+        if slice_loc == None:
+            low_lim = 0
+            high_lim = field.shape[slice_dir]
+        else:
+            low_lim = slice_loc
+            high_lim = low_lim+1
+        return low_lim, high_lim
+
+    for key in data:
+        if key in ['resolution', 'gamma']:
+            continue
+
+        field = data[key]
+
+        x_low, x_high = limits(x_slice_loc, 0, field)
+        y_low, y_high = limits(y_slice_loc, 1, field)
+        z_low, z_high = limits(z_slice_loc, 2, field)
+
+        data[key] = data[key][x_low:x_high, y_low:y_high, z_low:z_high]
+        data[key] = data[key].squeeze() # remove all dimensions of size 1
+
+    return data
+# ==============================================================================
+
+# ==============================================================================
+def compute_velocities(data: dict) -> dict:
+    """Compute the velocities and add them to the data dictionary
+
+    Args:
+        data (dict): All the input data
+
+    Returns:
+        dict: The input data with new velocities fields
+    """
+    data['velocity_x'] = data['momentum_x'] / data['density']
+    data['velocity_y'] = data['momentum_y'] / data['density']
+    data['velocity_z'] = data['momentum_z'] / data['density']
+
+    return data
+# ==============================================================================
+
+# ==============================================================================
+def compute_derived_quantities(data: dict, gamma: float) -> dict:
+    """Compute the various derived quantities and add them to the data dictionary.
+    This includes the gas pressure, total pressure, specific kinetic energy,
+    and magnetic pressure/energy
+
+    Args:
+        data (dict): All the input data
+        gamma (float): The adiabatic index
+
+    Returns:
+        dict: The input data with new derived quantities fields
+    """
+
+    data['spec_kinetic']    = 0.5 * (data['velocity_x']**2 + data['velocity_y']**2 + data['velocity_z']**2)
+    data['magnetic_energy'] = 0.5 * (data['magnetic_x_centered']**2 + data['magnetic_y_centered']**2 + data['magnetic_z_centered']**2)
+
+    data['gas_pressure'] = (gamma - 1) * (data['energy'] - data['density'] * data['spec_kinetic'] - data['magnetic_energy'])
+    data['total_pressure'] = data['gas_pressure'] + data['magnetic_energy']
+
+    return data
 # ==============================================================================
 
 # ==============================================================================

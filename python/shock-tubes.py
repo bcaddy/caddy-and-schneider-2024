@@ -108,35 +108,6 @@ def runCholla():
 # ==============================================================================
 
 # ==============================================================================
-def loadData(rootPath, shock_tube):
-    # Open the file and prep for loading
-    file = h5py.File(rootPath / 'data' / (shock_tube + '.h5'), 'r')
-    y_slice_loc = resolution['ny']//2
-    z_slice_loc = resolution['nz']//2
-
-    # Load all the raw data
-    gamma = file.attrs['gamma'][0]
-    density    = file['density'][:, y_slice_loc, z_slice_loc]
-    velocity_x = file['momentum_x'][:, y_slice_loc, z_slice_loc] / density
-    velocity_y = file['momentum_y'][:, y_slice_loc, z_slice_loc] / density
-    velocity_z = file['momentum_z'][:, y_slice_loc, z_slice_loc] / density
-    magnetic_x = file['magnetic_x'][:, y_slice_loc, z_slice_loc]
-    magnetic_y = 0.5 * (file['magnetic_y'][:, y_slice_loc, z_slice_loc] + file['magnetic_y'][:, y_slice_loc-1, z_slice_loc])
-    magnetic_z = 0.5 * (file['magnetic_z'][:, y_slice_loc, z_slice_loc] + file['magnetic_z'][:, y_slice_loc, z_slice_loc-1])
-    energy     = file['Energy'][:, y_slice_loc, z_slice_loc]
-
-    # Compute the Pressure
-    magnetic_x_centered = 0.5 * (magnetic_x[1:] + magnetic_x[:-1])
-    velocity_squared = velocity_x**2 + velocity_y**2 + velocity_z**2
-    magnetic_squared = magnetic_x_centered**2 + magnetic_y**2 + magnetic_z**2
-    pressure = (gamma - 1) * (energy - 0.5 * density * (velocity_squared) - 0.5 * (magnetic_squared))
-
-    return {'density':density, 'pressure':pressure, 'energy':energy,
-            'velocity_x':velocity_x, 'velocity_y':velocity_y, 'velocity_z':velocity_z,
-            'magnetic_x':magnetic_x, 'magnetic_y':magnetic_y, 'magnetic_z':magnetic_z}
-# ==============================================================================
-
-# ==============================================================================
 def plotShockTubes(rootPath, outPath):
     # Plotting info
     data_marker        = '.'
@@ -148,13 +119,13 @@ def plotShockTubes(rootPath, outPath):
     axslabel_font_size = 10
     tick_font_size     = 7.5
 
-    colors = {'density':'blue', 'pressure':'green', 'energy':'red',
+    colors = {'density':'blue', 'gas_pressure':'green', 'energy':'red',
               'velocity_x':'purple', 'velocity_y':'purple', 'velocity_z':'purple',
               'magnetic_x':'orange', 'magnetic_y':'orange', 'magnetic_z':'orange'}
 
     # Field info
-    fields = ['density', 'pressure', 'energy', 'velocity_x', 'velocity_y', 'velocity_z',  'magnetic_x', 'magnetic_y', 'magnetic_z']
-    field_indices = {'density':(0,0), 'pressure':(0,1), 'energy':(0,2),
+    fields = ['density', 'gas_pressure', 'energy', 'velocity_x', 'velocity_y', 'velocity_z',  'magnetic_x', 'magnetic_y', 'magnetic_z']
+    field_indices = {'density':(0,0), 'gas_pressure':(0,1), 'energy':(0,2),
                      'velocity_x':(1,0), 'velocity_y':(1,1), 'velocity_z':(1,2),
                      'magnetic_x':(2,0), 'magnetic_y':(2,1), 'magnetic_z':(2,2)}
 
@@ -171,7 +142,13 @@ def plotShockTubes(rootPath, outPath):
         fig.tight_layout(pad = 1.5, w_pad = 1.5)
 
         # Load data
-        data = loadData(rootPath, shock_tube)
+        data = shared_tools.load_conserved_data(f'{shock_tube}')
+        data = shared_tools.center_magnetic_fields(data)
+        data = shared_tools.slice_data(data,
+                                       y_slice_loc=data['resolution'][1]//2,
+                                       z_slice_loc=data['resolution'][2]//2)
+        data = shared_tools.compute_velocities(data)
+        data = shared_tools.compute_derived_quantities(data, data['gamma'])
 
         for field in fields:
             # Get info for this field

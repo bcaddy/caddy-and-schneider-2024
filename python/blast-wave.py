@@ -59,32 +59,6 @@ def main():
 # ==============================================================================
 
 # ==============================================================================
-def loadData(rootPath):
-    # Open the file and prep for loading
-    file = h5py.File(rootPath / 'data' / 'mhd-blast.h5', 'r')
-    resolution = file.attrs['dims']
-    z_slice_loc = resolution[2]//2
-
-    # Load all the raw data
-    gamma = file.attrs['gamma'][0]
-    density    = file['density'][:, :, z_slice_loc]
-    velocity_x = file['momentum_x'][:, :, z_slice_loc] / density
-    velocity_y = file['momentum_y'][:, :, z_slice_loc] / density
-    velocity_z = file['momentum_z'][:, :, z_slice_loc] / density
-    magnetic_x = 0.5 * (file['magnetic_x'][1:,  :, z_slice_loc] + file['magnetic_x'][:-1, :,   z_slice_loc])
-    magnetic_y = 0.5 * (file['magnetic_y'][ :, 1:, z_slice_loc] + file['magnetic_y'][:,   :-1, z_slice_loc])
-    magnetic_z = 0.5 * (file['magnetic_z'][ :,  :, z_slice_loc] + file['magnetic_z'][:,   :,   z_slice_loc-1])
-    energy     = file['Energy'][:, :, z_slice_loc]
-
-    # Compute magnetic energy
-    magnetic_energy = 0.5 * (magnetic_x**2 + magnetic_y**2 + magnetic_z**2)
-
-    return {'density':density, 'energy':energy, 'magnetic_energy':magnetic_energy,
-            'velocity_x':velocity_x, 'velocity_y':velocity_y, 'velocity_z':velocity_z,
-            'magnetic_x':magnetic_x, 'magnetic_y':magnetic_y, 'magnetic_z':magnetic_z}
-# ==============================================================================
-
-# ==============================================================================
 def plotBlastWave(rootPath, outPath):
     # Plotting info
     line_width         = 00.1
@@ -106,8 +80,12 @@ def plotBlastWave(rootPath, outPath):
     # fig.suptitle(f'', fontsize=suptitle_font_size)
     fig.tight_layout()
 
-    # # Load data
-    data = loadData(rootPath)
+    # Load data
+    data = shared_tools.load_conserved_data('mhd-blast')
+    data = shared_tools.center_magnetic_fields(data)
+    data = shared_tools.slice_data(data, z_slice_loc=data['resolution'][2]//2)
+    data = shared_tools.compute_velocities(data)
+    data = shared_tools.compute_derived_quantities(data, data['gamma'])
 
     for field in fields:
         # Get info for this field

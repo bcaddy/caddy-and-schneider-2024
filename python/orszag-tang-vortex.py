@@ -58,39 +58,6 @@ def main():
 # ==============================================================================
 
 # ==============================================================================
-def loadData(rootPath):
-    # Open the file and prep for loading
-    file = h5py.File(rootPath / 'data' / 'orszag_tang_vortex.h5', 'r')
-    resolution = file.attrs['dims']
-    z_slice_loc = resolution[2]//2
-
-    # Load all the raw data
-    gamma = file.attrs['gamma'][0]
-    density    = file['density'][:, :, z_slice_loc]
-    velocity_x = file['momentum_x'][:, :, z_slice_loc] / density
-    velocity_y = file['momentum_y'][:, :, z_slice_loc] / density
-    velocity_z = file['momentum_z'][:, :, z_slice_loc] / density
-    magnetic_x = 0.5 * (file['magnetic_x'][1:,  :, z_slice_loc] + file['magnetic_x'][:-1, :,   z_slice_loc])
-    magnetic_y = 0.5 * (file['magnetic_y'][ :, 1:, z_slice_loc] + file['magnetic_y'][:,   :-1, z_slice_loc])
-    magnetic_z = 0.5 * (file['magnetic_z'][ :,  :, z_slice_loc] + file['magnetic_z'][:,   :,   z_slice_loc-1])
-    energy     = file['Energy'][:, :, z_slice_loc]
-
-    # Compute magnetic energy
-    velocity_squared = velocity_x**2 + velocity_y**2 + velocity_z**2
-    magnetic_squared = magnetic_x**2 + magnetic_y**2 + magnetic_z**2
-
-    magnetic_energy = 0.5 * magnetic_squared
-    spec_kinetic = 0.5 * velocity_squared
-
-    pressure = (gamma - 1) * (energy - 0.5 * density * (velocity_squared) - magnetic_energy)
-
-    return {'density':density, 'energy':energy, 'pressure':pressure,
-            'magnetic_energy':magnetic_energy, 'spec_kinetic':spec_kinetic,
-            'velocity_x':velocity_x, 'velocity_y':velocity_y, 'velocity_z':velocity_z,
-            'magnetic_x':magnetic_x, 'magnetic_y':magnetic_y, 'magnetic_z':magnetic_z}
-# ==============================================================================
-
-# ==============================================================================
 def plotOTV(rootPath, outPath):
     # Plotting info
     line_width         = 0.4
@@ -99,8 +66,8 @@ def plotOTV(rootPath, outPath):
     num_contours       = 30
 
     # Field info
-    fields = ['density', 'magnetic_energy', 'pressure', 'spec_kinetic']
-    field_indices = {'density':(0,0), 'magnetic_energy':(0,1), 'pressure':(1,0), 'spec_kinetic':(1,1)}
+    fields = ['density', 'magnetic_energy', 'gas_pressure', 'spec_kinetic']
+    field_indices = {'density':(0,0), 'magnetic_energy':(0,1), 'gas_pressure':(1,0), 'spec_kinetic':(1,1)}
 
     # Setup figure
     figSizeScale = 2.                 # Scaling factor for the figure size
@@ -112,7 +79,11 @@ def plotOTV(rootPath, outPath):
     # fig.suptitle(f'', fontsize=suptitle_font_size)
 
     # Load data
-    data = loadData(rootPath)
+    data = shared_tools.load_conserved_data('orszag_tang_vortex')
+    data = shared_tools.center_magnetic_fields(data)
+    data = shared_tools.slice_data(data, z_slice_loc=data['resolution'][2]//2)
+    data = shared_tools.compute_velocities(data)
+    data = shared_tools.compute_derived_quantities(data, data['gamma'])
 
     for field in fields:
         # Get info for this field

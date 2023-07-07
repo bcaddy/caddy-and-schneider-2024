@@ -93,39 +93,34 @@ def runCholla():
 # ==============================================================================
 def computeL2Norm(rootPath):
     # Setup dictionary to hold data
-    data = {}
+    l2_data = {}
     for reconstructor in reconstructors:
         for wave in waves:
             for resolution in resolutions:
-                data[f'{reconstructor}_{wave}'] = []
+                l2_data[f'{reconstructor}_{wave}'] = []
 
-    # Loop over the lists and compute the L2 norm for each combination
+    # Setup dictionary to hold data
     for reconstructor in reconstructors:
         for wave in waves:
             for resolution in resolutions:
                 # Determine file paths and load the files
-                initialFilePath = rootPath / 'data' / f'{reconstructor}_{wave}_{resolution}_initial.h5'
-                finalFilePath   = rootPath / 'data' / f'{reconstructor}_{wave}_{resolution}_final.h5'
-                initialFile = h5py.File(initialFilePath, 'r')
-                finalFile   = h5py.File(finalFilePath, 'r')
+                initial_data = shared_tools.load_conserved_data(f'{reconstructor}_{wave}_{resolution}_initial')
+                final_data   = shared_tools.load_conserved_data(f'{reconstructor}_{wave}_{resolution}_final')
 
                 # Get a list of all the data sets
-                fields = initialFile.keys()
+                fields = initial_data.keys()
 
                 # Compute the L2 Norm
                 L2Norm = 0.0
                 for field in fields:
-                    initialData = np.array(initialFile[field])
-                    finalData   = np.array(finalFile[field])
-
-                    diff = np.abs(initialData - finalData)
-                    L1Error = np.sum(diff) / initialData.size
+                    diff = np.abs(initial_data[field] - final_data[field])
+                    L1Error = np.sum(diff) / (initial_data[field]).size
                     L2Norm += np.power(L1Error, 2)
 
                 L2Norm = np.sqrt(L2Norm)
-                data[f'{reconstructor}_{wave}'].append(L2Norm)
+                l2_data[f'{reconstructor}_{wave}'].append(L2Norm)
 
-    return data
+    return l2_data
 # ==============================================================================
 
 # ==============================================================================
