@@ -52,6 +52,11 @@ pretty_names = {'density':'Density',
                 'rj1a':'Ryu & Jones 1a',
                 'rj4d':'Ryu & Jones 4d'}
 
+# The colors for various quantities
+colors = {'density':'blue', 'gas_pressure':'green', 'energy':'red',
+            'velocity_x':'purple', 'velocity_y':'purple', 'velocity_z':'purple',
+            'magnetic_x':'orange', 'magnetic_y':'orange', 'magnetic_z':'orange'}
+
 # ==============================================================================
 # Various useful functions
 # ==============================================================================
