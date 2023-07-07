@@ -70,7 +70,7 @@ def plotOTV(rootPath, outPath):
     # fig.suptitle(f'', fontsize=suptitle_font_size)
 
     # Load data
-    data = shared_tools.load_conserved_data('orszag_tang_vortex')
+    data = shared_tools.load_conserved_data('orszag_tang_vortex', load_gamma=True, load_resolution=True)
     data = shared_tools.center_magnetic_fields(data)
     data = shared_tools.slice_data(data, z_slice_loc=data['resolution'][2]//2)
     data = shared_tools.compute_velocities(data)

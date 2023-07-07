@@ -46,6 +46,8 @@ pretty_names = {'density':'Density',
                 'slow_magnetosonic':'Slow Magnetosonic Wave',
                 'alfven_wave':r'Alfvén Wave',
                 'mhd_contact_wave':'Entropy Wave',
+                'standing':r'Standing Alfvén Wave',
+                'moving':r'Traveling Alfvén Wave',
                 'b&w':'Brio & Wu',
                 'd&w':'Dai & Woodward',
                 'einfeldt':'Einfeldt Strong Rarefaction',
@@ -121,7 +123,7 @@ def cholla_runner(exe_path: pathlib.Path = repo_root / 'cholla' / 'bin',
 # ==============================================================================
 
 # ==============================================================================
-def load_conserved_data(file_name: str) -> dict:
+def load_conserved_data(file_name: str, load_gamma: bool = False, load_resolution: bool = False) -> dict:
     """Load the conserved variables from the HDF5 file
 
     Args:
@@ -133,8 +135,11 @@ def load_conserved_data(file_name: str) -> dict:
     file = h5py.File(data_files_path / f'{file_name}.h5', 'r')
 
     output = {}
-    output['resolution'] = file.attrs['dims']
-    output['gamma']      = file.attrs['gamma']
+    if load_resolution:
+        output['resolution'] = file.attrs['dims']
+    if load_gamma:
+        output['gamma']      = file.attrs['gamma']
+
     output['density']    = np.array(file['density'])
     output['energy']     = np.array(file['Energy'])
     output['momentum_x'] = np.array(file['momentum_x'])

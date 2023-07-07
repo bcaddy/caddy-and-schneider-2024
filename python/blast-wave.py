@@ -72,7 +72,7 @@ def plotBlastWave(rootPath, outPath):
     fig.tight_layout()
 
     # Load data
-    data = shared_tools.load_conserved_data('mhd-blast')
+    data = shared_tools.load_conserved_data('mhd-blast', load_gamma=True, load_resolution=True)
     data = shared_tools.center_magnetic_fields(data)
     data = shared_tools.slice_data(data, z_slice_loc=data['resolution'][2]//2)
     data = shared_tools.compute_velocities(data)

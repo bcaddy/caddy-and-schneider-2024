@@ -129,7 +129,7 @@ def plotShockTubes(rootPath, outPath):
         fig.tight_layout(pad = 1.5, w_pad = 1.5)
 
         # Load data
-        data = shared_tools.load_conserved_data(f'{shock_tube}')
+        data = shared_tools.load_conserved_data(f'{shock_tube}', load_gamma=True, load_resolution=True)
         data = shared_tools.center_magnetic_fields(data)
         data = shared_tools.slice_data(data,
                                        y_slice_loc=data['resolution'][1]//2,
