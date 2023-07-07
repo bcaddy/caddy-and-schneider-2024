@@ -116,10 +116,6 @@ def loadData(rootPath):
 
 # ==============================================================================
 def plotBlastWave(rootPath, outPath):
-    # Pretty names
-    pretty_names = {'density':'Density',
-                    'magnetic_energy':'Magnetic Energy'}
-
     # Plotting info
     line_width         = 00.1
     suptitle_font_size = 15
@@ -162,7 +158,7 @@ def plotBlastWave(rootPath, outPath):
         subPlot[subplot_idx].set_aspect('equal')
 
         # Set titles
-        subPlot[subplot_idx].set_title(f'{pretty_names[field]}')
+        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}')
 
     # Save the figure and close it
     plt.savefig(outPath / f'mhd-blast.pdf', transparent = True)

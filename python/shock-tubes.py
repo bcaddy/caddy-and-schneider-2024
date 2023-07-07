@@ -162,22 +162,6 @@ def loadData(rootPath, shock_tube):
 
 # ==============================================================================
 def plotShockTubes(rootPath, outPath):
-    # Pretty names
-    pretty_names = {'b&w':'Brio & Wu',
-                    'd&w':'Dai & Woodward',
-                    'einfeldt':'Einfeldt Strong Rarefaction',
-                    'rj1a':'Ryu & Jones 1a',
-                    'rj4d':'Ryu & Jones 4d',
-                    'density':'Density',
-                    'pressure':'Pressure',
-                    'energy':'Energy',
-                    'velocity_x':'$V_x$',
-                    'velocity_y':'$V_y$',
-                    'velocity_z':'$V_z$',
-                    'magnetic_x':'$B_x$',
-                    'magnetic_y':'$B_y$',
-                    'magnetic_z':'$B_z$'}
-
     # Plotting info
     data_marker        = '.'
     data_markersize    = 5
@@ -207,7 +191,7 @@ def plotShockTubes(rootPath, outPath):
         fig, subPlot = plt.subplots(3, 3, sharex=True, figsize = (figWidth, figHeight))
 
         # Whole plot settings
-        fig.suptitle(f'{pretty_names[shock_tube]}', fontsize=suptitle_font_size)
+        fig.suptitle(f'{shared_tools.pretty_names[shock_tube]}', fontsize=suptitle_font_size)
         fig.tight_layout(pad = 1.5, w_pad = 1.5)
 
         # Load data
@@ -247,7 +231,7 @@ def plotShockTubes(rootPath, outPath):
                                              right=True)
 
             # Set titles
-            subPlot[subplot_idx].set_ylabel(f'{pretty_names[field]}', fontsize=axslabel_font_size)
+            subPlot[subplot_idx].set_ylabel(f'{shared_tools.pretty_names[field]}', fontsize=axslabel_font_size)
             if (subplot_idx[0] == 2):
                 subPlot[subplot_idx].set_xlabel('Position', fontsize=axslabel_font_size)
 
@@ -255,7 +239,7 @@ def plotShockTubes(rootPath, outPath):
         plt.savefig(outPath / f'{shock_tube}.pdf', transparent = True)
         plt.close()
 
-        print(f'Finished with {pretty_names[shock_tube]} plot.')
+        print(f'Finished with {shared_tools.pretty_names[shock_tube]} plot.')
 # ==============================================================================
 
 

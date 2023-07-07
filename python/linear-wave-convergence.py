@@ -148,12 +148,6 @@ def computeL2Norm(rootPath):
 
 # ==============================================================================
 def plotL2Norm(L2Norms, outPath, normalize = False):
-    # Pretty names
-    pretty_names = {'alfven_wave':r'Alfvén Wave',
-                    'fast_magnetosonic':'Fast Magnetosonic Wave',
-                    'mhd_contact_wave':'Entropy Wave',
-                    'slow_magnetosonic':'Slow Magnetosonic Wave'}
-
     # Plotting info
     data_linestyle     = '-'
     linewidth          = 1
@@ -228,7 +222,7 @@ def plotL2Norm(L2Norms, outPath, normalize = False):
             subPlot[subplot_idx].set_xlabel('Resolution', fontsize=axslabel_font_size)
         if (subplot_idx[1] == 0):
             subPlot[subplot_idx].set_ylabel(f'{norm_name}L2 Error', fontsize=axslabel_font_size)
-        subPlot[subplot_idx].set_title(f'{pretty_names[wave]}', fontsize=subtitle_font_size)
+        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[wave]}', fontsize=subtitle_font_size)
 
         subPlot[subplot_idx].legend(fontsize=legend_font_size)
 

@@ -123,11 +123,6 @@ def loadData(rootPath):
 
 # ==============================================================================
 def plotOTV(rootPath, outPath):
-    # Pretty names
-    pretty_names = {'density':'Density',
-                    'magnetic_energy':'Magnetic Energy',
-                    'pressure':'Pressure', 'spec_kinetic':'Specific Kinetic Energy'}
-
     # Plotting info
     line_width         = 0.4
     suptitle_font_size = 15
@@ -169,7 +164,7 @@ def plotOTV(rootPath, outPath):
         subPlot[subplot_idx].set_aspect('equal')
 
         # Set titles
-        subPlot[subplot_idx].set_title(f'{pretty_names[field]}')
+        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}')
 
     # Save the figure and close it
     fig.tight_layout()
