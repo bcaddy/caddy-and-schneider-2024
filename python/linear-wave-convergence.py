@@ -20,8 +20,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import h5py
 
-import os
-import sys
 import argparse
 import pathlib
 
@@ -48,8 +46,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--in_path', help='The path to the directory that the source files are located in. Defaults to "~/Code/cholla/bin"')
     parser.add_argument('-o', '--out_path', help='The path of the directory to write the plots out to. Defaults to writing in the same directory as the input files')
-    parser.add_argument('-r', '--run_cholla', action="store_true", help='Runs cholla to generate all the scaling data')
-    parser.add_argument('-f', '--figure', action="store_true", help='Plot the L2 Norms')
+    parser.add_argument('-r', '--run_cholla', action="store_true", help='Runs cholla to generate all the data')
+    parser.add_argument('-f', '--figure', action="store_true", help='Generate the plots')
 
 
     args = parser.parse_args()
@@ -64,10 +62,10 @@ def main():
     else:
         OutPath = pathlib.Path(__file__).resolve().parent.parent / 'assets' / '3-mhd-tests'
 
-    if args.run_cholla == 'True':
-        runCholla(rootPath)
+    if args.run_cholla:
+        runCholla()
 
-    if args.figure == 'True':
+    if args.figure:
         L2Norms = computeL2Norm(rootPath)
         plotL2Norm(L2Norms, OutPath)
         shared_tools.update_plot_entry('linear_wave_convergence', 'python/linear-wave-convergence.py')
@@ -75,34 +73,18 @@ def main():
 # ==============================================================================
 
 # ==============================================================================
-def runCholla(rootPath):
-    # Basic Settings
-    offAxisResolution = 'ny=16 nz=16'
-    exe_path = rootPath / 'cholla' / 'bin'
-    data_from_path = rootPath / 'python'
-    data_to_path = rootPath / 'data'
-
-    # Check that the output directory exists
-    data_to_path.mkdir(parents=True, exist_ok=True)
-
+def runCholla():
     # Loop over the lists and run cholla for each combination
     for reconstructor in reconstructors:
         for wave in waves:
             for resolution in resolutions:
-                # Generate Cholla run command
-                chollaPath = exe_path / f'cholla.mhd.c3po.{reconstructor}'
-                paramFilePath = data_from_path / 'cholla-config-files' / f'{wave}.txt'
-                logFile = rootPath / 'cholla.log'
-                command = f'{chollaPath} {paramFilePath} nx={resolution} {offAxisResolution} >> {logFile} 2>&1'
-
-                # Run Cholla
-                os.system(command)
-
-                # Move data files
-                initialFile = data_from_path / '0.h5.0'
-                finalFile = data_from_path / '1.h5.0'
-                initialFile.rename(data_to_path / f'{reconstructor}_{wave}_{resolution}_initial.h5')
-                finalFile.rename(data_to_path / f'{reconstructor}_{wave}_{resolution}_final.h5')
+                shared_tools.cholla_runner(reconstructor=reconstructor,
+                                           param_file_name=f'{wave}.txt',
+                                           cholla_cli_args=f'nx={resolution} ny=16 nz=16',
+                                           move_initial=True,
+                                           move_final=True,
+                                           initial_filename=f'{reconstructor}_{wave}_{resolution}_initial',
+                                           final_filename=f'{reconstructor}_{wave}_{resolution}_final')
 
                 # Print status
                 print(f'Finished with {resolution}, {wave}, {reconstructor}')

@@ -19,8 +19,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import h5py
 
-import os
-import sys
 import argparse
 import pathlib
 
@@ -30,7 +28,6 @@ plt.close('all')
 
 # Global Variables
 shock_tubes = ['b&w', 'd&w', 'rj1a', 'rj4d', 'einfeldt']
-reconstructor = 'ppmc'
 resolution = {'nx':512, 'ny':16, 'nz':16}
 physical_size = 1.0
 
@@ -59,8 +56,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--in_path', help='The path to the directory that the source files are located in. Defaults to "~/Code/cholla/bin"')
     parser.add_argument('-o', '--out_path', help='The path of the directory to write the plots out to. Defaults to writing in the same directory as the input files')
-    parser.add_argument('-r', '--run_cholla', action="store_true", help='Runs cholla to generate all the scaling data')
-    parser.add_argument('-f', '--figure', action="store_true", help='Plot the L2 Norms')
+    parser.add_argument('-r', '--run_cholla', action="store_true", help='Runs cholla to generate all the data')
+    parser.add_argument('-f', '--figure', action="store_true", help='Generate the plots')
     parser.add_argument('-t', '--tube', default=['all'], nargs='+', help="List of tubes to run and/or plot. Options are 'b&w', 'd&w', 'rj1a', 'rj4d', 'einfeldt', and 'all'")
 
     args = parser.parse_args()
@@ -82,10 +79,10 @@ def main():
                 raise ValueError(f'Unsupported value "{test_val}" given as a shock tube.')
         shock_tubes = args.tube
 
-    if args.run_cholla == 'True':
-        runCholla(rootPath)
+    if args.run_cholla:
+        runCholla()
 
-    if args.figure == 'True':
+    if args.figure:
         plotShockTubes(rootPath, OutPath)
         for tube in shock_tubes:
             shared_tools.update_plot_entry(tube, 'python/shock-tubes.py')
@@ -93,14 +90,7 @@ def main():
 # ==============================================================================
 
 # ==============================================================================
-def runCholla(rootPath):
-    # Paths
-    exe_path = rootPath / 'cholla' / 'bin'
-    data_from_path = rootPath / 'python'
-    data_to_path = rootPath / 'data'
-    # Check that the output directory exists
-    data_to_path.mkdir(parents=True, exist_ok=True)
-
+def runCholla():
     # Cholla settings
     common_settings = f"nx={resolution['nx']} ny={resolution['ny']} nz={resolution['nz']} init=Riemann " \
                       f"xmin=0.0 ymin=0.0 zmin=0.0 xlen={physical_size} ylen={physical_size} zlen={physical_size} "\
@@ -109,26 +99,12 @@ def runCholla(rootPath):
 
     # Loop over the lists and run cholla for each combination
     for shock_tube in shock_tubes:
-        # Generate Cholla run command
-        chollaPath = exe_path / f'cholla.mhd.c3po.{reconstructor}'
-        paramFilePath = data_from_path / 'cholla-config-files' / f'blank_settings_file.txt'
-        logFile = rootPath / 'cholla.log'
-        command = f'{chollaPath} {paramFilePath} {common_settings} {shock_tube_params[shock_tube]} >> {logFile} 2>&1'
-
-        # Run Cholla
-        os.system(command)
-
-        # Move data file
-        finalFile = data_from_path / '1.h5.0'
-        finalFile.rename(data_to_path / f'{shock_tube}.h5')
-
-        # Remove unused files
-        (data_from_path / '0.h5.0').unlink()
-        (data_from_path / 'run_output.log').unlink()
-        (data_from_path / 'run_timing.log').unlink()
+        shared_tools.cholla_runner(cholla_cli_args=f'{common_settings} {shock_tube_params[shock_tube]}',
+                                   move_final=True,
+                                   final_filename=f'{shock_tube}')
 
         # Print status
-        print(f'Finished with {shock_tube}, {reconstructor}')
+        print(f'Finished with {shock_tube}')
 # ==============================================================================
 
 # ==============================================================================

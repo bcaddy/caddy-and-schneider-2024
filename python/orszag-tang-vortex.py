@@ -19,8 +19,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import h5py
 
-import os
-import sys
 import argparse
 import pathlib
 
@@ -28,17 +26,14 @@ import shared_tools
 
 plt.close('all')
 
-# Global settings
-reconstructor = 'plmc'
-
 # ==============================================================================
 def main():
     # Check for CLI arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--in_path', help='The path to the directory that the source files are located in. Defaults to "~/Code/cholla/bin"')
     parser.add_argument('-o', '--out_path', help='The path of the directory to write the plots out to. Defaults to writing in the same directory as the input files')
-    parser.add_argument('-r', '--run_cholla', action="store_true", help='Runs cholla to generate all the scaling data')
-    parser.add_argument('-f', '--figure', action="store_true", help='Plot the L2 Norms')
+    parser.add_argument('-r', '--run_cholla', action="store_true", help='Runs cholla to generate all the data')
+    parser.add_argument('-f', '--figure', action="store_true", help='Generate the plots')
 
     args = parser.parse_args()
 
@@ -53,39 +48,13 @@ def main():
         OutPath = pathlib.Path(__file__).resolve().parent.parent / 'assets' / '3-mhd-tests'
 
     if args.run_cholla:
-        runCholla(rootPath)
+        shared_tools.cholla_runner(param_file_name=f'orszag_tang_vortex.txt',
+                                   move_final=True,
+                                   final_filename=f'orszag_tang_vortex')
 
     if args.figure:
         plotOTV(rootPath, OutPath)
         shared_tools.update_plot_entry('otv', 'python/orszag-tang-vortex.py')
-
-# ==============================================================================
-
-# ==============================================================================
-def runCholla(rootPath):
-    # Paths
-    exe_path = rootPath / 'cholla' / 'bin'
-    data_from_path = rootPath / 'python'
-    data_to_path = rootPath / 'data'
-    # Check that the output directory exists
-    data_to_path.mkdir(parents=True, exist_ok=True)
-
-    # Generate Cholla run command
-    chollaPath = exe_path / f'cholla.mhd.c3po.{reconstructor}'
-    paramFilePath = data_from_path / 'cholla-config-files' / f'orszag_tang_vortex.txt'
-    logFile = rootPath / 'cholla.log'
-    command = f'{chollaPath} {paramFilePath} >> {logFile} 2>&1'
-
-    # Run Cholla
-    os.system(command)
-
-    # Move data file
-    (data_from_path / '1.h5.0').rename(data_to_path / f'orszag_tang_vortex.h5')
-
-    # Remove unused files
-    (data_from_path / '0.h5.0').unlink()
-    (data_from_path / 'run_output.log').unlink()
-    (data_from_path / 'run_timing.log').unlink()
 # ==============================================================================
 
 # ==============================================================================
