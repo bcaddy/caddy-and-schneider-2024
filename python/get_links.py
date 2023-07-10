@@ -7,8 +7,9 @@
 ================================================================================
 """
 
-from shared_tools import unpickle_dictionary
+import pickle
 import argparse
+import pathlib
 
 
 def main():
@@ -17,7 +18,11 @@ def main():
     parser.add_argument('key', help='The key to the link to load')
     args = parser.parse_args()
 
-    link = f'\href{{{unpickle_dictionary()[args.key]}}}{{\img{{../assets/github.png}}}}'
+    path = pathlib.Path(__file__).resolve().parent.parent / 'python' / 'links.pkl'
+    with open(path, 'rb') as file:
+        links = pickle.load(file)
+
+    link = f'\href{{{links[args.key]}}}{{\img{{../assets/github.png}}}}'
 
     print(link)
 
