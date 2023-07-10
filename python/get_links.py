@@ -7,7 +7,7 @@
 ================================================================================
 """
 
-import shared_tools
+from shared_tools import unpickle_dictionary
 import argparse
 
 
@@ -17,7 +17,7 @@ def main():
     parser.add_argument('key', help='The key to the link to load')
     args = parser.parse_args()
 
-    link = f'\href{{{shared_tools.unpickle_dictionary()[args.key]}}}{{\img{{../assets/github.png}}}}'
+    link = f'\href{{{unpickle_dictionary()[args.key]}}}{{\img{{../assets/github.png}}}}'
 
     print(link)
 
