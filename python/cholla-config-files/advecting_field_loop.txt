@@ -46,9 +46,9 @@ vz=2.0
 # initial pressure
 P=1.0
 # amplitude of the loop/magnetic field background value
-A=0.001
+#A=0.001
 # Radius of the Loop
-radius=0.3
+#radius=0.3
 
 # value of gamma
 gamma=1.666666666666667

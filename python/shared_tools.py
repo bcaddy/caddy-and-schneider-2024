@@ -52,7 +52,9 @@ pretty_names = {'density':'Density',
                 'd&w':'Dai & Woodward',
                 'einfeldt':'Einfeldt Strong Rarefaction',
                 'rj1a':'Ryu & Jones 1a',
-                'rj4d':'Ryu & Jones 4d'}
+                'rj4d':'Ryu & Jones 4d',
+                'b_squared_avg':r'Normalized $\left< B^2 \right>$ Evolution',
+                'bz_abs_avg':r'Normalized $\left< \mid B_z \mid \right>$ Evolution'}
 
 # The colors for various quantities
 colors = {'density':'blue', 'gas_pressure':'green', 'energy':'red',
@@ -123,11 +125,14 @@ def cholla_runner(exe_path: pathlib.Path = repo_root / 'cholla' / 'bin',
 # ==============================================================================
 
 # ==============================================================================
-def load_conserved_data(file_name: str, load_gamma: bool = False, load_resolution: bool = False) -> dict:
+def load_conserved_data(file_name: str, load_gamma: bool = False, load_resolution: bool = False, load_time: bool = False) -> dict:
     """Load the conserved variables from the HDF5 file
 
     Args:
         file_name (str): The name of the HDF5 file, no extension
+        load_gamma (bool, optional): Whether or not to load gamma. Defaults to False.
+        load_resolution (bool, optional): Whether or not to load the resolution. Defaults to False.
+        load_time (bool, optional): Whether or not to load the time of the snapshot. Defaults to False.
 
     Returns:
         dict: The dictionary containing all the conserved data
@@ -139,6 +144,8 @@ def load_conserved_data(file_name: str, load_gamma: bool = False, load_resolutio
         output['resolution'] = file.attrs['dims']
     if load_gamma:
         output['gamma']      = file.attrs['gamma']
+    if load_time:
+        output['time']       = file.attrs['t']
 
     output['density']    = np.array(file['density'])
     output['energy']     = np.array(file['Energy'])

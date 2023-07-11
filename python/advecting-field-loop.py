@@ -22,6 +22,9 @@ resolutions   = [32, 64, 128]
 reconstructor = 'ppmc'
 tout          = 2.0
 outstep       = 0.2  # should be some even division of tout=2.0
+num_outputs   = int(np.ceil(tout/outstep) + 1)
+B_0           = 1E-3
+radius        = 0.3
 
 # ==============================================================================
 def main():
@@ -48,27 +51,24 @@ def main():
         runCholla()
 
     if args.figure:
-        pass
-        # plotAFL()
+        plotAFL(OutPath)
         # shared_tools.update_plot_entry("afl", 'python/advecting-field-loop.py')
 
 # ==============================================================================
 
 # ==============================================================================
 def runCholla():
-    num_outputs = int(np.ceil(tout/outstep) + 1)
-
     for res in resolutions:
         run_start = default_timer()
 
-        cli_args = f'nx={res} ny={res} nz={2*res} tout={tout} outstep={outstep}'
+        cli_args = f'nx={res} ny={res} nz={2*res} tout={tout} outstep={outstep} A={B_0} radius={radius}'
         shared_tools.cholla_runner(reconstructor=reconstructor,
                                    param_file_name=f'advecting_field_loop.txt',
                                    cholla_cli_args=cli_args,
                                    move_initial=True,
                                    move_final=True,
                                    initial_filename=f'afl_n{res}_0',
-                                   final_filename=f'afl_n{res}_{num_outputs-1}')
+                                   final_filename=f'afl_n{res}_1')
         # Copy the rest of the data
         files = (shared_tools.repo_root/'python').glob('*.h5.*')
         for target in files:
@@ -78,48 +78,102 @@ def runCholla():
 # ==============================================================================
 
 # ==============================================================================
-# def plotAFL(rootPath, outPath):
-#     # Plotting info
-#     line_width         = 0.1
-#     suptitle_font_size = 15
-#     subtitle_font_size = 10
-#     num_contours       = 30
+def load_data():
+    b_squared_avg = {}
+    bz_abs_avg    = {}
+    times         = {}
+    for res in resolutions:
+        key = f'{res}'
 
-#     # Setup figure
-#     fig, subPlot = plt.subplots(1, 2)
+        b_squared_avg[key] = np.zeros(num_outputs)
+        bz_abs_avg[key]    = np.zeros(num_outputs)
+        times[key]         = np.zeros(num_outputs)
 
-#     # Whole plot settings
-#     fig.tight_layout()
+        for i in range(num_outputs):
+            file_name = f'afl_n{res}_{i}'
 
-#     # Load data
+            temp_data = shared_tools.load_conserved_data(file_name, load_time=True)
+            temp_data = shared_tools.center_magnetic_fields(temp_data)
 
-#     data = shared_tools.load_conserved_data('', load_gamma=True, load_resolution=True)
-#     data = shared_tools.center_magnetic_fields(data)
+            b_squared_avg[key][i] = np.mean(temp_data['magnetic_x_centered']**2
+                                    + temp_data['magnetic_y_centered']**2
+                                    + temp_data['magnetic_z_centered']**2)
 
-#     for field in fields:
-#         # Get info for this field
-#         subplot_idx = field_indices[field]
-#         field_data  = np.fliplr(np.rot90(data[field]))
+            bz_abs_avg[key][i] = np.mean(np.abs(temp_data['magnetic_z_centered']))
+            bz_abs_avg[key][i] /= B_0
 
-#         # Compute where the contours are
-#         contours = np.linspace(np.min(field_data), np.max(field_data), num_contours)
+            times[key][i] = temp_data['time']
 
-#         # Plot the data
-#         subPlot[subplot_idx].contour(field_data, levels=num_contours, colors='black', linewidths=line_width)
+        b_squared_avg[key] /= b_squared_avg[key][0]
 
-#         # Set ticks and grid
-#         subPlot[subplot_idx].tick_params(labelleft=False, labelbottom=False,
-#                                          bottom=False, left=False)
+    return {'b_squared_avg':b_squared_avg, 'bz_abs_avg':bz_abs_avg, 'times':times}
+# ==============================================================================
 
-#         # Ensure equal axis
-#         subPlot[subplot_idx].set_aspect('equal')
+# ==============================================================================
+def plotAFL(outPath):
+    # Plotting info
+    suptitle_font_size = 15
+    subtitle_font_size = 10
+    axslabel_font_size = 10
+    line_width         = 1
+    marker_size        = 5
+    tick_font_size     = 7.5
+    colors             = {'32':'blue',    '64':'red',    '128':'green'}
+    line_style         = {'32':'dashdot', '64':'dashed', '128':'solid'}
+    markers            = {'32':'o',       '64':'v',      '128':'s'}
 
-#         # Set titles
-#         subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}')
+    # Setup figure
+    fig, subPlot = plt.subplots(1, 2)
 
-#     # Save the figure and close it
-#     plt.savefig(outPath / f'afl.pdf', transparent = True)
-#     plt.close()
+    # Load data
+    data = load_data()
+
+    # Info for each sublot
+    fields = ['b_squared_avg', 'bz_abs_avg']
+    subplot_indices = {'b_squared_avg':0, 'bz_abs_avg':1}
+
+    for field in fields:
+        # Get info for this field
+        subplot_idx = subplot_indices[field]
+
+        # Plot the data
+        for res in resolutions:
+            key    = f'{res}'
+            time   = data['times'][key]
+            y_data = data[field][key]
+            subPlot[subplot_idx].plot(time,
+                                      y_data,
+                                      color=colors[key],
+                                      linestyle=line_style[key],
+                                      linewidth=line_width,
+                                      marker=markers[key],
+                                      markersize=marker_size,
+                                      label=f'N={res}')
+
+        # Set ticks and grid
+        subPlot[subplot_idx].tick_params(axis='both',
+                                         direction='in',
+                                         which='both',
+                                         labelsize=tick_font_size,
+                                         bottom=True, top=True, left=True, right=True)
+        if field == 'b_squared_avg':
+            subPlot[subplot_idx].set_ylim(top=1.0)
+        if field == 'bz_abs_avg':
+            pass
+            # subPlot[subplot_idx].set_ylim(bottom=0.0)
+            # subPlot[subplot_idx].set_yscale('log')
+
+        # Set titles
+        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}')
+        subPlot[subplot_idx].set_xlabel('Time', fontsize=axslabel_font_size)
+
+        # Legend
+        subPlot[subplot_idx].legend()
+
+    # Save the figure and close it
+    fig.tight_layout()
+    plt.savefig(outPath / f'afl.pdf', transparent = True)
+    plt.close()
 # ==============================================================================
 
 if __name__ == '__main__':
