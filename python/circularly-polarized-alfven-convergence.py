@@ -204,7 +204,7 @@ def plotL2Norm(outPath, normalize = False):
     # fig.legend()
 
     # Whole plot settings
-    fig.suptitle(f'{norm_name}MHD Linear Wave Convergence', fontsize=suptitle_font_size)
+    fig.suptitle(f'{norm_name}Circularly Polarized Alfvén Wave Convergence', fontsize=suptitle_font_size)
 
     plt.tight_layout()
     plt.savefig(outPath / f'cpaw_convergence.pdf', transparent = True)
