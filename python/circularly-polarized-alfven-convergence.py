@@ -65,7 +65,7 @@ def main():
 
     if args.figure:
         plotL2Norm(OutPath)
-        # shared_tools.update_plot_entry('cpaw', 'python/circularly-polarized-alfven-convergence.py')
+        shared_tools.update_plot_entry('cpaw', 'python/circularly-polarized-alfven-convergence.py')
 
 # ==============================================================================
 
