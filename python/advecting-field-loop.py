@@ -18,7 +18,7 @@ import shared_tools
 plt.close('all')
 
 # Values to loop over
-resolutions   = [32, 64, 128]
+resolutions   = [32, 64, 128, 256]
 reconstructor = 'ppmc'
 tout          = 2.0
 outstep       = 0.1  # should be some even division of tout=2.0
@@ -123,9 +123,9 @@ def plotAFL(outPath):
     line_width         = 1
     marker_size        = 5
     tick_font_size     = 7.5
-    colors             = {'32':'blue',    '64':'red',    '128':'green'}
-    line_style         = {'32':'dashdot', '64':'dashed', '128':'solid'}
-    markers            = {'32':'o',       '64':'v',      '128':'s'}
+    colors             = {'32':'blue',    '64':'red',    '128':'green', '256':'purple'}
+    line_style         = {'32':'dashdot', '64':'dashed', '128':'solid', '256':'dotted'}
+    markers            = {'32':'o',       '64':'v',      '128':'s',     '256':'*'}
 
     # Setup figure
     fig, subPlot = plt.subplots(1, 2)
