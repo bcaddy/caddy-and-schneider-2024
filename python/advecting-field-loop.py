@@ -21,7 +21,7 @@ plt.close('all')
 resolutions   = [32, 64, 128]
 reconstructor = 'ppmc'
 tout          = 2.0
-outstep       = 0.2  # should be some even division of tout=2.0
+outstep       = 0.1  # should be some even division of tout=2.0
 num_outputs   = int(np.ceil(tout/outstep) + 1)
 B_0           = 1E-3
 radius        = 0.3
