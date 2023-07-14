@@ -9,7 +9,7 @@ nx=192
 # number of grid cells in the y dimension
 ny=192
 # number of grid cells in the z dimension
-nz=32
+nz=192
 # final output time
 tout=0.5
 # time interval for output
