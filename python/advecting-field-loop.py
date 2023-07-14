@@ -52,7 +52,7 @@ def main():
 
     if args.figure:
         plotAFL(OutPath)
-        # shared_tools.update_plot_entry("afl", 'python/advecting-field-loop.py')
+        shared_tools.update_plot_entry("afl", 'python/advecting-field-loop.py')
 
 # ==============================================================================
 
@@ -80,33 +80,38 @@ def runCholla():
 # ==============================================================================
 def load_data():
     b_squared_avg = {}
-    bz_abs_avg    = {}
+    divergence    = {}
     times         = {}
     for res in resolutions:
         key = f'{res}'
 
         b_squared_avg[key] = np.zeros(num_outputs)
-        bz_abs_avg[key]    = np.zeros(num_outputs)
+        divergence[key]    = np.zeros(num_outputs)
         times[key]         = np.zeros(num_outputs)
 
         for i in range(num_outputs):
             file_name = f'afl_n{res}_{i}'
 
-            temp_data = shared_tools.load_conserved_data(file_name, load_time=True)
+            temp_data = shared_tools.load_conserved_data(file_name, load_time=True, load_dx=True)
             temp_data = shared_tools.center_magnetic_fields(temp_data)
 
             b_squared_avg[key][i] = np.mean(temp_data['magnetic_x_centered']**2
                                     + temp_data['magnetic_y_centered']**2
                                     + temp_data['magnetic_z_centered']**2)
 
-            bz_abs_avg[key][i] = np.mean(np.abs(temp_data['magnetic_z_centered']))
-            bz_abs_avg[key][i] /= B_0
+            div_x = (temp_data['magnetic_x'][1:, :, :]
+                   - temp_data['magnetic_x'][:-1, :, :]) / temp_data['dx'][0]
+            div_y = (temp_data['magnetic_y'][:, 1:, :]
+                   - temp_data['magnetic_y'][:, :-1, :]) / temp_data['dx'][1]
+            div_z = (temp_data['magnetic_z'][:, :, 1:]
+                   - temp_data['magnetic_z'][:, :, :-1]) / temp_data['dx'][2]
+            divergence[key][i] = np.max(div_x + div_y + div_z)
 
             times[key][i] = temp_data['time']
 
         b_squared_avg[key] /= b_squared_avg[key][0]
 
-    return {'b_squared_avg':b_squared_avg, 'bz_abs_avg':bz_abs_avg, 'times':times}
+    return {'b_squared_avg':b_squared_avg, 'divergence':divergence, 'times':times}
 # ==============================================================================
 
 # ==============================================================================
@@ -129,8 +134,8 @@ def plotAFL(outPath):
     data = load_data()
 
     # Info for each sublot
-    fields = ['b_squared_avg', 'bz_abs_avg']
-    subplot_indices = {'b_squared_avg':0, 'bz_abs_avg':1}
+    fields = ['b_squared_avg', 'divergence']
+    subplot_indices = {'b_squared_avg':0, 'divergence':1}
 
     for field in fields:
         # Get info for this field
@@ -158,10 +163,10 @@ def plotAFL(outPath):
                                          bottom=True, top=True, left=True, right=True)
         if field == 'b_squared_avg':
             subPlot[subplot_idx].set_ylim(top=1.0)
-        if field == 'bz_abs_avg':
+        if field == 'divergence':
             pass
             # subPlot[subplot_idx].set_ylim(bottom=0.0)
-            # subPlot[subplot_idx].set_yscale('log')
+            subPlot[subplot_idx].set_yscale('log')
 
         # Set titles
         subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}')

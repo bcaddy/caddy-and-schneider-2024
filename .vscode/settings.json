@@ -8,5 +8,25 @@
         "reconstructor",
         "xytext",
         "ymin"
-    ]
+    ],
+    "files.associations": {
+        "nanorc": "shellscript",
+        "*.summit": "shellscript",
+        "*.crc": "shellscript",
+        "*.hydro": "makefile",
+        "*.lux": "shellscript",
+        "*.spock": "makefile",
+        "*.c3po": "makefile",
+        "*.github": "makefile",
+        "*.particleTests": "makefile",
+        "*.particles": "makefile",
+        "*.mhd": "makefile",
+        "*.frontier": "makefile",
+        "*.cooling": "makefile",
+        "*.cu": "cuda-cpp",
+        "random": "cpp",
+        "thread": "cpp",
+        "__locale": "cpp",
+        "locale": "cpp"
+    }
 }
