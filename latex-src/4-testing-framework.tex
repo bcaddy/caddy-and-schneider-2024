@@ -6,6 +6,7 @@ As Cholla grows in complexity, and with the fundamental changes that implementin
 Taken together, the ease of writing and running tests and their automated running on every pull request has meant that new features are faster and easier to add to Cholla with confidence. Any errors or changes that break older code will likely be quickly caught by the tests before they ever make it into Cholla and have been successful in doing so.
 
 \subsection{Testing Framework}
+\label{sec:testing-framework}
 
 GoogleTest\footnote{https://github.com/google/googletest} was chosen for as the testing framework. While there are many C++ testing frameworks available, GoogleTest is one of the most fully featured, popular, and easy to use options. The primary reason however is that it supports death tests, tests that check if the internals of the test crash/segfault/etc. Since Cholla, like many HPC codes, handles errors by reporting those errors then exiting a testing framework that can have the components it is testing crash without crashing the tests as well is critical.
 

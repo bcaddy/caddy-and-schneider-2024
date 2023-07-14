@@ -43,20 +43,68 @@ These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both th
 \subsection{Circularly Polarized Alfv\'en Wave}
 \label{sec:cpaw}
 
+The circularly polarized Alfv\'en wave is a non-linear wave that allows one to test the codes accuracy in the non-linear regime with the quantitative benefits of a regular wave test. The tests use a domain of $3.0\times1.5\times1.5$ and a resolution of $2N\times N \times N$ where $N$ goes from 8 to 256 in powers of 2 and periodic boundary conditions. The wave is set to travel at an oblique angle the grid making this a fully 3D test.
+
+In coordinate system aligned with the movement of the wave the initial conditions are 
+$\rho = 1.0$,
+$P = 0.1$,
+$v_x = (0,-1)$ for traveling or standing waves respectively,
+$v_y = A \sin{\frac{2\pi x}{\lambda}}$,
+$v_z = A \cos{\frac{2\pi x}{\lambda}}$,
+$B_x = 1.0$,
+$B_y = A \sin{\frac{2\pi x}{\lambda}}$,
+$B_z = A \cos{\frac{2\pi x}{\lambda}}$,
+where the amplitude of the wave $A = 0.1$ and the wavelength $\lambda = 1.0$. These coordinates are then rotated with the following rotation
+
+\begin{eqnarray}
+    x\prime = x \cos\alpha\cos\beta - y \sin\beta - z \sin\alpha\cos\beta \nonumber \\
+    y\prime = x \cos\alpha\sin\beta + y \cos\beta - z \sin\alpha\sin\beta \nonumber \\
+    z\prime = x \sin\alpha + z \cos\alpha \nonumber
+\end{eqnarray}
+
+with $\sin\alpha = 2/3$ and $\sin\beta = 1/\sqrt{5}$. This ensures the domain is fully periodic through the boundaries and the wave can travel (or stand) indefinitely. The magnetic fields are initialized with the vector potential to ensure initial divergence is zero to round off. The waves are then run for a single period and the L2 norm of the L2 error vector is plotted in Figure \ref{fig:cpaw} using the same method as in Section \ref{sec:lwc}. It's especially interesting to note that the improvement in accuracy that PPM brought over PLM in the linear waves is absent in this non-linear test.
+
+These Alfv\'en waves are subject to a parametric instability (TODO cite Del Zanna, Velli, \& Londrillo, A\&A 367, 705, 2001) which should not be present for these initial conditions. However, the truncation error will result in small variations in the magnetic pressure which will drive low amplitude compression waves \citep{stone_athena_2008}. 
+
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/cpaw_convergence.pdf}
-    \caption{Circularly Polarized Alfven Wave Convergence plot. \input{|python ../python/get_links.py 'cpaw'}}
+    \caption{Circularly Polarized Alfv\'en Wave Convergence using PLM and PPM reconstruction. \input{|python ../python/get_links.py 'cpaw'}}
     \label{fig:cpaw}
 \end{figure}
 
 \subsection{Advecting Field Loop}
 \label{sec:afl}
 
+In this test we advect a tilted spherical current loop across the domain at an oblique angle to the grid. This test requires particularly accurate balancing of the non-zero components of the induction equation. It also has zero magnetic field outside the spherical current loop, as the current loops moves across the grid those cells that are no longer in the loop should return to zero; within round off. It is also a good test of the dissipation of the magnetic field as the magnetic pressure should remain constant.
+
+The initial conditions for this test are most easily described using the vector potential. The background state is
+$\rho = 1.0$,
+$P = 1.0$,
+$v_x = 1.0$,
+$v_y = 1.0$,
+$v_z = 2.0$,
+$B_x = 0$,
+$B_y = 0$,
+$B_z = 0$.
+
+In the central region the state is given by the following vector potential that we have chosen such that $A_x = 0$,
+\begin{equation}
+    A_y = A_z = 
+    \begin{cases}
+        A \left( R - r \right),& \text{for}\; r < R\\
+        0,              & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+where $r$ is the Euclidean distance from the center of the domain. Note that since the vector potential is along the vertices of the cells $A_y$ and $A_z$ will never have the same value at the same position since they are not stored at identical positions. The test is conducted in a grid of $N\times N\times 2N$ cells for $N=(32, 64, 128, 256)$ with a domain of $1.0\times1.0\times2.0$ centered at zero and evolved for two periods; $t_{max} = 2.0$.
+
+In Figure \ref{fig:afl} the mean of cell centered $B^2$ normalized to the initial value is plotted to show the convergence of the dissipation rate. The dissipation rate is comparable to those found in the literature \citep{stone_athena_2008} and improves at approximately first order. Figure \ref{fig:afl} also shows the maximum divergence in the domain as a function of time. Throughout the entire evolution it remains near round off and, after an initial rise, remains fairly constant. The zero magnetic field region outside of the current loop also remains near zero throughout the entire evolution of the problem.
+ 
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/afl.pdf}
-    \caption{Advecting Field loop \input{|python ../python/get_links.py 'afl'}}
+    \caption{Evolution of tilted spherical magnetic field loop through two full periods. Mean of $B^2$ normalized to the initial value as a function of time (left) and the maximum divergence in the domain as a function of time (right). \input{|python ../python/get_links.py 'afl'}}
     \label{fig:afl}
 \end{figure}
 
@@ -74,20 +122,49 @@ The Riemann problem is defined as having a single state for half of the domain w
 \subsection{MHD Blast Wave in a Strongly Magnetized Medium}
 \label{sec:mhd-blast}
 
+Blast waves in different forms are staple tests for hydrodynamics and MHD codes. They combine strong shocked flows, smooth flows, and, in MHD, strong magnetic fields. The results are qualitative rather than quantitative but thoroughly test the robustness of the algorithm and act act as an excellent regression test for our automated testing (see Section \ref{sec:testing}). In this test $\beta = 0.2$, like \cite{stone_2009} we note instability if $\beta$ is decreased by a factor of 10. This issue could possibly be resolved by integrating the internal energy separate from the total energy using the dual energy formalism in Cholla.
+
+The background state is
+$\rho = 1.0$,
+$P = 0.1$,
+$v_x = 0.0$,
+$v_y = 0.0$,
+$v_z = 0.0$,
+$B_x = 1/\sqrt{2}$,
+$B_y = 1/\sqrt{2}$,
+$B_z = 0.0$,
+and the over pressure region is a central sphere of size $R = 0.1$ which has $P=10.0$.
+
+The test was then run with a domain of $1\times1.5\times1$ and resolution of $200\times300\times200$ until $t = 0.2$. Figure \ref{fig:blast} shows contours in the density and magnetic energy in an $x-y$ slice through the center of the domain. The contours are smooth and symmetric and show clear elongation of the blast wave rarefaction parallel to the magnetic field. The blast wave propagates slowly parallel to the magnetic field but much more rapidly perpendicular to the magnetic field
+
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/mhd-blast.pdf}
-    \caption{Contour plot of the MHD blast wave test \input{|python ../python/get_links.py 'mhd-blast'}}
+    \caption{Contour plot of the MHD blast wave test at $t=0.2$. 30 evenly spaced contours are shown in an $x-y$ slice through the center of the domain. \input{|python ../python/get_links.py 'mhd-blast'}}
     \label{fig:blast}
 \end{figure}
 
 \subsection{Orszag-Tang Vortex}
 \label{sec:otv}
 
+The Orszag-Tang vortex is a standard 2D MHD test from (CITE Orszag \& Tang (1979)). While it does not provide a quantitative measure of accuracy like the linear wave tests or a test of the robustness of the method like the MHD blast wave it does have a very complex flow that is sensitive to changes in the integrator; making it ideal for regression testing.
+
+The test was conducted with a periodic domain of $1\times1\times1$ and resolution of $192\times192\times192$ until $t = 0.5$ with the following initial conditions: 
+$\rho = 25 / \left( 36 \pi \right)$,
+$P    =  5 / \left( 12 \pi \right)$,
+$v_x  = \sin 2\pi y$,
+$v_y  = -\sin 2\pi x$,
+$v_z  = 0.0$,
+$A_x  = 0.0$,
+$A_y  = 0.0$,
+$A_z  = \left( B_0/4\pi \right) \left( \cos{4\pi x} + 2 \cos{2\pi y} \right)$, with $B_0 = 1/sqrt{4\pi}$.
+
+The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure 22 in \cite{stone_athena_2008} as a qualitative check for correctness of the flow structure.
+
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/orszag-tang-vortex.pdf}
-    \caption{Contour plot of the Orszag-Tang Vortex \input{|python ../python/get_links.py 'otv'}}
+    \caption{Contour plot of the Orszag-Tang Vortex at $t=0.5$. Thirty evenly spaced contours are shown for each plot in an $x-y$ slice through the center of the domain.  \input{|python ../python/get_links.py 'otv'}}
     \label{fig:otv}
 \end{figure}
 
