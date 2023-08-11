@@ -64,7 +64,7 @@ where the amplitude of the wave $A = 0.1$ and the wavelength $\lambda = 1.0$. Th
 
 with $\sin\alpha = 2/3$ and $\sin\beta = 1/\sqrt{5}$. This ensures the domain is fully periodic through the boundaries and the wave can travel (or stand) indefinitely. The magnetic fields are initialized with the vector potential to ensure initial divergence is zero to round off. The waves are then run for a single period and the L2 norm of the L2 error vector is plotted in Figure \ref{fig:cpaw} using the same method as in Section \ref{sec:lwc}. It's especially interesting to note that the improvement in accuracy that PPM brought over PLM in the linear waves is absent in this non-linear test.
 
-These Alfv\'en waves are subject to a parametric instability (TODO cite Del Zanna, Velli, \& Londrillo, A\&A 367, 705, 2001) which should not be present for these initial conditions. However, the truncation error will result in small variations in the magnetic pressure which will drive low amplitude compression waves \citep{stone_athena_2008}. 
+These Alfv\'en waves are subject to a parametric instability \citep{del_zanna_parametric_2001} which should not be present for these initial conditions. However, the truncation error will result in small variations in the magnetic pressure which will drive low amplitude compression waves \citep{stone_athena_2008}. 
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
