@@ -8,14 +8,14 @@
 \section{Methods}
 \label{sec:methods}
 
-Magnetohydrodynamics is a critical aspect of many astrophysical phenomenon but is extremely computationally expensive. Part of the computational expense is that magnetic field dynamos and their effects occur across a wide range of time and size scales. MHD simulation methods are also complex, the additional waves compared to hydrodynamics and the requirement to maintain the divergence free condition result in considerable complexity.
+Magnetic fields play a key role in many astrophysical phenomena, but are often neglected in numerical simulations due to the computational expense of magnetohydrodynamics. Part of this expense arises due to the wide range of temporal and physical scales over which magnetic field dynamos operate. Numerical integration of the MHD equations is also challenging; the additional waves compared to hydrodynamics and the requirement to maintain the divergence free condition result in considerable added complexity.
 
-As such physically realistic MHD simulations need to be both high resolution and use robust, divergence free, methods which increase the computational cost. This requires the ability to harness new exascale, GPU based, supercomputers efficiently and adding MHD to Cholla is an ideal way to do that. In this section we will describe the equations solved and methods used by the MHD module of Cholla with special attention to the changes required for solving these equations on GPUs.
+Given these considerations, MHD simulations often need to be both high resolution and use robust, divergence free methods, which tend to increase the computational cost. This limitation can be overcome by harnessing new GPU based supercomputers efficiently. Thus, we have elected to expand the existing massively parallel GPU-based hydrodynamics code, Cholla, to incorporate the effects of MHD. In this section we describe the equations solved and methods used by the MHD module of Cholla. While the algorithms themselves are not new, our particular choices are not laid out in any one reference, so we outline them all here. We also highlight choices that are particularly relevant to solving these equations on GPUs.
 
 \subsection{Magnetohydrodynamics}
 \label{sec:methods-mhd}
 
-Cholla solves the ideal MHD equations in their conserved Eulerian form using a finite volume method. These equations neglect all dissipative processes: finite viscosity, electrical resistivity and thermal conductivity. Since Cholla is focused on simulating the physics of low density regions such as the ISM, CGM, and IGM these approximations are reasonable. Anisotropic conduction may have an impact on galactic dynamics and is planned as a future addition to Cholla.
+Cholla solves the ideal MHD equations in their conserved Eulerian form using a finite volume method \citep{Godunov}. These equations neglect all dissipative processes: finite viscosity, electrical resistivity and thermal conductivity. These approximations are reasonable when simulation regions of low density such as the ISM, CGM, and IGM. Although we also neglect these additional processes at present, our methods are fully compatible with a future expansion to include additional physics that depends on magnetic fields, such as anisotropic conduction or cosmic ray transport.
 
 The ideal MHD equations are:
 
@@ -39,35 +39,35 @@ The ideal MHD equations are:
     \frac{\partial \boldsymbol{B}}{\partial t} - \nabla \times (\boldsymbol{v} \times \boldsymbol{B}) = 0
 \end{equation}
 
-where $\rho$ is density, $\boldsymbol{v} = ( v_x, v_y, v_z)$ is the velocity vector, $t$ is time, $\boldsymbol{B} = ( B_x, B_y, B_z)$ is the magnetic field, $\boldsymbol{I}$ is the identity tensor, $P_T \equiv P + \frac{1}{2}(\boldsymbol{B} \cdot \boldsymbol{B})$, $E$ is the total energy per unit volume $E \equiv \epsilon + \frac{1}{2}\rho(\boldsymbol{v}\cdot\boldsymbol{v}) + \frac{1}{2}(\boldsymbol{B}\cdot\boldsymbol{B})$, and the units are such that magnetic permeability $\mu_0 = 1$. 
+\noindent where $\rho$ is density, $\boldsymbol{v} = ( v_x, v_y, v_z)$ is the velocity vector, $t$ is time, $\boldsymbol{B} = ( B_x, B_y, B_z)$ is the magnetic field, $\boldsymbol{I}$ is the identity tensor, $P_T \equiv P + \frac{1}{2}(\boldsymbol{B} \cdot \boldsymbol{B})$ is the total pressure, $E$ is the total energy per unit volume $E \equiv \epsilon + \frac{1}{2}\rho(\boldsymbol{v}\cdot\boldsymbol{v}) + \frac{1}{2}(\boldsymbol{B}\cdot\boldsymbol{B})$, and the units are such that magnetic permeability $\mu_0 = 1$. 
 
-Equation \ref{eqn:mass-conservation} describes the conservation of mass, equation \ref{eqn:momentum-conservation} describes the conservation of momentum, equation \ref{eqn:energy-conservation} describes the conservation of energy, an equation \ref{eqn:induction} is the induction equation which describes the divergence free condition. The equation of state used is the ideal gas equation of state $P \equiv \epsilon(\gamma - 1)$ where $\gamma$ is the adiabatic index and $\epsilon$ is the internal energy density. 
+Equation \ref{eqn:mass-conservation} describes the conservation of mass, equation \ref{eqn:momentum-conservation} describes the conservation of momentum, equation \ref{eqn:energy-conservation} describes the conservation of energy, and equation \ref{eqn:induction} is the induction equation, which describes the divergence free condition. Cholla uses an ideal gas equation of state  which is $P \equiv \epsilon(\gamma - 1)$ where $\gamma$ is the adiabatic index and $\epsilon$ is the internal energy density. 
 
-In practice these equations are used in their vector form where $\boldsymbol{U}$ and $\boldsymbol{w}$ and the conserved and primitive variables respectively. 
+In practice these equations are used in their vector form, where $\boldsymbol{U}$ and $\boldsymbol{w}$ are the conserved and primitive variables respectively:
 
-\begin{equation}
+\begin{align}
     \boldsymbol{U} = \begin{bmatrix}
-            \rho \\
-            v_x \\
-            v_y \\
-            v_z \\
-            E   \\
-            B_x \\
-            B_y \\
+            \rho &
+            v_x &
+            v_y &
+            v_z &
+            E   &
+            B_x &
+            B_y &
             B_z
-         \end{bmatrix}, \quad
+         \end{bmatrix}
+    \\
     \boldsymbol{w} = \begin{bmatrix}
-            \rho \\
-            v_x \\
-            v_y \\
-            v_z \\
-            P   \\
-            B_x \\
-            B_y \\
+            \rho &
+            v_x &
+            v_y &
+            v_z &
+            P   &
+            B_x &
+            B_y &
             B_z 
          \end{bmatrix}
-\end{equation}
-
+\end{align}
 
 The conservation equations, in Cartesian coordinates, can then be rewritten as
 
@@ -120,36 +120,38 @@ where $\boldsymbol{F_x}$, $\boldsymbol{F_y}$, and $\boldsymbol{F_z}$ are the vec
          \end{bmatrix}.
 \end{equation}
 
-Some other useful MHD equations are given in Appendix \ref{appen:mhd-glossary}.
+Some other useful MHD equations are given in Appendix \ref{appen:mhd-glossary} such as the eigenvalues, wave speeds, etc.
 
 
 
 \subsection{Overview of the VL+CT Integrator}
 \label{sec:vlct-summary}
 
-The MHD integrator in Cholla uses the VL+CT (Van Leer plus Constrained Transport) integrator introduced in \cite{stone_2009} and used in Athena and Athena++ since then. The specific algorithm is from \cite{stone_2009} with some clarifying details from \cite{gardiner_2005,gardiner_unsplit_2008,stone_athena_2008} and the piecewise parabolic method is from \cite{felker_2020}. We also use the HLLD Riemann solver from \cite{hlld_2005}.
+To integrate these equations in Cholla, we use the VL+CT (Van Leer plus Constrained Transport) integrator introduced in \cite{stone_2009}, along with the HLLD Riemann solver from \cite{hlld_2005}. The specific algorithm is from \cite{stone_2009} with some clarifying details from \cite{gardiner_2005,gardiner_unsplit_2008,stone_athena_2008} and the piecewise parabolic method is from \cite{felker_2020}. The VL+CT integrator is very similar in structure to the Van Leer integrator \citep{van_leer_2003, falle_1991, Toro}, though with significant new additions for Constrained Transport (CT). We note that this is now the default integrator used in Cholla, as we have found it to be more robust than the CTU algorithm described in \cite{schneider_2015}. Constrained transport treats the magnetic field as a surface averaged quantity centered at cell interfaces rather than a volume averaged, cell centered quantity like the hydro variables; i.e. a staggered grid. Each face stores only the magnetic field perpendicular to that face, i.e. the $x,i+1/2,j,k$ face stores the $B_{x,i+1/2,j,k}$ magnetic field. At each time step, the magnetic field is then updated using edge averaged EMFs (Electromotive Force) computed from the magnetic flux returned by the Riemann solver. Updating the magnetic field with the EMF automatically fulfill the divergence free condition for magnetic fields, assuming that the initial conditions are divergence free.
 
-The VL+CT integrator is very similar in structure to the Van Leer integrator, though with significant new additions for Constrained Transport (CT). Constrained transport treats the magnetic field as surface averaged quantity centered at cell interfaces rather than a volume averaged, cell centered quantity like the hydro variables. Also, each face stores only the magnetic field perpendicular to that face, i.e. the $x,i+1/2,j,k$ face store the $B_{x,i+1/2,j,k}$ magnetic field. The magnetic field is then updated with edge averaged EMFs (Electromotive Force) computed from the magnetic flux returned by the Riemann solver. By updating with EMF you automatically fulfill the divergence free condition for magnetic fields, assuming that the initial conditions are divergence free.
-
-The steps of the VL+CT integrator are as follows; more detailed discussion of each step is in section \ref{vlct:header}.
+A brief overview of the algorithm for a single time step using the VL+CT integrator is as follows; more detailed discussion of each step is in section \ref{vlct:header}.
 
 \begin{enumerate}
     \item Compute the time step
-    \item Perform piecewise constant reconstruction of the interface state
-    \item Perform a Riemann solve on the reconstructed interface state
+    \item Reconstruct interface states using a piecewise constant method (PCM) approximation.
+    \item Solve the Riemann problem on every interface using the PCM interface states
     \item Compute the edge centered electric fields
-    \item Update the $t=n$ conserved variables to $t=n+\delta t/2$ using the computed fluxes and electric fields
-    \item Perform piecewise linear or parabolic reconstruction of the interface state
-    \item Perform a Riemann solve on the higher order reconstructed interface state
+    \item Update the $t=n$ conserved variables to $t=n+\Delta t/2$ using the computed fluxes and electric fields
+    \item Reconstruct interface states using a piecewise linear method (PLM) or piecewise parabolic method (PPM) approximation.
+    \item Solve the Riemann problem on every interface using the higher order reconstructed interface states
     \item Compute the edge centered electric fields
-    \item Update the $t=n$ conserved variables to $t=n+\delta t$ using the half time step fluxes and electric fields
+    \item Update the $t=n$ conserved variables to $t=n+\Delta t$ using the half time step fluxes and electric fields
 \end{enumerate}
 
+
 \subsection{Implementation on GPUs}
+\label{sec:gpu-vs-cpu}
 
-While the implementation of MHD on GPUs is similar to the implementation on CPUs there are some crucial differences, especially in data handling and movement. Compared to CPUs, GPUs have high memory bandwidth and extremely high FLOPS but limited memory capacity and limited functionality due to their fundamentally SIMD nature. Also, while their memory bandwidth is higher the much larger number of active threads on a GPU compared to a CPU still means that codes are often limited by memory bandwidth. As an example of this, where Athena++ computed their centered magnetic fields once and then saves them to memory Cholla recomputes them as needed. This saves a considerable amount of GPU memory and has minimal impact on performance due to the high memory bandwidth and FLOPS of GPUs.
+While the implementation of MHD on GPUs is similar to the implementation on CPUs there are some crucial differences, especially regarding data handling and movement. Compared to CPUs, GPUs have high memory bandwidth and extremely high FLOPS but limited memory capacity and limited functionality due to their fundamentally SIMD nature. Also, while their memory bandwidth is higher on the whole, the much larger number of active threads on a GPU compared to a CPU means that codes are often limited by memory bandwidth. This leads to some implementation choices that may seem counter-intuitive. For example, while an optimized CPU-based code may compute the cell-centered magnetic fields once and then save them to memory, Cholla recomputes them in each function call as needed.
 
-A major change since earlier versions of Cholla is keeping as much data as possible in the GPU memory instead of moving it to and from main system memory. Historically Cholla, and many other GPU codes, have kept the "primary" data on the CPU memory, copied whatever data needed worked on to the GPU, computed with it, then copied the data back. As GPUs have gotten dramatically faster and with much more memory over the last decade it had gotten to the point where these copies to and fro dominate the run time. In addition, new supercomputers, such as Frontier, have the network connections directly connected to the GPUs instead of connected to the CPU and so any MPI communication has to go through GPU memory. Between these two factors it is critical that all the data lives on the GPU and stays there during the entire simulation. Cholla has successfully moved all computations and MPI communication to the GPU. The only work that remains on the CPU is the setting of the initial conditions, which only occurs once, and reading and writing the HDF5 files since, at the time of writing, the HDF5 library does not support writing files directly from GPU memory.
+A major change since earlier versions of Cholla is keeping as much data as possible in the GPU memory instead of moving it to and from main system memory. Although it has always been a GPU-native code, historically Cholla used an extreme version of the ``offload" model of GPU programming, keeping the "primary" data (like conserved variable arrays) in CPU memory, and copying that data the GPU to carry out computations before copying it back each time step. As GPUs have gotten dramatically faster and their memory capacity has increased over the last decade it has reached the point where these copies between CPU and GPU memory can dominate the run time. In addition, new supercomputers, such as Frontier, have the network connections directly connected to the GPUs instead of connected to the CPU and so any MPI communication must go through GPU memory. Between these two factors it is critical that all the data lives on the GPU and stays there during the entire simulation. Cholla has successfully moved all computations and MPI communication to the GPU. The only work that remains on the CPU is the setting of the initial conditions, which only occurs once, and reading and writing the HDF5 files since, at the time of writing, the HDF5 library does not support writing files directly from GPU memory.
+
+There are several portions of the code where a grid wide reduction has to be performed. The primary example is the case where we are computing the time step and need to find the minimum crossing time in the grid. In a CPU code this can be accomplished fairly simply by splitting up the array to reduce amongst the relatively few CPU cores, finding the reduced value within each domain, then calling some kind of parallel reduction method, typically an explicit call to \texttt{MPI\_Allreduce} or implicitly in an OpenMP reduction block. GPUs however have much larger number of threads that can be active at once, typically hundreds of thousands, and stringent memory limitation that lead to GPU reductions being much more complex than their CPU counterparts and then they still require the call to \texttt{MPI\_Allreduce}. We utilized a similar method to what is recommended by NVIDIA\footnote{https://developer.nvidia.com/blog/faster-parallel-reductions-kepler/}. One major note is that this method uses atomic operations for the final step of the GPU reduction. At the time of writing NVIDIA's CUDA API only supports atomic max operations on integral types so we adopted a method from RAPIDS cuML library\footnote{https://github.com/rapidsai/cuml/blob/dc14361ba11c41f7a4e1e6a3625bbadd0f52daf7/cpp/src\_prims/stats/minmax.cuh} that uses the 64 bit integer version of \texttt{atomicMax} with some encoding to perform the atomic max operation on floating point numbers; no such workaround was required for AMD's HIP API since all HIP atomics support floating point and integral values. Overall this method is slightly faster that Cholla's previous hybrid GPU+CPU reduction for the number of elements we typically encounter. However, it is much simplier to use and performs dramatically better as the number of elements increases.
 
 These, and other changes (TODO: EVAN, what else should we add?) has dramatically improved Cholla performance over the last few years; in total a NUMBERX speed up on the same hardware and a NUMBERX total speed up moving from running on Summit on 2019 to Frontier in 2023.
 
@@ -162,18 +164,18 @@ INSERT 2019 vs. 2023 SCALING PLOT HERE.
 \subsubsection{Step 1: Compute the Time Step}
 \label{vlct:dt}
 
-The first step is to compute the time step. This it the minimum crossing time of any wave in any cell multiplied by a Courant factor to maintain the Courant–Friedrichs–Lewy condition.
+The first step is to compute the time step. This it the minimum crossing time of any wave in any cell multiplied by a Courant factor to maintain the Courant–Friedrichs–Lewy condition \cite{cfl}.
 
 \begin{equation}
     \label{eqn:dt}
-    \delta t = C_{CFL} \min \left(
-        \frac{\delta x}{\mid v^n_{x,i,j,k} \mid + C^n_{f,i,j,k}},
-        \frac{\delta y}{\mid v^n_{y,i,j,k} \mid + C^n_{f,i,j,k}},
-        \frac{\delta z}{\mid v^n_{z,i,j,k} \mid + C^n_{f,i,j,k}}
+    \Delta t = C_{CFL} \min \left(
+        \frac{\Delta x}{\mid v^n_{x,i,j,k} \mid + C^n_{f,i,j,k}},
+        \frac{\Delta y}{\mid v^n_{y,i,j,k} \mid + C^n_{f,i,j,k}},
+        \frac{\Delta z}{\mid v^n_{z,i,j,k} \mid + C^n_{f,i,j,k}}
     \right).
 \end{equation}
 
-Where $\delta t$ is the time step, $C_{CFL} \leq 0.5$ is the CFL number, $\mid v^n_{l,i,j,k}\mid $ is the magnitude of the velocity in the $l$ direction velocity in the ${i,j,k}$ cell, and $C^n_f $ is the fast magnetosonic wave-speed computed using \emph{cell centered} values. The fast and slow magnetosonic speeds are computed with this equation
+\noindent where $\Delta t$ is the time step, $C_{CFL} \leq 0.5$ is the CFL number, $\mid v^n_{l,i,j,k}\mid $ is the magnitude of the velocity in the $l$ direction velocity in the ${i,j,k}$ cell, and $c^n_f $ is the fast magnetosonic wave-speed computed using \emph{cell centered} values. The fast and slow magnetosonic speeds are
 
 \begin{equation}
     c_{f,s} = \sqrt{\frac
@@ -181,11 +183,11 @@ Where $\delta t$ is the time step, $C_{CFL} \leq 0.5$ is the CFL number, $\mid v
     {2\rho}}
 \end{equation}
 
-where the $+$ option corresponds to the fast magnetosonic speed.
+\noindent where the $+$ option corresponds to the fast magnetosonic speed, and $-$ to the slow.
 
-Equation \ref{eqn:dt} computes the minimum crossing time of a wave in a specific cell and then a global reduction is performed to find the minimum in the entire grid; that minimum is used as the time step $\delta t$. This reduction is done primarily on the GPU followed by an MPI ALL\_REDUCE. GPU reductions are complex and their performance is extremely sensitive to the method used. We utilized a similar method to what is recommended by NVIDIA\footnote{https://developer.nvidia.com/blog/faster-parallel-reductions-kepler/}. The first step is to do as much of the reduction as possible without communicating between the GPU threads. To do so we launch only the maximum number of threads the GPU can run at once, instead of one thread per cell as is done in most of our kernels. Each thread then performs a grid-stride loop so that most of the reduction is done with no communication between threads at all. Once the grid-stride loop is complete a per-warp reduction is performed using the \texttt{\_\_shfl\_down} intrinsic to find the minimum crossing time within that warp and that is written to shared memory. Next the first warp in each block loads the minimums from shared memory and repeats the \texttt{\_\_shfl\_down} reduction to get the minimum value within the block. The final step is to use the built in atomic operations to perform the final grid wide reduction. In total this method eliminates the need for a second kernel launch to perform, is more performant than a reduction entirely in shared memory, and reduces the number of atomic calls to such a small value, only about 100-150, that they rarely collide in practice. One challenge was that, at the time of writing, CUDA did not have an overload for \texttt{atomicMax} that supported double precision floating point numbers. Instead we adopted a method from RAPIDS cuML library\footnote{https://github.com/rapidsai/cuml/blob/dc14361ba11c41f7a4e1e6a3625bbadd0f52daf7/cpp/src\_prims/stats/minmax.cuh} that uses the 64 bit integer version of \texttt{atomicMax} with some encoding to ensure correct results; no such workaround was required for HIP since HIP supports \texttt{atomicMax} with doubles. This reduction method is used in several other places that Cholla requires reductions as well.
+Equation \ref{eqn:dt} computes the minimum crossing time of a wave in a specific cell and then a global reduction is performed to find the minimum in the entire grid; that minimum is used as the time step $\Delta t$. This reduction is done primarily on the GPU followed by an MPI ALL\_REDUCE. GPU reductions are complex and their performance is extremely sensitive to the method used, details of our reduction method are discussed in section \ref{sec:gpu-vs-cpu}. 
 
-Computing the cell centered magnetic field is done with a direct average of the face centered values. These cell centered values for the magnetic field will then be used several times throughout the integrator. In CPU based codes it is typically more efficient to compute these cell centered magnetic fields once and save them since CPU based codes are typically compute limited. Cholla is generally limited instead by GPU memory or memory bandwidth and so these values are recomputed when needed rather than allocating another large chunk of memory.
+Computing the cell centered magnetic field is done with a direct average of the face centered values. These cell centered values for the magnetic field will then be used several times throughout the integrator. In CPU based codes it is typically more efficient to compute these cell centered magnetic fields once and save them since CPU based codes are typically compute limited. Cholla is generally limited instead by GPU memory and so these values are recomputed when needed rather than allocating another large chunk of memory.
 
 \begin{equation}
     \begin{aligned}
@@ -198,20 +200,22 @@ Computing the cell centered magnetic field is done with a direct average of the 
 \subsubsection{Step 2: First Order Reconstruction}
 \label{vlct:first-order-reconstruction}
 
-Reconstructing the interface states at first order, or piecewise constant (PCM), is done by setting the primitive interface states values to the same value as the cell. PCM is far too diffusive for most simulations but is excellent for debugging or some rare problems where the extra diffusion is desirable. It is worth noting that most higher order methods essentially revert to PCM near large discontinuities.
+Reconstructing the interface states at first order, or the piecewise constant method (PCM), is done by setting the primitive interface states values to the same value as the cell:
 
 \begin{equation}
     \boldsymbol{W}_{L, i+1/2} = \boldsymbol{W}_{R, i-1/2} = \boldsymbol{W}_{i}
 \end{equation}
 
-where $ \boldsymbol{W}_{L/R, i\pm1/2} $ is the state on the left or right side of the cell
+\noindent where $ \boldsymbol{W}_{L/R, i\pm1/2} $ is the state on the left or right side of the cell.
+
+Although PCM is too diffusive to be used on its own in both reconstruction steps it is excellent for debugging. We use it here as a computationally-inexpensive way to calculate first-order fluxes, which will be used for the ``predictor" step of this predictor-corrector algorithm. Most higher order methods revert to PCM near large discontinuities.
 
 \subsubsection{Step 3: First Riemann Solve}
 \label{vlct:first-riemann-solve}
 
 The next step is the solve the Riemann problem with the first order interface states. We use the HLLD Riemann Solver introduced in \cite{hlld_2005}. The longitudinal magnetic field does not require reconstruction and can be used directly since it is stored at the face. The transverse fields (i.e. the fields parallel to the interface) are reconstructed from the cell centered average as shown in section \ref{vlct:dt} then reconstructed using PCM identically to other fields.
 
-The magnetic fluxes that are returned by the Riemann solver are the face centered EMFs (section 5.3 of \cite{stone_athena_2008}), however it is not immediately clear which face centered EMFs they are. Table \ref{table:emf} details the correlation between flux and EMF.
+The magnetic fluxes that are returned by the Riemann solver are the face centered EMFs \citep[see section 5.3 of][]{stone_athena_2008}, for clarity, we list in Table \ref{table:emf} the correlation between flux and EMF.
 
 \begin{table}[!ht]
     \centering
@@ -256,8 +260,8 @@ Example for computing the CT electric field in the $ z $-direction. The other di
             + \mathcal{E}_{z, i, j-1/2, k}
             + \mathcal{E}_{z, i-1/2, j-1, k}
             + \mathcal{E}_{z, i-1, j-1/2, k}\right) \\
-        + \frac{\delta y}{8} \left( \left( \frac{\partial \mathcal{E}_z }{\partial y} \right)_{i-1/2, j-1/4, k} + \left(  \frac{\partial \mathcal{E}_z }{\partial y} \right)_{i-1/2, j-3/4, k} \right) \\
-        + \frac{\delta x}{8} \left( \left( \frac{\partial \mathcal{E}_z }{\partial x} \right)_{i-1/4, j-1/2, k} + \left(  \frac{\partial \mathcal{E}_z }{\partial x} \right)_{i-3/4, j-1/2, k} \right)
+        + \frac{\Delta y}{8} \left( \left( \frac{\partial \mathcal{E}_z }{\partial y} \right)_{i-1/2, j-1/4, k} + \left(  \frac{\partial \mathcal{E}_z }{\partial y} \right)_{i-1/2, j-3/4, k} \right) \\
+        + \frac{\Delta x}{8} \left( \left( \frac{\partial \mathcal{E}_z }{\partial x} \right)_{i-1/4, j-1/2, k} + \left(  \frac{\partial \mathcal{E}_z }{\partial x} \right)_{i-3/4, j-1/2, k} \right)
     \end{aligned}
 \end{equation}
 
@@ -284,7 +288,7 @@ where, for example, the derivatives are given by
 \begin{equation}
     \label{eqn:emf-slope}
     \left( \frac{\partial \mathcal{E}_z }{\partial y} \right)_{i, j-1/4, k} =
-    2 \left( \frac{\mathcal{E}_{z,i,j-1/2,k} - \mathcal{E}_{z,i,j,k}^{ref}}{\delta y} \right).
+    2 \left( \frac{\mathcal{E}_{z,i,j-1/2,k} - \mathcal{E}_{z,i,j,k}^{ref}}{\Delta y} \right).
 \end{equation}
 
 The easiest way to see how to compute these derivatives is with the Figure \ref{fig:emf-graph} based off of Figure 5 in \cite{stone_athena_2008}. Each edge requires 4 derivatives and they are computed as differences between a reference state and an edge state.
@@ -306,9 +310,9 @@ Update all the hydro variables using the standard update equation
 \begin{equation}
     \begin{aligned}
         \boldsymbol{U}^{n+1/2}_{i,j,k} = \boldsymbol{U}^{n}_{i,j,k}
-        - \frac{\delta t}{\delta x} \left( \boldsymbol{F}^n_{x,i+1/2,j,k} - \boldsymbol{F}^n_{x,i-1/2,j,k} \right) \\
-        - \frac{\delta t}{\delta y} \left( \boldsymbol{F}^n_{y,i+1/2,j,k} - \boldsymbol{F}^n_{y,i-1/2,j,k} \right) \\
-        - \frac{\delta t}{\delta z} \left( \boldsymbol{F}^n_{z,i+1/2,j,k} - \boldsymbol{F}^n_{z,i-1/2,j,k} \right).
+        - \frac{\Delta t}{\Delta x} \left( \boldsymbol{F}^n_{x,i+1/2,j,k} - \boldsymbol{F}^n_{x,i-1/2,j,k} \right) \\
+        - \frac{\Delta t}{\Delta y} \left( \boldsymbol{F}^n_{y,i+1/2,j,k} - \boldsymbol{F}^n_{y,i-1/2,j,k} \right) \\
+        - \frac{\Delta t}{\Delta z} \left( \boldsymbol{F}^n_{z,i+1/2,j,k} - \boldsymbol{F}^n_{z,i-1/2,j,k} \right).
     \end{aligned}
 \end{equation}
 
@@ -317,24 +321,24 @@ Update the magnetic field using the electric fields
 \begin{equation}
     \begin{aligned}
         B^{n+1/2}_{x,i-1/2,j,k} = B^{n}_{x,i-1/2,j,k}
-        + \frac{\delta t}{\delta z} \left( \mathcal{E}^n_{y,i-1/2,j,k+1/2} - \mathcal{E}^n_{y,i-1/2,j,k-1/2} \right) \\
-        - \frac{\delta t}{\delta y} \left( \mathcal{E}^n_{z,i-1/2,j+1/2,k} - \mathcal{E}^n_{z,i-1/2,j-1/2,k} \right)
+        + \frac{\Delta t}{\Delta z} \left( \mathcal{E}^n_{y,i-1/2,j,k+1/2} - \mathcal{E}^n_{y,i-1/2,j,k-1/2} \right) \\
+        - \frac{\Delta t}{\Delta y} \left( \mathcal{E}^n_{z,i-1/2,j+1/2,k} - \mathcal{E}^n_{z,i-1/2,j-1/2,k} \right)
     \end{aligned}
 \end{equation}
 
 \begin{equation}
     \begin{aligned}
         B^{n+1/2}_{y,i,j-1/2,k} = B^{n}_{y,i,j-1/2,k}
-        + \frac{\delta t}{\delta x} \left( \mathcal{E}^n_{z,i+1/2,j-1/2,k} - \mathcal{E}^n_{z,i-1/2,j-1/2,k} \right) \\
-        - \frac{\delta t}{\delta z} \left( \mathcal{E}^n_{x,i,j-1/2,k+1/2} - \mathcal{E}^n_{x,i,j-1/2,k-1/2} \right)
+        + \frac{\Delta t}{\Delta x} \left( \mathcal{E}^n_{z,i+1/2,j-1/2,k} - \mathcal{E}^n_{z,i-1/2,j-1/2,k} \right) \\
+        - \frac{\Delta t}{\Delta z} \left( \mathcal{E}^n_{x,i,j-1/2,k+1/2} - \mathcal{E}^n_{x,i,j-1/2,k-1/2} \right)
     \end{aligned}
 \end{equation}
 
 \begin{equation}
     \begin{aligned}
         B^{n+1/2}_{z,i,j,k-1/2} = B^{n}_{z,i-1/2,j,k}
-        + \frac{\delta t}{\delta y} \left( \mathcal{E}^n_{x,i,j+1/2,k-1/2} - \mathcal{E}^n_{x,i,j-1/2,k-1/2} \right) \\
-        - \frac{\delta t}{\delta x} \left( \mathcal{E}^n_{y,i+1/2,j,k-1/2} - \mathcal{E}^n_{y,i-1/2,j,k-1/2} \right).
+        + \frac{\Delta t}{\Delta y} \left( \mathcal{E}^n_{x,i,j+1/2,k-1/2} - \mathcal{E}^n_{x,i,j-1/2,k-1/2} \right) \\
+        - \frac{\Delta t}{\Delta x} \left( \mathcal{E}^n_{y,i+1/2,j,k-1/2} - \mathcal{E}^n_{y,i-1/2,j,k-1/2} \right).
     \end{aligned}
 \end{equation}
 
@@ -403,9 +407,9 @@ Update all the hydro variables using the below equations. Note that this is almo
 \begin{equation}
     \begin{aligned}
         \boldsymbol{U}^{n+1}_{i,j,k} = \boldsymbol{U}^{n}_{i,j,k}
-        - \frac{\delta t}{\delta x} \left( \boldsymbol{F}^{n+1/2}_{x,i+1/2,j,k} - \boldsymbol{F}^{n+1/2}_{x,i-1/2,j,k} \right) \\
-        - \frac{\delta t}{\delta y} \left( \boldsymbol{F}^{n+1/2}_{y,i+1/2,j,k} - \boldsymbol{F}^{n+1/2}_{y,i-1/2,j,k} \right) \\
-        - \frac{\delta t}{\delta z} \left( \boldsymbol{F}^{n+1/2}_{z,i+1/2,j,k} - \boldsymbol{F}^{n+1/2}_{z,i-1/2,j,k} \right).
+        - \frac{\Delta t}{\Delta x} \left( \boldsymbol{F}^{n+1/2}_{x,i+1/2,j,k} - \boldsymbol{F}^{n+1/2}_{x,i-1/2,j,k} \right) \\
+        - \frac{\Delta t}{\Delta y} \left( \boldsymbol{F}^{n+1/2}_{y,i+1/2,j,k} - \boldsymbol{F}^{n+1/2}_{y,i-1/2,j,k} \right) \\
+        - \frac{\Delta t}{\Delta z} \left( \boldsymbol{F}^{n+1/2}_{z,i+1/2,j,k} - \boldsymbol{F}^{n+1/2}_{z,i-1/2,j,k} \right).
     \end{aligned}
 \end{equation}
 
@@ -414,28 +418,28 @@ Update the magnetic field
 \begin{equation}
     \begin{aligned}
         B^{n+1}_{x,i-1/2,j,k} = B^{n}_{x,i-1/2,j,k}
-        + \frac{\delta t}{\delta z} \left( \mathcal{E}^{n+1/2}_{y,i-1/2,j,k+1/2} - \mathcal{E}^{n+1/2}_{y,i-1/2,j,k-1/2} \right) \\
-        - \frac{\delta t}{\delta y} \left( \mathcal{E}^{n+1/2}_{z,i-1/2,j+1/2,k} - \mathcal{E}^{n+1/2}_{z,i-1/2,j-1/2,k} \right)
+        + \frac{\Delta t}{\Delta z} \left( \mathcal{E}^{n+1/2}_{y,i-1/2,j,k+1/2} - \mathcal{E}^{n+1/2}_{y,i-1/2,j,k-1/2} \right) \\
+        - \frac{\Delta t}{\Delta y} \left( \mathcal{E}^{n+1/2}_{z,i-1/2,j+1/2,k} - \mathcal{E}^{n+1/2}_{z,i-1/2,j-1/2,k} \right)
     \end{aligned}
 \end{equation}
 
 \begin{equation}
     \begin{aligned}
         B^{n+1}_{y,i,j-1/2,k} = B^{n}_{y,i,j-1/2,k}
-        + \frac{\delta t}{\delta x} \left( \mathcal{E}^{n+1/2}_{z,i+1/2,j-1/2,k} - \mathcal{E}^{n+1/2}_{z,i-1/2,j-1/2,k} \right) \\
-        - \frac{\delta t}{\delta z} \left( \mathcal{E}^{n+1/2}_{x,i,j-1/2,k+1/2} - \mathcal{E}^{n+1/2}_{x,i,j-1/2,k-1/2} \right)
+        + \frac{\Delta t}{\Delta x} \left( \mathcal{E}^{n+1/2}_{z,i+1/2,j-1/2,k} - \mathcal{E}^{n+1/2}_{z,i-1/2,j-1/2,k} \right) \\
+        - \frac{\Delta t}{\Delta z} \left( \mathcal{E}^{n+1/2}_{x,i,j-1/2,k+1/2} - \mathcal{E}^{n+1/2}_{x,i,j-1/2,k-1/2} \right)
     \end{aligned}
 \end{equation}
 
 \begin{equation}
     \begin{aligned}
         B^{n+1}_{z,i-1/2,j,k} = B^{n}_{z,i-1/2,j,k}
-        + \frac{\delta t}{\delta y} \left( \mathcal{E}^{n+1/2}_{x,i,j+1/2,k-1/2} - \mathcal{E}^{n+1/2}_{x,i,j-1/2,k-1/2} \right) \\
-        - \frac{\delta t}{\delta x} \left( \mathcal{E}^{n+1/2}_{y,i+1/2,j,k-1/2} - \mathcal{E}^{n+1/2}_{y,i-1/2,j,k-1/2} \right).
+        + \frac{\Delta t}{\Delta y} \left( \mathcal{E}^{n+1/2}_{x,i,j+1/2,k-1/2} - \mathcal{E}^{n+1/2}_{x,i,j-1/2,k-1/2} \right) \\
+        - \frac{\Delta t}{\Delta x} \left( \mathcal{E}^{n+1/2}_{y,i+1/2,j,k-1/2} - \mathcal{E}^{n+1/2}_{y,i-1/2,j,k-1/2} \right).
     \end{aligned}
 \end{equation}
 
-\subsubsection{Step 10. Increment the Time by \texorpdfstring{$\delta t$}{dt}}
+\subsubsection{Step 10. Increment the Time by \texorpdfstring{$\Delta t$}{dt}}
 \label{vlct:increment-time}
 
-Increment the time by $\delta t$, perform boundary conditions, other physics, etc. then restart at step 1.
+Increment the time by $\Delta t$, perform boundary conditions, other physics, etc. then restart at step 1.
