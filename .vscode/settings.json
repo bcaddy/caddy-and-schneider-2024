@@ -6,7 +6,9 @@
         "diaph",
         "einfeldt",
         "reconstructor",
+        "xlims",
         "xytext",
+        "ylims",
         "ymin"
     ],
     "files.associations": {
