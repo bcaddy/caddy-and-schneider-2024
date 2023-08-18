@@ -171,27 +171,28 @@ The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure
 \section{MHD Performance Tests}
 \label{sec:mhd-perf-tests}
 
-The performance and weak scaling of MHD in Cholla is critical given the scale of the machines that Cholla is designed to run on. 
+Given that Cholla is intended to be a massively parallel code the scaling properties warrant discussion. However, we will focus on weak scaling rather than strong scaling as our primary goal is to be able to simulate as many cells as possible and because strong scaling rapidly reduces the number of cells per GPU to the point where the whole GPU cannot be utilized. The results of the weak scaling tests are shown in Figures \ref{fig:scaling-cells-per-second} and \ref{fig:scaling-ms-per-gpu}. 
+
+Our primary scaling tests were performed on the Frontier Supercomputer at the Oak Ridge Leadership Computing Facility. Frontier utilizes AMD Radeon Instinct MI250X GPUs, a notable feature of these GPUs is that they contain two Graphics Compute Dies (GCDs) each of which is essentially a separate GPU and treated as such in software. As such, for the sake of clear comparison to other systems, we will refer to each GCD as a single GPU for the remainder of this paper. On Frontier Cholla updates $1.7\times 10^8$ cells per second per GPU up to 32,768 GPUs and $1.5\times 10^8$ cells per second per GPU above 32,768 GPUs up to 74,088 GPUs. The lower performance per GPU occasionally appears on smaller tests and tests with the lowered performance also demonstrate much larger variance in performance per GPU. As such our suspicion is that the lower performance is caused by a small number of slower GPUs and is not a feature of Cholla.
+
+With a single rank there is no MPI overhead. As the number of ranks grows the MPI overhead quickly stabilizes at around 15ms with a moderate increase when running on the full size of Frontier. Perhaps most importantly, the VL+CT integrator scales almost perfectly and takes up most of the time on each time steps, dominating over the MPI communication time by nearly a factor of 10. Overall this shows that Cholla has excellent weak scaling up to the full size of Frontier.
+
+All the weak scaling tests here were performed with a slow magnetosonic wave perturbation (described in Section \ref{sec:lwc}), periodic boundary conditions, in double precision, and with $256^3$ cells per MPI rank; each rank corresponds to one GPU. This wave was then evolved for 103 time steps and the results averaged, we exclude setup and tear down time as they are disproportionately significant for short runs like this. This wave was chosen as it is generally the most challenging of the waves to reproduce accurately in our experience. This problem requires that every cell be updated and uses the third order piecewise parabolic reconstruction method in the characteristic variables. Overall this means that this test is a reasonably worst case scenario.
 
 
 % Performance on different hardware: CRC V100+PPC, CRC A100+x86, Summit, Frontier, Grace Hopper?
 
-\subsection{Weak Scaling}
-
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/scaling_tests_ms_per_gpu.pdf}
-    \caption{CAPTION  \input{|python ../python/get_links.py 'scaling_plot'}}
+    \caption{Weak scaling performance of Cholla MHD with the contribution of the VL+CT integrator and MPI communication highlighted.  \input{|python ../python/get_links.py 'scaling_plot'}}
     \label{fig:scaling-ms-per-gpu}
 \end{figure}
-
-
-\subsection{Cell Updates Per Second Per GPU}
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/scaling_tests_cells_per_second.pdf}
-    \caption{CAPTION  \input{|python ../python/get_links.py 'scaling_plot'}}
+    \caption{Weak scaling performance of Cholla MHD. Cell updates per second per MPI rank/GPU is shown.  \input{|python ../python/get_links.py 'scaling_plot'}}
     \label{fig:scaling-cells-per-second}
 \end{figure}
 
