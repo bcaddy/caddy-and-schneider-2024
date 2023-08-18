@@ -1,5 +1,21 @@
 \begin{abstract}
 
-Abstract here
+% S1: What are we presenting?
+We present an extension of the massively parallel, GPU native, astrophysical hydrodynamics code Cholla to magnetohydrodynamics (MHD).
+% S2: Which equations and methods?
+Cholla solves the ideal MHD equations in their Eulerian form on a static Cartesian mesh utilizing the Van Leer + Constrained Transport integrator, the HLLD Riemann solver, and multiple reconstruction methods; including the piecewise parabolic method (PPM).
+% S3: Performance results
+Cholla's MHD module can perform over 150 million cell updates per GPU-second while using the HLLD Riemann solver and PPM.
+% S4: How big of a grid can we do per GPU?
+The massively parallel nature of GPUs allow Cholla's MHD module to perform simulation with resolutions of $>256^3$ cells on a single GPU.
+% S5: Scaling
+We use GPU direct MPI to attain nearly perfect weak scaling up to 74,000 GPUs and a total grid size of over 1.2 trillion cells.
+% S6: We did test problems
+A suite of test problems highlights the accuracy of Cholla's MHD module and demonstrate that it maintains zero magnetic divergence to round off error.
+% S7: Summary of new testing framework
+We also present the new testing and continuous integration tools for Cholla that utilize GoogleTest, GitHub Actions, and Jenkins.
+% S8: Why Testing?
+These new tools have allowed us to significantly increase our rate of development while making Cholla more robust and accurate.
+% S9:  
 
 \end{abstract}
