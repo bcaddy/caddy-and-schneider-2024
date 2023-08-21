@@ -1,2 +1,13 @@
 \section{Summary}
 \label{sec:summary}
+
+In this work we have presented the MHD extension of Cholla, a massively parallel, GPU native, MHD code. MHD in Cholla uses the Van Leer plus Constrained Transport MHD integrator \citep{stone_2009}, the HLLD Riemann solver, and multiple reconstruction methods to model numerical solutions to the Eulerian ideal MHD equations on a static mesh.
+
+Designing the MHD extension to run on GPUs required some significant changes to the implementation compared to a CPU code and elicited challenges working within the limits of GPUs. The entire grid must stay in GPU memory to minimize the amount of data being passed between the CPU and GPU. GPUs also require specific memory layouts and a greater focus on reducing memory usage, even at the cost of increased computation. As demonstrated in Section \ref{sec:mhd-perf-tests}, these optimizations, and the highly parallel nature of GPUs, makes MHD in Cholla extremely fast, over 150 million cell updates per GPU-second even when scaled up to 74,088 GPUs for a total of over 11 trillion cell updates per second. 
+
+We also present a suite of canonical MHD tests, Section \ref{sec:mhd-tests}. These tests demonstrate the accuracy of the code in a variety of ways and that the code does an excellent job of maintaining the divergence free condition even in highly challenging settings. 
+
+As the complexity of Cholla and the number of people contributing to the code grew it quickly became clear that a more structured testing methodology was needed, Section \ref{sec:testing-framework}. To this end we adopted the GoogleTest\footnote{https://github.com/google/googletest} unit testing framework. Paired with some custom testing tools this enabled us to easily write and run tests ranging from simple unit tests all the way to massively parallel system tests with ease. We then integrated these tests with GitHub Actions\footnote{https://github.com/features/actions} to run formatting, static analysis, and builds with various configuration along with Jenkins\footnote{https://www.jenkins.io} running on University of Pittsburgh's cluster to run the tests. This enables us to easily run the tests on ever single pull request and catch bugs before they ever make it into the codebase.
+
+% Future work
+In the future we expect to apply this code to a high resolution ($\approx 10,000^3$ cells) simulation of a Milky Way like galaxy to study the impact of magnetic fields on the galactic winds and the dynamics of the galactic dynamo.
