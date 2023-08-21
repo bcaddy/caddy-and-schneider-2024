@@ -1,7 +1,7 @@
-\section{Testing Framework}
+\section{Automated Testing \& Continuous Integration}
 \label{sec:testing}
 
-As Cholla grows in complexity, and with the fundamental changes that implementing MHD requires, a more rigorous testing method was required  that would also work on large parallel systems. We addressed this in three primary steps: 1) Choose a testing framework for unit tests, 2) Write the software tools needed to extend that testing framework for Cholla's needs, and 3) add automated testing that runs whenever anyone submits a pull request to the Cholla GitHub repository. 
+As Cholla grows in complexity, and with the fundamental changes that implementing MHD requires, a more rigorous testing method was required  that would also work on large parallel systems. We addressed this in three primary steps: 1) Choose a testing framework for unit tests, 2) Write the software tools needed to extend that testing framework for Cholla's needs, and 3) add automated testing as part of a continuous integration (CI) pipeline that runs whenever anyone submits a pull request to the Cholla GitHub repository. 
 
 Taken together, the ease of writing and running tests and their automated running on every pull request has meant that new features are faster and easier to add to Cholla with confidence. Any errors or changes that break older code will likely be quickly caught by the tests before they ever make it into Cholla and have been successful in doing so.
 

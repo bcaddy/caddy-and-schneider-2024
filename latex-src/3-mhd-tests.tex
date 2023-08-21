@@ -168,7 +168,7 @@ The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure
     \label{fig:otv}
 \end{figure}
 
-\section{MHD Performance Tests}
+\subsection{MHD Performance Tests}
 \label{sec:mhd-perf-tests}
 
 Given that Cholla is intended to be a massively parallel code the scaling properties warrant discussion. However, we will focus on weak scaling rather than strong scaling as our primary goal is to be able to simulate as many cells as possible and because strong scaling rapidly reduces the number of cells per GPU to the point where the whole GPU cannot be utilized. The results of the weak scaling tests are shown in Figures \ref{fig:scaling-cells-per-second} and \ref{fig:scaling-ms-per-gpu}. 
