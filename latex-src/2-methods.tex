@@ -167,12 +167,14 @@ INSERT 2019 vs. 2023 SCALING PLOT HERE.
 The first step is to compute the time step. This it the minimum crossing time of any wave in any cell multiplied by a Courant factor to maintain the Courant–Friedrichs–Lewy condition \cite{cfl}.
 
 \begin{equation}
-    \label{eqn:dt}
-    \Delta t = C_{CFL} \min \left(
-        \frac{\Delta x}{\mid v^n_{x,i,j,k} \mid + C^n_{f,i,j,k}},
-        \frac{\Delta y}{\mid v^n_{y,i,j,k} \mid + C^n_{f,i,j,k}},
-        \frac{\Delta z}{\mid v^n_{z,i,j,k} \mid + C^n_{f,i,j,k}}
-    \right).
+    \begin{aligned}
+        \label{eqn:dt}
+        \Delta t = C_{CFL} \min \left(
+            \frac{\Delta x}{\mid v^n_{x,i,j,k} \mid + C^n_{f,i,j,k}}, \right. \\ \left.
+            \frac{\Delta y}{\mid v^n_{y,i,j,k} \mid + C^n_{f,i,j,k}}, 
+            \frac{\Delta z}{\mid v^n_{z,i,j,k} \mid + C^n_{f,i,j,k}}
+        \right).
+    \end{aligned}
 \end{equation}
 
 \noindent where $\Delta t$ is the time step, $C_{CFL} \leq 0.5$ is the CFL number, $\mid v^n_{l,i,j,k}\mid $ is the magnitude of the velocity in the $l$ direction velocity in the ${i,j,k}$ cell, and $c^n_f $ is the fast magnetosonic wave-speed computed using \emph{cell centered} values. The fast and slow magnetosonic speeds are
@@ -217,22 +219,23 @@ The next step is the solve the Riemann problem with the first order interface st
 
 The magnetic fluxes that are returned by the Riemann solver are the face centered EMFs \citep[see section 5.3 of][]{stone_athena_2008}, for clarity, we list in Table \ref{table:emf} the correlation between flux and EMF.
 
-\begin{table}[!ht]
-    \centering
-        \caption{Magnetic Flux to Face Centered EMF}
-    \begin{tabular}{|l|l|l|l|}
-    \hline
-        HLLD Solve Direction & Equation for Magnetic Flux & Eqn. as a Cross Product & EMF \\ \hline
-        $ X $ & $ V_x B_y - B_x V_y $ & $  (V \times B)_z $ & $ -\varepsilon_z $ \\ \hline
-        $ X $ & $ V_x B_z - B_x V_z $ & $ -(V \times B)_y $ & $  \varepsilon_y $ \\ \hline
-        $ Y $ & $ V_x B_y - B_x V_y $ & $  (V \times B)_z $ & $ -\varepsilon_x $ \\ \hline
-        $ Y $ & $ V_x B_z - B_x V_z $ & $ -(V \times B)_y $ & $  \varepsilon_z $ \\ \hline
-        $ Z $ & $ V_x B_y - B_x V_y $ & $  (V \times B)_z $ & $ -\varepsilon_y $ \\ \hline
-        $ Z $ & $ V_x B_z - B_x V_z $ & $ -(V \times B)_y $ & $  \varepsilon_x $ \\ \hline
-    \end{tabular}
-    \tablecomments{The directions used here are relative to the internal workings of the HLLD solver. Since the HLLD solver is inherently 1D we run it once for each of the faces of a cell. So in the case where the solver is running in the Y direction the solver's Y field is actually the Z field and the solvers Z field is actually the X field, cyclically extended for the Z direction}
+\begin{deluxetable*}{llll}
     \label{table:emf}
-\end{table}
+    \tablecaption{Magnetic Flux to Face Centered EMF}
+
+    \tablehead{\colhead{HLLD Solve Direction} & \colhead{Equation for Magnetic Flux} & \colhead{Eqn. as a Cross Product} & \colhead{EMF}}
+
+    \startdata
+    $ X $ & $ V_x B_y - B_x V_y $ & $  (V \times B)_z $ & $ -\varepsilon_z $ \\ \hline
+    $ X $ & $ V_x B_z - B_x V_z $ & $ -(V \times B)_y $ & $  \varepsilon_y $ \\ \hline
+    $ Y $ & $ V_x B_y - B_x V_y $ & $  (V \times B)_z $ & $ -\varepsilon_x $ \\ \hline
+    $ Y $ & $ V_x B_z - B_x V_z $ & $ -(V \times B)_y $ & $  \varepsilon_z $ \\ \hline
+    $ Z $ & $ V_x B_y - B_x V_y $ & $  (V \times B)_z $ & $ -\varepsilon_y $ \\ \hline
+    $ Z $ & $ V_x B_z - B_x V_z $ & $ -(V \times B)_y $ & $  \varepsilon_x $ \\ \hline
+    \enddata
+
+    \tablecomments{The directions used here are relative to the internal workings of the HLLD solver. Since the HLLD solver is inherently 1D we run it once for each of the faces of a cell. So in the case where the solver is running in the Y direction the solver's Y field is actually the Z field and the solvers Z field is actually the X field, cyclically extended for the Z direction}
+\end{deluxetable*}
 
 \subsubsection{Step 4: Compute the Constrained Transport EMF}
 \label{vlct:emf}
