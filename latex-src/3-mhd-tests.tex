@@ -147,7 +147,7 @@ The test was then run with a domain of $1\times1.5\times1$ and resolution of $20
 \subsection{Orszag-Tang Vortex}
 \label{sec:otv}
 
-The Orszag-Tang vortex is a standard 2D MHD test from (CITE Orszag \& Tang (1979)). While it does not provide a quantitative measure of accuracy like the linear wave tests or a test of the robustness of the method like the MHD blast wave it does have a very complex flow that is sensitive to changes in the integrator; making it ideal for regression testing.
+The Orszag-Tang vortex is a standard 2D MHD test from \citep{otv_1979}. While it does not provide a quantitative measure of accuracy like the linear wave tests or a test of the robustness of the method like the MHD blast wave it does have a very complex flow that is sensitive to changes in the integrator; making it ideal for regression testing.
 
 The test was conducted with a periodic domain of $1\times1\times1$ and resolution of $192\times192\times192$ until $t = 0.5$ with the following initial conditions: 
 $\rho = 25 / \left( 36 \pi \right)$,
@@ -161,7 +161,7 @@ $A_z  = \left( B_0/4\pi \right) \left( \cos{4\pi x} + 2 \cos{2\pi y} \right)$, w
 
 The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure 22 in \cite{stone_athena_2008} as a qualitative check for correctness of the flow structure.
 
-\begin{figure}[ht!]
+\begin{figure}[!ht]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/orszag-tang-vortex.pdf}
     \caption{Contour plot of the Orszag-Tang Vortex at $t=0.5$. Thirty evenly spaced contours are shown for each plot in an $x-y$ slice through the center of the domain.  \input{|python ../python/get_links.py 'otv'}}
@@ -173,7 +173,7 @@ The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure
 
 Given that Cholla is intended to be a massively parallel code the scaling properties warrant discussion. However, we will focus on weak scaling rather than strong scaling as our primary goal is to be able to simulate as many cells as possible and because strong scaling rapidly reduces the number of cells per GPU to the point where the whole GPU cannot be utilized. The results of the weak scaling tests are shown in Figures \ref{fig:scaling-cells-per-second} and \ref{fig:scaling-ms-per-gpu}. 
 
-Our primary scaling tests were performed on the Frontier Supercomputer at the Oak Ridge Leadership Computing Facility. Frontier utilizes AMD Radeon Instinct MI250X GPUs, a notable feature of these GPUs is that they contain two Graphics Compute Dies (GCDs) each of which is essentially a separate GPU and treated as such in software. As such, for the sake of clear comparison to other systems, we will refer to each GCD as a single GPU for the remainder of this paper. On Frontier Cholla updates $1.7\times 10^8$ cells per second per GPU up to 32,768 GPUs and $1.5\times 10^8$ cells per second per GPU above 32,768 GPUs up to 74,088 GPUs. The lower performance per GPU occasionally appears on smaller tests and tests with the lowered performance also demonstrate much larger variance in performance per GPU. As such our suspicion is that the lower performance is caused by a small number of slower GPUs and is not a feature of Cholla.
+Our primary scaling tests were performed on the Frontier Supercomputer at the Oak Ridge Leadership Computing Facility. Frontier utilizes AMD Radeon Instinct MI250X GPUs, a notable feature of these GPUs is that they contain two Graphics Compute Dies (GCDs) each of which is essentially a separate GPU and treated as such in software. As such, for the sake of clear comparison to other systems, we will refer to each GCD as a single GPU for the remainder of this paper. On Frontier Cholla updates $1.7\times 10^8$ cells per second per GPU up to 32,768 GPUs and $1.5\times 10^8$ cells per second per GPU above 32,768 GPUs up to 74,088 GPUs. The lower performance per GPU occasionally appears on smaller tests and tests with the lowered performance also sometimes demonstrate much larger variance in performance per GPU. As such our suspicion is that the lower performance is caused by a small number of slower GPUs and is not a feature of Cholla.
 
 With a single rank there is no MPI overhead. As the number of ranks grows the MPI overhead quickly stabilizes at around 15ms with a moderate increase when running on the full size of Frontier. Perhaps most importantly, the VL+CT integrator scales almost perfectly and takes up most of the time on each time steps, dominating over the MPI communication time by nearly a factor of 10. Overall this shows that Cholla has excellent weak scaling up to the full size of Frontier.
 

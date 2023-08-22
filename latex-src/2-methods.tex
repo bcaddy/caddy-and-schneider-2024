@@ -127,19 +127,21 @@ Some other useful MHD equations are given in Appendix \ref{appen:mhd-glossary} s
 \subsection{Overview of the VL+CT Integrator}
 \label{sec:vlct-summary}
 
-To integrate these equations in Cholla, we use the VL+CT (Van Leer plus Constrained Transport) integrator introduced in \cite{stone_2009}, along with the HLLD Riemann solver from \cite{hlld_2005}. The specific algorithm is from \cite{stone_2009} with some clarifying details from \cite{gardiner_2005,gardiner_unsplit_2008,stone_athena_2008} and the piecewise parabolic method is from \cite{felker_2020}. The VL+CT integrator is very similar in structure to the Van Leer integrator \citep{van_leer_2003, falle_1991, Toro}, though with significant new additions for Constrained Transport (CT). We note that this is now the default integrator used in Cholla, as we have found it to be more robust than the CTU algorithm described in \cite{schneider_2015}. Constrained transport treats the magnetic field as a surface averaged quantity centered at cell interfaces rather than a volume averaged, cell centered quantity like the hydro variables; i.e. a staggered grid. Each face stores only the magnetic field perpendicular to that face, i.e. the $x,i+1/2,j,k$ face stores the $B_{x,i+1/2,j,k}$ magnetic field. At each time step, the magnetic field is then updated using edge averaged EMFs (Electromotive Force) computed from the magnetic flux returned by the Riemann solver. Updating the magnetic field with the EMF automatically fulfill the divergence free condition for magnetic fields, assuming that the initial conditions are divergence free.
+To integrate these equations in Cholla, we use the VL+CT (Van Leer plus Constrained Transport) integrator introduced in \cite{stone_2009}, along with the HLLD Riemann solver from \cite{hlld_2005}. The specific algorithm is from \cite{stone_2009} with some clarifying details from \cite{gardiner_2005,gardiner_unsplit_2008,stone_athena_2008} and the piecewise parabolic method is from \cite{felker_2020}. The VL+CT integrator is very similar in structure to the Van Leer integrator \citep{van_leer_2003, falle_1991, Toro}, though with significant new additions for Constrained Transport (CT). We note that this is now the default integrator used in Cholla, as we have found it to be more robust than the CTU algorithm described in \cite{schneider_2015}.
 
-A brief overview of the algorithm for a single time step using the VL+CT integrator is as follows; more detailed discussion of each step is in section \ref{vlct:header}.
+Constrained transport treats the magnetic field as a surface averaged quantity centered at cell interfaces rather than a volume averaged, cell centered quantity like the hydro variables; i.e. a staggered grid. Each face stores only the magnetic field perpendicular to that face, i.e. the $x,i+1/2,j,k$ face stores the $B_{x,i+1/2,j,k}$ magnetic field. At each time step, the magnetic field is then updated using edge averaged EMFs (Electromotive Force) computed from the magnetic flux returned by the Riemann solver. Updating the magnetic field with the EMF automatically fulfill the divergence free condition for magnetic fields, assuming that the initial conditions are divergence free.
+
+A brief overview of the algorithm for a single time step using the VL+CT integrator is as follows; more detailed discussion of each step is presented in section \ref{vlct:header}.
 
 \begin{enumerate}
-    \item Compute the time step
+    \item Compute the time step, $\Delta t$.
     \item Reconstruct interface states using a piecewise constant method (PCM) approximation.
-    \item Solve the Riemann problem on every interface using the PCM interface states
-    \item Compute the edge centered electric fields
-    \item Update the $t=n$ conserved variables to $t=n+\Delta t/2$ using the computed fluxes and electric fields
+    \item Solve the Riemann problem on every interface using the PCM interface states.
+    \item Compute the edge centered electric fields.
+    \item Update the $t=n$ conserved variables to $t=n+\Delta t/2$ using the computed fluxes and electric fields.
     \item Reconstruct interface states using a piecewise linear method (PLM) or piecewise parabolic method (PPM) approximation.
-    \item Solve the Riemann problem on every interface using the higher order reconstructed interface states
-    \item Compute the edge centered electric fields
+    \item Solve the Riemann problem on every interface using the higher order reconstructed interface states.
+    \item Recompute the edge centered electric fields.
     \item Update the $t=n$ conserved variables to $t=n+\Delta t$ using the half time step fluxes and electric fields
 \end{enumerate}
 
@@ -189,8 +191,7 @@ The first step is to compute the time step. This it the minimum crossing time of
 
 Equation \ref{eqn:dt} computes the minimum crossing time of a wave in a specific cell and then a global reduction is performed to find the minimum in the entire grid; that minimum is used as the time step $\Delta t$. This reduction is done primarily on the GPU followed by an MPI ALL\_REDUCE. GPU reductions are complex and their performance is extremely sensitive to the method used, details of our reduction method are discussed in section \ref{sec:gpu-vs-cpu}. 
 
-Computing the cell centered magnetic field is done with a direct average of the face centered values. These cell centered values for the magnetic field will then be used several times throughout the integrator. In CPU based codes it is typically more efficient to compute these cell centered magnetic fields once and save them since CPU based codes are typically compute limited. Cholla is generally limited instead by GPU memory and so these values are recomputed when needed rather than allocating another large chunk of memory.
-
+The cell-centered magnetic field is computed with a direct average of the face centered values:
 \begin{equation}
     \begin{aligned}
         B^n_{x,i,j,k,} = \frac{1}{2} \left( B^n_{x,i+1/2,j,k} + B^n_{x,i-1/2,j,k} \right) \\
@@ -198,6 +199,9 @@ Computing the cell centered magnetic field is done with a direct average of the 
         B^n_{z,i,j,k,} = \frac{1}{2} \left( B^n_{z,i,j,k+1/2} + B^n_{z,i,j,k-1/2} \right) \\
     \end{aligned}
 \end{equation}
+These cell-centered values for the magnetic field are used several times throughout the integrator. In CPU-based codes it is typically more efficient to compute these cell centered magnetic fields once and save them, since CPU-based codes are typically compute limited. Cholla is generally limited instead by GPU memory, so we recompute the cell-centered values when they are needed rather than permanently allocating the associated memory.
+
+
 
 \subsubsection{Step 2: First Order Reconstruction}
 \label{vlct:first-order-reconstruction}
@@ -215,9 +219,9 @@ Although PCM is too diffusive to be used on its own in both reconstruction steps
 \subsubsection{Step 3: First Riemann Solve}
 \label{vlct:first-riemann-solve}
 
-The next step is the solve the Riemann problem with the first order interface states. We use the HLLD Riemann Solver introduced in \cite{hlld_2005}. The longitudinal magnetic field does not require reconstruction and can be used directly since it is stored at the face. The transverse fields (i.e. the fields parallel to the interface) are reconstructed from the cell centered average as shown in section \ref{vlct:dt} then reconstructed using PCM identically to other fields.
+The next step is to solve the Riemann problem with the first order interface states. We use the HLLD Riemann solver introduced in \cite{hlld_2005}. The longitudinal magnetic field does not require reconstruction and can be used directly since it is stored at the face. The transverse fields (i.e. the fields parallel to the interface) are reconstructed from the cell centered average (computed as shown in section \ref{vlct:dt}), then reconstructed using PCM identically to other fields.
 
-The magnetic fluxes that are returned by the Riemann solver are the face centered EMFs \citep[see section 5.3 of][]{stone_athena_2008}, for clarity, we list in Table \ref{table:emf} the correlation between flux and EMF.
+The magnetic fluxes returned by the Riemann solver are the face centered EMFs \citep[see section 5.3 of][]{stone_athena_2008}. For clarity, we list in Table \ref{table:emf} the correlation between flux and EMF.
 
 \begin{deluxetable*}{llll}
     \label{table:emf}
@@ -240,20 +244,20 @@ The magnetic fluxes that are returned by the Riemann solver are the face centere
 \subsubsection{Step 4: Compute the Constrained Transport EMF}
 \label{vlct:emf}
 
-The next step is to calculate the constrained transport EMF. These fields are \emph{line averaged} along each cell vertex. These line averaged fields are constructed by a complex averaging of the face centered EMF, from the previous step, and their slopes.
+The next step is to calculate the constrained transport EMF. These fields are \emph{line averaged} along each cell vertex. These line averaged fields are constructed by averaging the face centered EMFs from the previous step, and their slopes.
 
 % I don't think we need this 
 % Technically constrained transport uses the magnetic flux as the conservative variable and EMF to update it. However, those values only differ from the magnetic flux density (i.e. the magnetic field) and the electric field respectively by factors of unit length we can treat them as the same thing, the same way we treat density and mass as the same for the hydro fields \cite{stone_athena_2008}. As such we use the magnetic field and electric field to evolve the grid. Electric fields have the proper units to evolve the magnetic flux density, $ B $, whereas EMF has the proper units to evolve the magnetic flux.
 
-On any face there are two non-zero electric fields; both transverse to the face. The most important thing to note is that the component that is used to calculate the field along a given edge is the component that is parallel to that edge. i.e. if the edge points along the $ z $-direction then you use the field pointing along the $ z $-direction, not the field in the $ x $ or $ y $ direction.
+On any face there are two non-zero electric fields; both transverse to the face. The component that is used to calculate the field along a given edge is the component that is parallel to that edge; i.e. if the edge points along the $ z $-direction then the field pointing along the $ z $-direction is used, not the field in the $ x $ or $ y $ direction.
 
-We also need cell centered electric fields (reference fields) for computing the slopes. This reference field can be computed with the following cross product
+We also need cell centered electric fields (reference fields) to computing the slopes. This reference field can be computed with the following cross product
 
 \begin{equation}
     \mathcal{E}_{i,j,k}^{ref,n} = - \left( \boldsymbol{v}^{n}_{i.j.k} \times \boldsymbol{B}^{n}_{i.j.k} \right).
 \end{equation}
 
-Example for computing the CT electric field in the $ z $-direction. The other direction can be computed by just substituting out the $ z $ index with $ x $ or $ y $ and changing the derivatives appropriately, see Figure \ref{fig:emf-graph} for more details.
+Example for computing the CT electric field in the $ z $-direction. The equations for computing the other directions are obtained by substituting out the $ z $ index with $ x $ or $ y $ and changing the derivatives appropriately; see Figure \ref{fig:emf-graph} for more details.
 
 \begin{equation}
     \label{eqn:emf-edge}
@@ -296,14 +300,13 @@ where, for example, the derivatives are given by
 
 The easiest way to see how to compute these derivatives is with the Figure \ref{fig:emf-graph} based off of Figure 5 in \cite{stone_athena_2008}. Each edge requires 4 derivatives and they are computed as differences between a reference state and an edge state.
 
-\begin{figure}[ht!]
-    \epsscale{0.5}
+\begin{figure*}[ht!]
     \plotone{assets/2-methods/CT-edge-field-figures-X.pdf}
     \plotone{assets/2-methods/CT-edge-field-figures-Y.pdf}
     \plotone{assets/2-methods/CT-edge-field-figures-Z.pdf}
     \caption{2D slices in all three planes showing the location of the fluxes, edge EMFs, and derivatives. Based on Figure 5 of \cite{stone_athena_2008}.}
     \label{fig:emf-graph}
-\end{figure}
+\end{figure*}
 
 \subsubsection{Step 5. Perform the Half Time-step Update}
 \label{vlct:half-dt-update}
