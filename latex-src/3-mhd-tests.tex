@@ -4,13 +4,13 @@
 \subsection{Linear Wave Convergence}
 \label{sec:lwc}
 
-The propagation of the four MHD linear waves provide an excellent quantitative measure of the accuracy of computation methods \citep{stone_2009}. The tests use a domain of $1.0\times1.0\times1.0$ and a resolution of $N\times16\times16$ where $N$ goes from 16 to 512 in powers of 2. The equation of the wave is
+The propagation of the four MHD linear waves provide an excellent quantitative measure of the accuracy of computation methods \citep{stone_2009}. Our linear wave tests use a domain of $1.0\times1.0\times1.0$ and a resolution of $N\times16\times16$ where $N$ goes from 16 to 512 in powers of 2. The equation of the wave is
 
 \begin{equation}
-    q = \overline{q} + A R_w \sin{\frac{2\pi x}{\lambda}}
+    q = \overline{q} + A R_w \sin{\frac{2\pi x}{\lambda}},
 \end{equation}
 
-where $q$ is the conserved variable, $\overline{q}$ is the mean background state, $A=10^{-6}$ is the amplitude of the wave, $R_w$ is the right eigenvector in conserved variables for the wave mode $w$, $x$ is the position, and $\lambda=1$ is the wavelength of the wave. The adiabatic index $\gamma$ is $5/3$ and the background state is: 
+\noindent where $q$ is the conserved variable, $\overline{q}$ is the mean background state, $A=10^{-6}$ is the amplitude of the wave, $R_w$ is the right eigenvector in conserved variables for the wave mode $w$, $x$ is the position, and $\lambda=1$ is the wavelength of the wave. The adiabatic index $\gamma$ is $5/3$ and the background state is: 
 $\overline{\rho}=1.0$,
 $\overline{v_x}=\overline{v_y}=\overline{v_z}=0$ (except for the contact wave where $\overline{v_x} = 1$),
 $\overline{P}=1/\gamma$,
@@ -19,19 +19,19 @@ $\overline{B_y}=1.5$,
 $\overline{B_z}=0$ 
 and the right eigenvectors for this state are given in Appendix A of \cite{gardiner_unsplit_2008}. 
 
-The wave is propagated for one period and then the error between the initial and final state is the L2 norm of the L1 error vector. First we compute the L1 norm of the absolute difference for each conserved variable between the initial and final state
+The wave is propagated for one period, and then the error is computed between the initial and final state. First, we compute the L1 norm, which is the absolute difference for each conserved variable between the initial and final state:
 
 \begin{equation}
     \delta q_s = \frac{1}{n_x n_y n_z} \sum_{i,j,k} \mid q^f_{i,j,k,s} - q^i_{i,j,k,s} \mid
 \end{equation}
 
-where $q_s$ is a specific conserved variable. We then compute the L2 norm of this vector of L1 norms
+\noindent where $q_s$ is a specific conserved variable. We then compute the L2 norm of this vector of L1 norms as
 
 \begin{equation}
     \mid \mid \delta q \mid \mid = \sqrt{\sum_s \left( \delta q_s \right)^2}.
 \end{equation}
 
-These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both the PLM and PPM reconstructions. The results are comparable to the results in \cite{stone_2009} and demonstrate the expected second order convergence for this second order method. Using PPM does improve the accuracy of the method but maintains the second order convergence due to the second order nature of the integrator. These tests have been run in all three directions with the waves moving in the positive or negative directions and gotten identical results.
+These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both the PLM and PPM reconstructions. The results are comparable to the results in \cite{stone_2009} and demonstrate the expected second order convergence for this second order method. Using PPM does improve the accuracy of the method, but maintains the second order convergence due to the second order nature of the integrator. We have implemented these tests in all three directions with the waves moving in the positive or negative directions and find identical results.
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
@@ -43,9 +43,9 @@ These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both th
 \subsection{Circularly Polarized Alfv\'en Wave}
 \label{sec:cpaw}
 
-The circularly polarized Alfv\'en wave is a non-linear wave that allows one to test the codes accuracy in the non-linear regime with the quantitative benefits of a regular wave test. The tests use a domain of $3.0\times1.5\times1.5$ and a resolution of $2N\times N \times N$ where $N$ goes from 8 to 256 in powers of 2 and periodic boundary conditions. The wave is set to travel at an oblique angle the grid making this a fully 3D test.
+The circularly polarized Alfv\'en wave is a non-linear wave that tests a code's accuracy in the non-linear regime with the quantitative benefits of a regular wave test. The tests use a domain of $3.0\times1.5\times1.5$ and a resolution of $2N\times N \times N$ where $N$ goes from 8 to 256 in powers of 2 and periodic boundary conditions. The wave is set to travel at an oblique angle the grid, making this a fully 3D test.
 
-In coordinate system aligned with the movement of the wave the initial conditions are 
+In a coordinate system aligned with the movement of the wave the initial conditions are 
 $\rho = 1.0$,
 $P = 0.1$,
 $v_x = (0,-1)$ for traveling or standing waves respectively,
@@ -54,7 +54,7 @@ $v_z = A \cos{\frac{2\pi x}{\lambda}}$,
 $B_x = 1.0$,
 $B_y = A \sin{\frac{2\pi x}{\lambda}}$,
 $B_z = A \cos{\frac{2\pi x}{\lambda}}$,
-where the amplitude of the wave $A = 0.1$ and the wavelength $\lambda = 1.0$. These coordinates are then rotated with the following rotation
+where the amplitude of the wave $A = 0.1$ and the wavelength $\lambda = 1.0$. These coordinates are then transformed with the following rotation
 
 \begin{eqnarray}
     x\prime = x \cos\alpha\cos\beta - y \sin\beta - z \sin\alpha\cos\beta \nonumber \\
@@ -62,7 +62,7 @@ where the amplitude of the wave $A = 0.1$ and the wavelength $\lambda = 1.0$. Th
     z\prime = x \sin\alpha + z \cos\alpha \nonumber
 \end{eqnarray}
 
-with $\sin\alpha = 2/3$ and $\sin\beta = 1/\sqrt{5}$. This ensures the domain is fully periodic through the boundaries and the wave can travel (or stand) indefinitely. The magnetic fields are initialized with the vector potential to ensure initial divergence is zero to round off. The waves are then run for a single period and the L2 norm of the L2 error vector is plotted in Figure \ref{fig:cpaw} using the same method as in Section \ref{sec:lwc}. It's especially interesting to note that the improvement in accuracy that PPM brought over PLM in the linear waves is absent in this non-linear test.
+\noindent with $\sin\alpha = 2/3$ and $\sin\beta = 1/\sqrt{5}$. This ensures the domain is fully periodic through the boundaries and the wave can travel (or stand) indefinitely. The magnetic fields are initialized with the vector potential to ensure initial divergence is zero to round off. The waves are then run for a single period and the L2 norm of the L2 error vector is plotted in Figure \ref{fig:cpaw} using the same method as in Section \ref{sec:lwc}. It is interesting to note that the improvement in accuracy that PPM brought over PLM in the linear waves is absent in this non-linear test.
 
 These Alfv\'en waves are subject to a parametric instability \citep{del_zanna_parametric_2001} which should not be present for these initial conditions. However, the truncation error will result in small variations in the magnetic pressure which will drive low amplitude compression waves \citep{stone_athena_2008}. 
 
@@ -76,7 +76,7 @@ These Alfv\'en waves are subject to a parametric instability \citep{del_zanna_pa
 \subsection{Advecting Field Loop}
 \label{sec:afl}
 
-In this test we advect a tilted spherical current loop across the domain at an oblique angle to the grid. This test requires particularly accurate balancing of the non-zero components of the induction equation. It also has zero magnetic field outside the spherical current loop, as the current loops moves across the grid those cells that are no longer in the loop should return to zero; within round off. It is also a good test of the dissipation of the magnetic field as the magnetic pressure should remain constant.
+In this test we advect a tilted spherical current loop across the domain at an oblique angle to the grid. This test requires particularly accurate balancing of the non-zero components of the induction equation. It also has zero magnetic field outside the spherical current loop; as the current loops moves across the grid those cells that are no longer in the loop should return to zero to within round off error. It is also a good test of the dissipation of the magnetic field, as the magnetic pressure should remain constant.
 
 The initial conditions for this test are most easily described using the vector potential. The background state is
 $\rho = 1.0$,
@@ -111,9 +111,9 @@ In Figure \ref{fig:afl} the mean of cell centered $B^2$ normalized to the initia
 \subsection{MHD Riemann Problems}
 \label{sec:riemann}
 
-MHD Riemann problems are staple tests for new MHD codes and methods due to their mix of different flow types and extreme conditions. While there are a variety of different MHD Riemann problems in the literature \citep{brio_wu_1988, einfeldt_1991, ryu_jones_1995, dai_woodward_1998} we have chosen five that present a variety of challenging cases. 
+MHD Riemann problems are staple tests for new MHD codes and methods due to their mix of different flow types and extreme conditions. There are many different MHD Riemann problems in the literature \citep{brio_wu_1988, einfeldt_1991, ryu_jones_1995, dai_woodward_1998}; we have chosen to present five that cover a variety of challenging cases. 
 
-The Riemann problem is defined as having a single state for half of the domain which suddenly switches to a different state on the other half of the domain. All of Riemann problems here have a domain of $1\times1\times1$ and resolution of $512\times16\times16$ and are run until the $t_{max}$ for that particular Riemann problem. All have been run in all three spatial directions with both possible orientations of the two states and achieved identical results. The details of each left and right state are in Table \ref{table:riemann} and the details of each Riemann problem are discussed in the captions of Figures \ref{fig:brio-and-wu}-\ref{fig:einfeldt}.
+The Riemann problem is defined as having a single state for half of the domain which suddenly switches at a discontinuity to a different state on the other half of the domain. All of Riemann problems here have a domain of $1\times1\times1$ and resolution of $512\times16\times16$ and are run until the $t_{max}$ for that particular Riemann problem. All have been run in all three spatial directions with both possible orientations of the two states and achieved identical results. The details of each left and right state are given in Table \ref{table:riemann} and the details of each Riemann problem are discussed in the captions of Figures \ref{fig:brio-and-wu}-\ref{fig:einfeldt}.
 
 \input{../assets/3-mhd-tests/riemann-table.tex}
 
@@ -122,7 +122,7 @@ The Riemann problem is defined as having a single state for half of the domain w
 \subsection{MHD Blast Wave in a Strongly Magnetized Medium}
 \label{sec:mhd-blast}
 
-Blast waves in different forms are staple tests for hydrodynamics and MHD codes. They combine strong shocked flows, smooth flows, and, in MHD, strong magnetic fields. The results are qualitative rather than quantitative but thoroughly test the robustness of the algorithm and act act as an excellent regression test for our automated testing (see Section \ref{sec:testing}). In this test $\beta = 0.2$, like \cite{stone_2009} we note instability if $\beta$ is decreased by a factor of 10. This issue could possibly be resolved by integrating the internal energy separate from the total energy using the dual energy formalism in Cholla.
+Blast waves in different forms are staple tests for hydrodynamics and MHD codes. They combine strong shocked flows, smooth flows, and, in MHD, strong magnetic fields. The results are qualitative rather than quantitative but thoroughly test the robustness of the algorithm and act act as an excellent regression test for our automated testing (see Section \ref{sec:testing}). In this test $\beta = 0.2$, like \cite{stone_2009}, we find instabilities if $\beta$ is decreased by a factor of 10. This issue could possibly be resolved by integrating the internal energy separate from the total energy using the dual energy formalism in Cholla.
 
 The background state is
 $\rho = 1.0$,
@@ -135,7 +135,7 @@ $B_y = 1/\sqrt{2}$,
 $B_z = 0.0$,
 and the over pressure region is a central sphere of size $R = 0.1$ which has $P=10.0$.
 
-The test was then run with a domain of $1\times1.5\times1$ and resolution of $200\times300\times200$ until $t = 0.2$. Figure \ref{fig:blast} shows contours in the density and magnetic energy in an $x-y$ slice through the center of the domain. The contours are smooth and symmetric and show clear elongation of the blast wave rarefaction parallel to the magnetic field. The blast wave propagates slowly parallel to the magnetic field but much more rapidly perpendicular to the magnetic field
+The test was then run with a domain of $1\times1.5\times1$ and resolution of $200\times300\times200$ until $t = 0.2$. Figure \ref{fig:blast} shows contours in the density and magnetic energy in an $x-y$ slice through the center of the domain. The contours are smooth and symmetric and show clear elongation of the blast wave rarefaction parallel to the magnetic field. The blast wave propagates slowly parallel to the magnetic field but much more rapidly perpendicular to the magnetic field.
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
@@ -147,7 +147,7 @@ The test was then run with a domain of $1\times1.5\times1$ and resolution of $20
 \subsection{Orszag-Tang Vortex}
 \label{sec:otv}
 
-The Orszag-Tang vortex is a standard 2D MHD test from \citep{otv_1979}. While it does not provide a quantitative measure of accuracy like the linear wave tests or a test of the robustness of the method like the MHD blast wave it does have a very complex flow that is sensitive to changes in the integrator; making it ideal for regression testing.
+The Orszag-Tang vortex is a standard 2D MHD test from \cite{otv_1979}. While it does not provide a quantitative measure of accuracy like the linear wave tests or a test of the robustness of the method like the MHD blast wave, it does have a very complex flow that is sensitive to changes in the integrator, making it ideal for regression testing.
 
 The test was conducted with a periodic domain of $1\times1\times1$ and resolution of $192\times192\times192$ until $t = 0.5$ with the following initial conditions: 
 $\rho = 25 / \left( 36 \pi \right)$,
@@ -171,13 +171,13 @@ The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure
 \subsection{MHD Performance Tests}
 \label{sec:mhd-perf-tests}
 
-Given that Cholla is intended to be a massively parallel code the scaling properties warrant discussion. However, we will focus on weak scaling rather than strong scaling as our primary goal is to be able to simulate as many cells as possible and because strong scaling rapidly reduces the number of cells per GPU to the point where the whole GPU cannot be utilized. The results of the weak scaling tests are shown in Figures \ref{fig:scaling-cells-per-second} and \ref{fig:scaling-ms-per-gpu}. 
+Given that Cholla is intended to be a massively parallel code the scaling properties warrant discussion. We focus on weak scaling rather than strong scaling as our primary goal, since good weak scaling enables much larger problems to be simulated, while strong scaling rapidly reduces the number of cells per GPU to the point where the whole GPU cannot be utilized. Thus, GPUs may not be a good choice for algorithms and applications that require strong scaling. Results of our weak scaling tests are shown in Figures \ref{fig:scaling-cells-per-second} and \ref{fig:scaling-ms-per-gpu}. 
 
-Our primary scaling tests were performed on the Frontier Supercomputer at the Oak Ridge Leadership Computing Facility. Frontier utilizes AMD Radeon Instinct MI250X GPUs, a notable feature of these GPUs is that they contain two Graphics Compute Dies (GCDs) each of which is essentially a separate GPU and treated as such in software. As such, for the sake of clear comparison to other systems, we will refer to each GCD as a single GPU for the remainder of this paper. On Frontier Cholla updates $1.7\times 10^8$ cells per second per GPU up to 32,768 GPUs and $1.5\times 10^8$ cells per second per GPU above 32,768 GPUs up to 74,088 GPUs. The lower performance per GPU occasionally appears on smaller tests and tests with the lowered performance also sometimes demonstrate much larger variance in performance per GPU. As such our suspicion is that the lower performance is caused by a small number of slower GPUs and is not a feature of Cholla.
+Our primary scaling tests were performed on the Frontier Supercomputer at the Oak Ridge Leadership Computing Facility. Frontier utilizes AMD Radeon Instinct MI250X GPUs, each of which contains two Graphics Compute Dies (GCDs) that function essentially as separate GPUs and can be treated as such in software. Thus, for the sake of clear comparison to other systems, we will refer to each GCD as a single GPU for the remainder of this paper. On Frontier Cholla updates $1.7\times 10^8$ cells per second per GPU up to 32,768 GPUs and $1.5\times 10^8$ cells per second per GPU above 32,768 GPUs up to 74,088 GPUs. The lower performance per GPU occasionally appears on smaller tests and tests with the lowered performance also sometimes demonstrate much larger variance in performance per GPU. As such our suspicion is that the lower performance is caused by a small number of slower GPUs and is not a feature of Cholla.
 
 With a single rank there is no MPI overhead. As the number of ranks grows the MPI overhead quickly stabilizes at around 15ms with a moderate increase when running on the full size of Frontier. Perhaps most importantly, the VL+CT integrator scales almost perfectly and takes up most of the time on each time steps, dominating over the MPI communication time by nearly a factor of 10. Overall this shows that Cholla has excellent weak scaling up to the full size of Frontier.
 
-All the weak scaling tests here were performed with a slow magnetosonic wave perturbation (described in Section \ref{sec:lwc}), periodic boundary conditions, in double precision, and with $256^3$ cells per MPI rank; each rank corresponds to one GPU. This wave was then evolved for 103 time steps and the results averaged, we exclude setup and tear down time as they are disproportionately significant for short runs like this. This wave was chosen as it is generally the most challenging of the waves to reproduce accurately in our experience. This problem requires that every cell be updated and uses the third order piecewise parabolic reconstruction method in the characteristic variables. Overall this means that this test is a reasonably worst case scenario.
+All the weak scaling tests here were performed with a slow magnetosonic wave perturbation (described in Section \ref{sec:lwc}), periodic boundary conditions, in double precision, and with $256^3$ cells per MPI rank; each rank corresponds to one GPU. We evolve the wave for 103 time steps and average the results over the number of time steps, excluding setup and tear down time. This wave was chosen as it is generally the most challenging of the waves to reproduce accurately in our experience. This problem requires that every cell be updated and uses the third order piecewise parabolic reconstruction method in the characteristic variables. Overall this means that this test is a reasonably worst case scenario.
 
 
 % Performance on different hardware: CRC V100+PPC, CRC A100+x86, Summit, Frontier, Grace Hopper?

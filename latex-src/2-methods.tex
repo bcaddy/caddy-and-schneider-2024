@@ -301,9 +301,9 @@ where, for example, the derivatives are given by
 The easiest way to see how to compute these derivatives is with the Figure \ref{fig:emf-graph} based off of Figure 5 in \cite{stone_athena_2008}. Each edge requires 4 derivatives and they are computed as differences between a reference state and an edge state.
 
 \begin{figure*}[ht!]
-    \plotone{assets/2-methods/CT-edge-field-figures-X.pdf}
-    \plotone{assets/2-methods/CT-edge-field-figures-Y.pdf}
-    \plotone{assets/2-methods/CT-edge-field-figures-Z.pdf}
+    \includegraphics[width=0.32\linewidth]{assets/2-methods/CT-edge-field-figures-X.pdf}
+    \includegraphics[width=0.32\linewidth]{assets/2-methods/CT-edge-field-figures-Y.pdf}
+    \includegraphics[width=0.32\linewidth]{assets/2-methods/CT-edge-field-figures-Z.pdf}
     \caption{2D slices in all three planes showing the location of the fluxes, edge EMFs, and derivatives. Based on Figure 5 of \cite{stone_athena_2008}.}
     \label{fig:emf-graph}
 \end{figure*}
@@ -311,7 +311,7 @@ The easiest way to see how to compute these derivatives is with the Figure \ref{
 \subsubsection{Step 5. Perform the Half Time-step Update}
 \label{vlct:half-dt-update}
 
-Update all the hydro variables using the standard update equation
+Update all the hydro variables using the standard conservative update equation and the first-order fluxes from Step 3:
 
 \begin{equation}
     \begin{aligned}
@@ -322,7 +322,7 @@ Update all the hydro variables using the standard update equation
     \end{aligned}
 \end{equation}
 
-Update the magnetic field using the electric fields
+Update the magnetic field using the electric fields computed in Step 4:
 
 \begin{equation}
     \begin{aligned}
@@ -351,7 +351,7 @@ Update the magnetic field using the electric fields
 \subsubsection{Step 6. Half Time-step Second Order Reconstruction}
 \label{vlct:higher-order-reconstruction}
 
-Now we need to perform the higher order reconstruction. The method shown here is for Piecewise Linear Method (PLM), reconstruction. Cholla currently implements piecewise constant, piecewise linear and piecewise parabolic reconstruction, with limiting in the characteristic variables, for MHD. The piecewise parabolic method that Cholla utilizes is discussed in detail in \cite{felker_2020}. Using the third order piecewise parabolic method does typically give slightly more accurate results but since the method is formally second order it does not improve the overall scaling.
+Step 5 results in first order time-averaged values for the cell-centered conserved variables and face-centered magnetic fields. To make the integration second-order in time, we need to perform a ``corrector" step. First, weperform a higher order interface reconstruction. The method shown here is for Piecewise Linear Method (PLM), reconstruction. Cholla currently implements piecewise constant, piecewise linear, and piecewise parabolic reconstruction, with limiting in the characteristic variables, for MHD. The piecewise parabolic method that Cholla utilizes is discussed in detail in \cite{felker_2020}. Using the third order piecewise parabolic method for spatial reconstruction does typically give slightly more accurate results at a given resolution compared to PLM, but since the method is formally second order it does not improve the overall scaling.
 
 Note that at a given face only the transverse components of the electric field need to be reconstructed. The longitudinal component is already given at the face.
 
@@ -370,8 +370,8 @@ Note that at a given face only the transverse components of the electric field n
         \end{cases}
     \end{align}
     
-    \item Project the slopes into the characteristic variables $\boldsymbol{a}$ using the eigenvectors detailed in \cite{stone_athena_2008}. Note that to maintain mathematical consistency we use the eigenvectors of the $\boldsymbol{w_{i}}$ cell for all three slopes and the later projection back to primitive variables.
-    \item Apply monotonicity constraints to the characteristic differences to ensure that the reconstruction is total variation diminishing (TVD). We used this limiter from \cite{leveque2002finite}.
+    \item Project the slopes into the characteristic variables, $\boldsymbol{a}$, using the eigenvectors given in the appendix of \cite{stone_athena_2008}. Note that to maintain mathematical consistency we use the eigenvectors of the $\boldsymbol{w_{i}}$ cell for all three slopes and the later projection back to primitive variables.
+    \item Apply monotonicity constraints to the characteristic differences to ensure that the reconstruction is total variation diminishing (TVD). We use the following limiter, given in \cite{leveque2002finite}.
     \begin{equation}
         \label{eqn:limiter}
         \delta \boldsymbol{a}_{m,i} = 
@@ -380,8 +380,8 @@ Note that at a given face only the transverse components of the electric field n
             0,              & \text{otherwise}
         \end{cases}
     \end{equation}
-    \item Project the characteristic slopes back into the primitive variables $\boldsymbol{a}$ using the eigenvectors detailed in \cite{stone_athena_2008}.
-    \item Then compute the interface states $\boldsymbol{W}_{L, i+1/2}$ and $\boldsymbol{W}_{R, i-1/2}$
+    \item Project the limited characteristic slopes, $\delta \boldsymbol{a}_{m}$, back into the primitive variables, $\delta \boldsymbol{W}_{m}$, using the eigenvectors given in \cite{stone_athena_2008}.
+    \item Compute the interface states $\boldsymbol{W}_{L, i+1/2}$ and $\boldsymbol{W}_{R, i-1/2}$:
 \end{enumerate}
 
     \begin{equation}
@@ -391,24 +391,24 @@ Note that at a given face only the transverse components of the electric field n
         \end{aligned}
     \end{equation}
 
-    where $ \boldsymbol{W}_{L/R, i\pm1/2} $ is the state on the left or right side
+    \noindent where $ \boldsymbol{W}_{L/R, i\pm1/2} $ is the state on the left or right side
     of the cell and $ \delta \boldsymbol{W}_{i}^m $ is the monotonically limited
     primitive slope. Limiting can be done in the primitive variables by skipping steps 3 and 5 then replacing the characteristic slopes in Equation \ref{eqn:limiter} with their primitive counterparts.
 
 \subsubsection{Step 7. Second Riemann Solve}
 \label{vlct:2nd-riemann-solve}
 
-Solve the Riemann problem again with the half time step MHD interface states from step 6.
+Solve the Riemann problem for each interface again using the higher order interface states computed in step 6.
 
 \subsubsection{Step 8. Compute the Constrained Transport Electric Fields}
 \label{vlct:2nd-emf}
 
-Repeat step 3 but using the fluxes from the second Riemann solve and the half time step MHD variables.
+Repeat step 3, but using the fluxes from the second Riemann solve and the half time step MHD variables computed in Step 5.
 
 \subsubsection{Step 9. Perform the Full Time-step Update}
 \label{vlct:full-dt-update}
 
-Update all the hydro variables using the below equations. Note that this is almost identical to step 3 except we're updating the $ t = n $ state with the $ t=n+1/2 $ fluxes/CT fields instead of the $ t=n $ fluxes/CT fields
+Update the cell-centered hydro variables from $t = n$ to $t = n + \Delta t$ using the conserved update equation and the second order fluxes computed in Step 7:
 
 \begin{equation}
     \begin{aligned}
@@ -419,7 +419,7 @@ Update all the hydro variables using the below equations. Note that this is almo
     \end{aligned}
 \end{equation}
 
-Update the magnetic field
+Update the face-centered magnetic field using the electric fields calculated in Step 8:
 
 \begin{equation}
     \begin{aligned}
