@@ -86,7 +86,7 @@ def Scaling_Plot(scaling_data, y_title, filename, plot_func, xlims, ylims, skip_
     # Plot the data
     ax = plot_func(scaling_data, 'Total', color_total, 'Total', ax, marker_size)
     # Note that the timer for the integrator is named "Hydro" not "MHD"
-    ax = plot_func(scaling_data, 'Hydro', color_mhd, 'MHD', ax, marker_size)
+    ax = plot_func(scaling_data, 'Hydro_Integrator', color_mhd, 'MHD', ax, marker_size)
     if (not skip_mpi):
         ax = plot_func(scaling_data, 'Boundaries', color_mpi, 'MPI Comm', ax, marker_size)
 
