@@ -151,7 +151,7 @@ should be + min not - min(note on p. 7)},
 	abstract = {Recently, upwind differencing schemes have become very popular for solving hyperbolic partial differential equations, especially when discontinuities exist in the solutions. Among many upwind schemes successfully applied to rhe problems in gas dynamics, Roe's method stands out for its relative simplicity and clarity of the underlying physical model. In this paper, an upwind differencing scheme of Roe-type for the MHD equations is constructed. In each computational cell, the problem is first linearized around some averaged state which preserves the flux differences. Then the solution is advanced in time by computing the wave contributions to the flux at the cell interfaces. One crucial task of the linearization procedure is the construction of a Roe matrix. For the special case {\textgreater}J = 2, a Roe matrix in the form of a mean value Jacobian is found, and for the general case, a simple averaging procedure is introduced. All other necessary ingredients of the construction, which include eigenvalues, and a complete set of right eigenvectors of the Roe matrix and decomposition coefficients are presented. As a numerical example, we chose a coplanar MHD Riemann problem. The problem is solved by the newly constructed second-order upwind scheme as well as by the Lax Friedrichs, the Lax-Wendroff, and the flux-corrected transport schemes. The results demonstrate several advantages of the upwind scheme. In this paper, we also show that the MHD equations are nonconvex. This is a contrast to the general belief that the fast and slow waves are like sound waves in the Euler equations. As a consequence, the wave structure becomes more complicated; for example, compound waves consisting of a shock and attached to it a rarefaction wave of the same family can exist in MHD.},
 	urldate = {2021-11-19},
 	journal = {JOURNAL OF COMPUTATlONAL PHYSICS},
-	author = {Brio, M and Wv, C C},
+	author = {Brio, M and Wu, C C},
 	year = {1988},
 	pages = {40--422},
 	file = {PDF:/Users/Bob/Zotero/storage/IRZKQ4G8/Brio & Wu 1988.pdf:application/pdf},
@@ -330,3 +330,20 @@ should be + min not - min(note on p. 7)},
 	annote = {Comment: 42 pages, 22 figures, accepted for publication in J. Comp. Phys},
 	file = {Felker and Stone - 2018 - A fourth-order accurate finite volume method for i.pdf:/Users/Bob/Zotero/storage/IMHKMRVU/Felker and Stone - 2018 - A fourth-order accurate finite volume method for i.pdf:application/pdf},
 }
+@Inbook{Toth1996,
+author="T{\'o}th, G{\'a}bor",
+editor="Uchida, Yutaka
+and Kosugi, Takeo
+and Hudson, Hugh S.",
+title="A General Code for Modeling MHD Flows on Parallel Computers: Versatile Advection Code",
+bookTitle="Magnetodynamic Phenomena in the Solar Atmosphere: Prototypes of Stellar Magnetic Activity",
+year="1996",
+publisher="Springer Netherlands",
+address="Dordrecht",
+pages="471--472",
+abstract="A general tool for solving MHD and hydrodynamical problems typical of astrophysical applications is designed and implemented. The code allows the user to solve a hyperbolic system of partial differential equations with a variety of modern high resolution numerical schemes on 1, 2 or 3D non-uniform Cartesian grids with slab or axial symmetry. The equations may contain fluxes and source terms. The boundary conditions can be chosen from a number of implemented types, --- fixed, periodic, reflective or `free' --- but the code is structured in a manner that allows the user to write his/her own subroutines for a new type of boundary condition, or even to implement a new set of equations. The choice of algorithms allows the user to find the optimal one for the application at hand and/or to compare results of different schemes thus gaining insight into the numerical effects. An emphasis is put on independence of computer platforms. Efficiency of the code is also a high priority, the options available for the user should not compromise the performance.",
+isbn="978-94-009-0315-9",
+doi="10.1007/978-94-009-0315-9_101",
+url="https://doi.org/10.1007/978-94-009-0315-9_101"
+}
+

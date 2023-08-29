@@ -1,10 +1,15 @@
 \section{MHD Tests}
 \label{sec:mhd-tests}
 
-\subsection{Linear Wave Convergence}
+we have implemented a large suite of test problems to demonstrate the accuracy, robustness and performance of Cholla MHD. We chose problems that are common stables in the literature and specifically selected problems that are challenging for the integrator and, when possible, have quantifiable measures of correctness for comparisons to other methods and codes. All of these problems are also present in our automated test suite as either accuracy and/or regression system tests, see Section \ref{sec:testing} for details. Section \ref{sec:accuracy_tests} discusses the accuracy tests and Section \ref{sec:mhd-perf-tests} discusses the performance and scaling of Cholla MHD on up to 74,088 GPUs.
+
+\subsection{Accuracy Tests}
+\label{sec:accuracy_tests}
+
+\subsubsection{Linear Wave Convergence}
 \label{sec:lwc}
 
-The propagation of the four MHD linear waves provide an excellent quantitative measure of the accuracy of computation methods \citep{stone_2009}. Our linear wave tests use a domain of $1.0\times1.0\times1.0$ and a resolution of $N\times16\times16$ where $N$ goes from 16 to 512 in powers of 2. The equation of the wave is
+The propagation of the four MHD linear waves provide an excellent quantitative measure of the accuracy of computation methods. Our linear wave tests use a domain of $1.0\times1.0\times1.0$ and a resolution of $N\times16\times16$ where $N$ goes from 16 to 512 in powers of 2. The equation of the wave is
 
 \begin{equation}
     q = \overline{q} + A R_w \sin{\frac{2\pi x}{\lambda}},
@@ -40,10 +45,10 @@ These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both th
     \label{fig:linear-wave-convergence}
 \end{figure}
 
-\subsection{Circularly Polarized Alfv\'en Wave}
+\subsubsection{Circularly Polarized Alfv\'en Wave}
 \label{sec:cpaw}
 
-The circularly polarized Alfv\'en wave is a non-linear wave that tests a code's accuracy in the non-linear regime with the quantitative benefits of a regular wave test. The tests use a domain of $3.0\times1.5\times1.5$ and a resolution of $2N\times N \times N$ where $N$ goes from 8 to 256 in powers of 2 and periodic boundary conditions. The wave is set to travel at an oblique angle the grid, making this a fully 3D test.
+The circularly polarized Alfv\'en wave is a non-linear wave that tests a code's accuracy in the non-linear regime with the quantitative benefits of a regular wave test \citep{Toth1996}. The tests use a domain of $3.0\times1.5\times1.5$ and a resolution of $2N\times N \times N$ where $N$ goes from 8 to 256 in powers of 2 and periodic boundary conditions. The wave is set to travel at an oblique angle the grid, making this a fully 3D test.
 
 In a coordinate system aligned with the movement of the wave the initial conditions are 
 $\rho = 1.0$,
@@ -73,12 +78,12 @@ These Alfv\'en waves are subject to a parametric instability \citep{del_zanna_pa
     \label{fig:cpaw}
 \end{figure}
 
-\subsection{Advecting Field Loop}
+\subsubsection{Advecting Field Loop}
 \label{sec:afl}
 
 In this test we advect a tilted spherical current loop across the domain at an oblique angle to the grid. This test requires particularly accurate balancing of the non-zero components of the induction equation. It also has zero magnetic field outside the spherical current loop; as the current loops moves across the grid those cells that are no longer in the loop should return to zero to within round off error. It is also a good test of the dissipation of the magnetic field, as the magnetic pressure should remain constant.
 
-The initial conditions for this test are most easily described using the vector potential. The background state is
+The initial conditions for this test are most easily described using the magnetic vector potential, which is defined as $\boldsymbol{B} = \nabla \times\boldsymbol{A}$. The background state is
 $\rho = 1.0$,
 $P = 1.0$,
 $v_x = 1.0$,
@@ -108,7 +113,7 @@ In Figure \ref{fig:afl} the mean of cell centered $B^2$ normalized to the initia
     \label{fig:afl}
 \end{figure}
 
-\subsection{MHD Riemann Problems}
+\subsubsection{MHD Riemann Problems}
 \label{sec:riemann}
 
 MHD Riemann problems are staple tests for new MHD codes and methods due to their mix of different flow types and extreme conditions. There are many different MHD Riemann problems in the literature \citep{brio_wu_1988, einfeldt_1991, ryu_jones_1995, dai_woodward_1998}; we have chosen to present five that cover a variety of challenging cases. 
@@ -119,10 +124,10 @@ The Riemann problem is defined as having a single state for half of the domain w
 
 \input{../assets/3-mhd-tests/riemann-figures.tex}
 
-\subsection{MHD Blast Wave in a Strongly Magnetized Medium}
+\subsubsection{MHD Blast Wave in a Strongly Magnetized Medium}
 \label{sec:mhd-blast}
 
-Blast waves in different forms are staple tests for hydrodynamics and MHD codes. They combine strong shocked flows, smooth flows, and, in MHD, strong magnetic fields. The results are qualitative rather than quantitative but thoroughly test the robustness of the algorithm and act act as an excellent regression test for our automated testing (see Section \ref{sec:testing}). In this test $\beta = 0.2$, like \cite{stone_2009}, we find instabilities if $\beta$ is decreased by a factor of 10. This issue could possibly be resolved by integrating the internal energy separate from the total energy using the dual energy formalism in Cholla.
+Blast waves in different forms are staple tests for hydrodynamics and MHD codes. They combine strong shocked flows, smooth flows, and, in MHD, strong magnetic fields. The results are qualitative rather than quantitative but thoroughly test the robustness of the algorithm and act act as an excellent regression test for our automated testing (see Section \ref{sec:testing}). In this test $\beta = 0.2$, like \cite{stone_2009}, we find instabilities if $\beta$ is decreased by a factor of 10. 
 
 The background state is
 $\rho = 1.0$,
@@ -144,7 +149,7 @@ The test was then run with a domain of $1\times1.5\times1$ and resolution of $20
     \label{fig:blast}
 \end{figure}
 
-\subsection{Orszag-Tang Vortex}
+\subsubsection{Orszag-Tang Vortex}
 \label{sec:otv}
 
 The Orszag-Tang vortex is a standard 2D MHD test from \cite{otv_1979}. While it does not provide a quantitative measure of accuracy like the linear wave tests or a test of the robustness of the method like the MHD blast wave, it does have a very complex flow that is sensitive to changes in the integrator, making it ideal for regression testing.
@@ -171,13 +176,13 @@ The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure
 \subsection{MHD Performance Tests}
 \label{sec:mhd-perf-tests}
 
-Given that Cholla is intended to be a massively parallel code the scaling properties warrant discussion. We focus on weak scaling rather than strong scaling as our primary goal, since good weak scaling enables much larger problems to be simulated, while strong scaling rapidly reduces the number of cells per GPU to the point where the whole GPU cannot be utilized. Thus, GPUs may not be a good choice for algorithms and applications that require strong scaling. Results of our weak scaling tests are shown in Figures \ref{fig:scaling-cells-per-second} and \ref{fig:scaling-ms-per-gpu}. 
-
-Our primary scaling tests were performed on the Frontier Supercomputer at the Oak Ridge Leadership Computing Facility. Frontier utilizes AMD Radeon Instinct MI250X GPUs, each of which contains two Graphics Compute Dies (GCDs) that function essentially as separate GPUs and can be treated as such in software. Thus, for the sake of clear comparison to other systems, we will refer to each GCD as a single GPU for the remainder of this paper. On Frontier Cholla updates $1.7\times 10^8$ cells per second per GPU up to 32,768 GPUs and $1.5\times 10^8$ cells per second per GPU above 32,768 GPUs up to 74,088 GPUs. The lower performance per GPU occasionally appears on smaller tests and tests with the lowered performance also sometimes demonstrate much larger variance in performance per GPU. As such our suspicion is that the lower performance is caused by a small number of slower GPUs and is not a feature of Cholla.
-
-With a single rank there is no MPI overhead. As the number of ranks grows the MPI overhead quickly stabilizes at around 15ms with a moderate increase when running on the full size of Frontier. Perhaps most importantly, the VL+CT integrator scales almost perfectly and takes up most of the time on each time steps, dominating over the MPI communication time by nearly a factor of 10. Overall this shows that Cholla has excellent weak scaling up to the full size of Frontier.
+Given that Cholla is a massively parallel code and so the scaling properties warrant discussion. We focus on weak scaling rather than strong scaling as our primary goal, since good weak scaling enables much larger problems to be simulated, while strong scaling rapidly reduces the number of cells per GPU to the point where the whole GPU cannot be utilized. Thus, GPUs may not be a good choice for algorithms and applications that require strong scaling. Results of our weak scaling tests are shown in Figures \ref{fig:scaling-cells-per-second} and \ref{fig:scaling-ms-per-gpu}. 
 
 All the weak scaling tests here were performed with a slow magnetosonic wave perturbation (described in Section \ref{sec:lwc}), periodic boundary conditions, in double precision, and with $256^3$ cells per MPI rank; each rank corresponds to one GPU. We evolve the wave for 103 time steps and average the results over the number of time steps, excluding setup and tear down time. This wave was chosen as it is generally the most challenging of the waves to reproduce accurately in our experience. This problem requires that every cell be updated and uses the third order piecewise parabolic reconstruction method in the characteristic variables. Overall this means that this test is a reasonably worst case scenario.
+
+Our primary scaling tests were performed on the \textit{Frontier} Supercomputer at the Oak Ridge Leadership Computing Facility. \textit{Frontier} utilizes AMD Radeon Instinct MI250X GPUs, each of which contains two Graphics Compute Dies (GCDs) that function essentially as separate GPUs and can be treated as such in software. Thus, for the sake of clear comparison to other systems, we will refer to each GCD as a single GPU for the remainder of this paper. On \textit{Frontier} Cholla updates $TODO UPDATE THIS NUMBER$ cells per second per GPU up to 32,768 GPUs and $TODO UPDATE THIS NUMBER$ cells per second per GPU above 32,768 GPUs up to 74,088 GPUs. Using nearly the entirety of \textit{Frontier}, 74,088 GPUs, Cholla MHD was able to perform $TODO UPDATE THIS NUMBER$ cell updates per second on a total grid size of $TODO UPDATE THIS NUMBER^3$ cells. Most of the decrease in performance at higher numbers of MPI ranks is not due to MPI overhead but instead due to a small number, or a single, MPI rank that is much slower than the rest. Timing data from these runs shows that the minimum and average time per GPU required for the integrator, not the MPI communication, is similar to the "fast" runs but the maximum time is significantly higher. This pattern of low minimums and averages with high maximums also occasionally appears on smaller runs, leading credence to the theory that there is a small number of slow GPUs in \textit{Frontier}. As supercomputing clusters continue to grow in scale and complexity rare hardware issues are more likely to become something that users of these machines need to contend with.
+
+With a single MPI rank there is no communication overhead. As the number of ranks grows the MPI overhead quickly stabilizes at around 15ms with a moderate increase when running on the full size of \textit{Frontier}. Perhaps most importantly, the VL+CT integrator scales almost perfectly and takes up most of the time on each time steps, dominating over the MPI communication time by nearly a factor of 10. Overall this shows that Cholla has excellent weak scaling up to the full size of \textit{Frontier}.
 
 
 % Performance on different hardware: CRC V100+PPC, CRC A100+x86, Summit, Frontier, Grace Hopper?
