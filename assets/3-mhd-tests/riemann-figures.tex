@@ -1,39 +1,59 @@
+\paragraph{Brio \& Wu Shock Tube}
+
+The Brio \& Wu Shock Tube \citep{brio_wu_1988} is a staple test of MHD codes. This Riemann problem is essentially the Sod shock tube \cite{sod_1978} with a magnetic field. However, this shock tube is an excellent stress test for PPM reconstruction, as methods higher than second order tend to create large oscillations in the solution due to the slowly moving shocks. To minimize these oscillations we changed the PPM reconstruction algorithm used in the VL+CT integrator from the method described in \cite{stone_athena_2008} to the method described in \cite{felker_2018}. This newer method reduced the oscillations to a reasonable level. Note that the oscillation was present when limiting in the primitive or characteristic variables. No oscillation is present when using PLM reconstruction.
+
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/b&w.pdf}
-    \caption{The Brio \& Wu Shock Tube solution. This is essentially the Sod shock tube with a magnetic field. However, this shock tube is an excellent stress test for PPM reconstruction, as higher-order methods tend to create large oscillations in the solution due to the slowly moving shocks. To minimize these oscillations we implemented a new PPM reconstruction algorithm based on \cite{felker_2018} which reduced the oscillations to a reasonable level. No oscillation is present when using PLM reconstruction.
+    \caption{The Brio \& Wu Shock Tube solution \citep{brio_wu_1988}.
     \input{|python ../python/get_links.py 'b&w'}}
     \label{fig:brio-and-wu}
 \end{figure}
 
+\paragraph{Dai \& Woodward Shock Tube}
+
+The Dai \& Woodward Shock Tube (also called Ryu \& Jones 2a) \citep{dai_woodward_1998, ryu_jones_1995} produces all seven possible MHD waves. From left to right we see: a fast shock, Alfvén wave, slow shock, contact discontinuity, slow shock, Alfvén wave, and fast shock. This makes it an excellent laboratory for checking that the full spread of wave modes are well resolved.
+
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/d&w.pdf}
-    \caption{Dai \& Woodward Shock Tube (also called Ryu \& Jones 2a) solution. This shock tube produces all seven possible MHD waves. From left to right we see: a fast shock, Alfvén wave, slow shock, contact discontinuity, slow shock, Alfvén wave, and fast shock. This makes it an excellent laboratory for checking that the full spread of wave modes are well resolved.
+    \caption{Dai \& Woodward Shock Tube (also called Ryu \& Jones 2a) solution \citep{dai_woodward_1998, ryu_jones_1995}.
     \input{|python ../python/get_links.py 'd&w'}}
     \label{fig:dai-and-woodward}
 \end{figure}
 
+\paragraph{Ryu \& Jones 1a Shock Tube}
+
+Ryu \& Jones 1a Shock Tube solution \citep{ryu_jones_1995} is a less common test for MHD codes. However, in our experience, it is an excellent problem to help with debugging MHD codes due to its relatively simple structure without any spike like structures that are difficult to discern by eye during the evolution of the initial conditions. The lack of any spikes and the presence of multiple types of strong shocks also make it a good diagnostic test over/undershoot of the solution near discontinuities.
+
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/rj1a.pdf}
-    \caption{Ryu \& Jones 1a Shock Tube solution. This shock tube has a fairly simple wave structure without any spikes which makes it a good diagnostic test, as well as a good test for over/undershoot of the solution near discontinuities.
+    \caption{Ryu \& Jones 1a Shock Tube solution \citep{ryu_jones_1995}.
     \input{|python ../python/get_links.py 'rj1a'}}
     \label{fig:rj-1a}
 \end{figure}
 
+\paragraph{Ryu \& Jones 4d Shock Tube}
+
+The Ryu \& Jones 4d Shock Tube solution\citep{ryu_jones_1995} features a switch-on slow shock. Switch-on waves increase the strength of the transverse magnetic field while reducing the thermal pressure to maintain energy conservation. This is a simplified example of a type of magnetic field amplification and as such it is important that we replicate it accurately. A "switch-off" wave does the inverse.
+
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/rj4d.pdf}
-    \caption{Ryu \& Jones 4d Shock Tube solution. This test features a switch-on slow shock. Switch-on waves increase the strength of the transverse magnetic field while reducing the thermal pressure to maintain energy conservation. This is a simplified example of a potential type of magnetic field amplification in galaxies and as such it is important that we replicate it accurately. A "switch-off" wave does the inverse.
+    \caption{Ryu \& Jones 4d Shock Tube solution\citep{ryu_jones_1995}.
     \input{|python ../python/get_links.py 'rj4d'}}
     \label{fig:rj-4d}
 \end{figure}
 
+\paragraph{MHD Einfeldt Strong Rarefaction}
+
+The MHD Einfeldt Strong Rarefaction solution\citep{einfeldt_1991} creates a strong outflow and central vacuum state. The diverging solution leads to an extremely strong and fast rarefaction where the energy is dominated by kinetic energy and as such can often reveal issues in code accuracy, since it can lead to nonphysical states with negative density or negative internal energy. High values of the outflow velocity ($V_{out}\ge3$) can lead to spurious oscillations. $V_{out} = 2$ was chosen for this test \citep{charm_2011}.
+
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \plotone{assets/3-mhd-tests/einfeldt.pdf}
-    \caption{MHD Einfeldt Strong Rarefaction solution. This Riemann problem creates a strong outflow and central vacuum state. The diverging solution leads to an extremely strong and fast rarefaction where the energy is dominated by kinetic energy and as such can often reveal issues in code accuracy, since it can lead to nonphysical states with negative density or negative internal energy. High values of the outflow velocity ($V_{out}\ge3$) can lead to spurious oscillations. $V_{out} = 2$ was chosen for this test \citep{charm_2011}.
+    \caption{MHD Einfeldt Strong Rarefaction solution\citep{einfeldt_1991}.
     \input{|python ../python/get_links.py 'einfeldt'}}
     \label{fig:einfeldt}
 \end{figure}
