@@ -53,7 +53,7 @@ def plotOTV(rootPath, outPath):
     # Plotting info
     line_width         = 0.4
     suptitle_font_size = 15
-    subtitle_font_size = 10
+    subtitle_font_size = 25
     num_contours       = 30
 
     # Field info
@@ -61,10 +61,8 @@ def plotOTV(rootPath, outPath):
     field_indices = {'density':(0,0), 'magnetic_energy':(0,1), 'gas_pressure':(1,0), 'spec_kinetic':(1,1)}
 
     # Setup figure
-    figSizeScale = 2.                 # Scaling factor for the figure size
-    figHeight    = 4.8 * figSizeScale # height of the plot in inches, default is 4.8
-    figWidth     = 7.0 * figSizeScale # width of the plot in inches, default is 6.4
-    fig, subPlot = plt.subplots(2, 2)#figsize = (figWidth, figHeight))
+    figSize = 10.0
+    fig, subPlot = plt.subplots(2, 2, layout='constrained', figsize = (figSize, 1.1*figSize))
 
     # Whole plot settings
     # fig.suptitle(f'', fontsize=suptitle_font_size)
@@ -95,10 +93,9 @@ def plotOTV(rootPath, outPath):
         subPlot[subplot_idx].set_aspect('equal')
 
         # Set titles
-        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}')
+        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}', fontsize=subtitle_font_size)
 
     # Save the figure and close it
-    fig.tight_layout()
     plt.savefig(outPath / f'orszag-tang-vortex.pdf', transparent = True)
     plt.close()
 # ==============================================================================
