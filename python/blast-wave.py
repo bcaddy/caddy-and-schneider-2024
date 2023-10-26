@@ -54,7 +54,7 @@ def plotBlastWave(rootPath, outPath):
     # Plotting info
     line_width         = 00.1
     suptitle_font_size = 15
-    subtitle_font_size = 25
+    subtitle_font_size = 30
     num_contours       = 30
 
     # Field info
