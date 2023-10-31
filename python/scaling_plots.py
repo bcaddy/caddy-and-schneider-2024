@@ -106,7 +106,7 @@ def Scaling_Plot(scaling_data, y_title, filename, plot_func, xlims, ylims, skip_
 
     legend = ax.legend()
     fig.tight_layout()
-    5
+
     output_path = shared_tools.repo_root / 'assets' / '3-mhd-tests' / f'scaling_tests_{filename}.pdf'
     fig.savefig(output_path)
 # ==============================================================================

@@ -109,6 +109,7 @@ def plotShockTubes(rootPath, outPath):
     subtitle_font_size = 10
     axslabel_font_size = 10
     tick_font_size     = 7.5
+    line_color         = 'black'
 
     # Field info
     fields = ['density', 'gas_pressure', 'energy', 'velocity_x', 'velocity_y', 'velocity_z',  'magnetic_x', 'magnetic_y', 'magnetic_z']
@@ -153,7 +154,7 @@ def plotShockTubes(rootPath, outPath):
             # Plot the data
             subPlot[subplot_idx].plot(positions,
                                       field_data,
-                                      color      = shared_tools.colors[field],
+                                      color      = line_color,
                                       linestyle  = data_linestyle,
                                       linewidth  = linewidth,
                                       marker     = data_marker,
