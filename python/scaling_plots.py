@@ -18,9 +18,9 @@ import matplotlib.pyplot as plt
 import shared_tools
 
 matplotlib.use("Agg")
-plt.style.use('dark_background')
+plt.style.use('seaborn-v0_8-colorblind')
 
-axes_color = '0.1'
+# axes_color = '0.1'
 # plt.rcParams['axes.facecolor']    = axes_color
 # plt.rcParams['figure.facecolor']  = background_color
 # plt.rcParams['patch.facecolor']   = background_color
@@ -41,12 +41,12 @@ def main():
 
     x_limit = [0.7, 1E5]
 
-    Scaling_Plot(scaling_data=scaling_data,
-                 y_title=r'Cells / Second / GPU',
-                 filename='cells_per_second',
-                 plot_func=cells_per_second_per_gpu,
-                 xlims=x_limit,
-                 skip_mpi=True)
+    cells_per_second_plot(scaling_data=scaling_data,
+                          y_title=r'Cells / Second / GPU',
+                          filename='cells_per_second',
+                          plot_func=cells_per_second_per_gpu,
+                          xlims=x_limit,
+                          skip_mpi=True)
 
 #     Scaling_Plot(scaling_data=scaling_data,
 #                  y_title=r'Milliseconds / 256$^3$ Cells / GPU',
@@ -92,37 +92,29 @@ def load_data(data_path):
 # ==============================================================================
 
 # ==============================================================================
-def Scaling_Plot(scaling_data, y_title, filename, plot_func, xlims, ylims=None, skip_mpi=False, skip_integrator=False, legend=True):
+def cells_per_second_plot(scaling_data, y_title, filename, plot_func, xlims, ylims=None, skip_mpi=False, skip_integrator=False, legend=True):
     # Instantiate Plot
     fig = plt.figure(0, figsize=(15, 10))
     fig.clf()
     ax = plt.gca()
 
     # Set plot settings
-    color_mhd       = 'blue'
-    color_mpi       = 'red'
-    color_total     = 'purple'
+    # Defaults colors #0072B2, #009E73, #D55E00, #CC79A7, #F0E442, #56B4E9
+    color_mhd          = '#0072B2'
+    color_mpi          = '#009E73'
+    color_total        = '#D55E00'
+    marker_style_mhd   = 'o'
+    marker_style_mpi   = '1'
+    marker_style_total = '^'
     marker_size     = 10
 
     # Plot the data
-    ax = plot_func(scaling_data, 'Total', color_total, 'Total', ax, marker_size)
+    ax = plot_func(scaling_data, 'Total', color_total, 'Total', ax, marker_size, marker_style=marker_style_total)
     if (not skip_integrator):
         # Note that the timer for the integrator is named "Hydro" not "MHD"
-        ax = plot_func(scaling_data, 'Hydro_Integrator', color_mhd, 'MHD Integrator', ax, marker_size)
+        ax = plot_func(scaling_data, 'Hydro_Integrator', color_mhd, 'MHD Integrator', ax, marker_size, marker_style=marker_style_mhd)
     if (not skip_mpi):
-        ax = plot_func(scaling_data, 'Boundaries', color_mpi, 'MPI Communication', ax, marker_size, delete_first=True)
-
-    # Set CPU region
-    num_procs = scaling_data.loc['n_proc'].to_numpy()
-    ax.text(1.02E2, 2E6,
-            '   Typical CPU Code\nCells / Second / CPU',
-            fontsize=20,
-            alpha=0.5)
-    athenaPP_per_cpu = 20 * 1E6
-    cpu_high_lim = 2. * athenaPP_per_cpu
-    ax.fill_between(x=[num_procs.min(), num_procs.max()], y1=[1E6, 1E6], y2=[cpu_high_lim, cpu_high_lim],
-                    color='cyan',
-                    alpha=0.2)
+        ax = plot_func(scaling_data, 'Boundaries', color_mpi, 'MPI Communication', ax, marker_size, marker_style=marker_style_mpi, delete_first=True)
 
     # Setup the rest of the plot
     ax.set_xlim(xlims[0], xlims[1])
@@ -157,22 +149,8 @@ def Scaling_Plot(scaling_data, y_title, filename, plot_func, xlims, ylims=None, 
         legend = ax.legend(fontsize=15)
     fig.tight_layout()
 
-    output_path = shared_tools.repo_root / 'assets' / f'scaling_tests_{filename}.pdf'
+    output_path = shared_tools.repo_root / 'assets' / '3-mhd-tests' / f'scaling_tests_{filename}.pdf'
     fig.savefig(output_path, dpi=400)
-# ==============================================================================
-
-# ==============================================================================
-def ms_per_256_per_gpu(scaling_data, name, color, label, ax, marker_size, delete_first=False):
-    x = scaling_data.loc['n_proc'].to_numpy()
-    y = scaling_data.loc[name].to_numpy() / (scaling_data.loc['n_steps'].to_numpy() - 1)
-
-    if (delete_first):
-        x = x[1:]
-        y = y[1:]
-
-    ax.plot(x, y, '--', c=color, marker='o', markersize=marker_size, label=label)
-
-    return ax
 # ==============================================================================
 
 # ==============================================================================
@@ -189,7 +167,7 @@ def weak_scaling_efficiency(scaling_data, name, color, label, ax, marker_size, d
 # ==============================================================================
 
 # ==============================================================================
-def cells_per_second_per_gpu(scaling_data, name, color, label, ax, marker_size, delete_first=None):
+def cells_per_second_per_gpu(scaling_data, name, color, label, ax, marker_size, marker_style, delete_first=None):
     x = (scaling_data.loc['n_proc'].to_numpy())
 
     cells_per_gpu = ( scaling_data.loc['nx'].to_numpy()
@@ -201,7 +179,7 @@ def cells_per_second_per_gpu(scaling_data, name, color, label, ax, marker_size, 
 
     y = cells_per_gpu / avg_time_step
 
-    ax.plot(x, y, '--', c=color, marker='o', markersize=marker_size, label=label)
+    ax.plot(x, y, '--', c=color, marker=marker_style, markersize=marker_size, label=label)
 
     return ax
 # ==============================================================================
