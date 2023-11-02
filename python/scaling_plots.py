@@ -35,33 +35,13 @@ plt.close('all')
 
 # ==============================================================================
 def main():
-    data_path = shared_tools.repo_root / 'scaling-tests' / 'data' / '2023-08-24-plmc'
+    data_path = shared_tools.repo_root / 'scaling-tests' / 'data' / '2023-09-20-high-res-plmc-identify-bad-ranks'
 
     scaling_data = load_data(data_path)
 
-    x_limit = [0.7, 1E5]
 
-    cells_per_second_plot(scaling_data=scaling_data,
-                          y_title=r'Cells / Second / GPU',
-                          filename='cells_per_second',
-                          plot_func=cells_per_second_per_gpu,
-                          xlims=x_limit,
-                          skip_mpi=True)
 
-#     Scaling_Plot(scaling_data=scaling_data,
-#                  y_title=r'Milliseconds / 256$^3$ Cells / GPU',
-#                  filename='ms_per_gpu',
-#                  plot_func=ms_per_256_per_gpu,
-#                  xlims=x_limit)
-
-#     Scaling_Plot(scaling_data=scaling_data,
-#                  y_title=r'Weak Scaling Efficiency',
-#                  filename='weak_scaling_efficiency',
-#                  plot_func=weak_scaling_efficiency,
-#                  xlims=x_limit,
-#                  skip_mpi=True,
-#                  skip_integrator=True,
-#                  legend=False)
+    cells_per_second_plot(scaling_data=scaling_data)
 # # ==============================================================================
 
 # ==============================================================================
@@ -73,7 +53,7 @@ def load_data(data_path):
     file_name = data_dirs[0] / 'run_timing.log'
     with open(file_name, 'r') as file:
         lines        = file.readlines()
-        header       = lines[3][1:].split()
+        header       = lines[5][1:].split()
         scaling_data = pd.DataFrame(index=header)
 
     # Loop through the directories and load the data
@@ -82,17 +62,18 @@ def load_data(data_path):
         if file_name.is_file():
             with open(file_name, 'r') as file:
                 lines  = file.readlines()
-                data   = lines[4].split()
+                data   = lines[6].split()
                 scaling_data[int(data[0])] = pd.to_numeric(data)
         else:
             print(f'File: {file_name} not found.')
 
     scaling_data = scaling_data.reindex(sorted(scaling_data.columns), axis=1)
+    print(scaling_data)
     return scaling_data
 # ==============================================================================
 
 # ==============================================================================
-def cells_per_second_plot(scaling_data, y_title, filename, plot_func, xlims, ylims=None, skip_mpi=False, skip_integrator=False, legend=True):
+def cells_per_second_plot(scaling_data):
     # Instantiate Plot
     fig = plt.figure(0, figsize=(15, 10))
     fig.clf()
@@ -109,16 +90,13 @@ def cells_per_second_plot(scaling_data, y_title, filename, plot_func, xlims, yli
     marker_size     = 10
 
     # Plot the data
-    ax = plot_func(scaling_data, 'Total', color_total, 'Total', ax, marker_size, marker_style=marker_style_total)
-    if (not skip_integrator):
-        # Note that the timer for the integrator is named "Hydro" not "MHD"
-        ax = plot_func(scaling_data, 'Hydro_Integrator', color_mhd, 'MHD Integrator', ax, marker_size, marker_style=marker_style_mhd)
-    if (not skip_mpi):
-        ax = plot_func(scaling_data, 'Boundaries', color_mpi, 'MPI Communication', ax, marker_size, marker_style=marker_style_mpi, delete_first=True)
+    ax = cells_per_second_per_gpu(scaling_data, 'Total', color_total, 'Total', ax, marker_size, marker_style=marker_style_total)
+    # Note that the timer for the integrator is named "Hydro" not "MHD"
+    ax = cells_per_second_per_gpu(scaling_data, 'Hydro_Integrator', color_mhd, 'MHD Integrator', ax, marker_size, marker_style=marker_style_mhd)
 
     # Setup the rest of the plot
-    ax.set_xlim(xlims[0], xlims[1])
-    ax.set_ylim(ymin = 1E5, ymax=1E9)
+    ax.set_xlim(xmin = 0.7, xmax = 1E5)
+    ax.set_ylim(ymin = 1E8, ymax = 1E9)
 
     ax.set_yscale('log')
     ax.set_xscale('log')
@@ -142,14 +120,14 @@ def cells_per_second_plot(scaling_data, y_title, filename, plot_func, xlims, yli
     title_size      = 40
     axis_label_size = 25
     fig.suptitle('MHD Weak Scaling on Frontier (PLMC)', fontsize=title_size)
-    ax.set_ylabel(y_title, fontsize=axis_label_size)
+    ax.set_ylabel(r'Cell Updates / Second / GPU', fontsize=axis_label_size)
     ax.set_xlabel(r'Number of GPUs', fontsize=axis_label_size)
 
-    if legend:
-        legend = ax.legend(fontsize=15)
+
+    legend = ax.legend(fontsize=15)
     fig.tight_layout()
 
-    output_path = shared_tools.repo_root / 'assets' / '3-mhd-tests' / f'scaling_tests_{filename}.pdf'
+    output_path = shared_tools.repo_root / 'assets' / '3-mhd-tests' / f'scaling_tests_cells_per_second.pdf'
     fig.savefig(output_path, dpi=400)
 # ==============================================================================
 
