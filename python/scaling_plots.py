@@ -39,10 +39,11 @@ def main():
 
     scaling_data = load_data(data_path)
 
+    cells_per_second_plot(scaling_data)
+    weak_scaling_efficiency(scaling_data)
 
-
-    cells_per_second_plot(scaling_data=scaling_data)
-# # ==============================================================================
+    shared_tools.update_plot_entry('scaling', 'python/scaling_plots.py')
+# ==============================================================================
 
 # ==============================================================================
 def load_data(data_path):
@@ -68,7 +69,7 @@ def load_data(data_path):
             print(f'File: {file_name} not found.')
 
     scaling_data = scaling_data.reindex(sorted(scaling_data.columns), axis=1)
-    print(scaling_data)
+
     return scaling_data
 # ==============================================================================
 
@@ -90,9 +91,13 @@ def cells_per_second_plot(scaling_data):
     marker_size     = 10
 
     # Plot the data
-    ax = cells_per_second_per_gpu(scaling_data, 'Total', color_total, 'Total', ax, marker_size, marker_style=marker_style_total)
+    ax, x, y = cells_per_second_per_gpu(scaling_data, 'Total', color_total, 'Total', ax, marker_size, marker_style=marker_style_total)
     # Note that the timer for the integrator is named "Hydro" not "MHD"
-    ax = cells_per_second_per_gpu(scaling_data, 'Hydro_Integrator', color_mhd, 'MHD Integrator', ax, marker_size, marker_style=marker_style_mhd)
+    ax = cells_per_second_per_gpu(scaling_data, 'Hydro_Integrator', color_mhd, 'MHD Integrator', ax, marker_size, marker_style=marker_style_mhd)[0]
+
+    # Print the performance results
+    for i in range(len(x)):
+        print(f'Ranks: {int(x[i]):5d} updating at {round(y[i]/1.E8,2):3.2f}E8 cell updates per second per gpu')
 
     # Setup the rest of the plot
     ax.set_xlim(xmin = 0.7, xmax = 1E5)
@@ -132,16 +137,79 @@ def cells_per_second_plot(scaling_data):
 # ==============================================================================
 
 # ==============================================================================
-def weak_scaling_efficiency(scaling_data, name, color, label, ax, marker_size, delete_first=None):
+def weak_scaling_efficiency(scaling_data):
+    # Instantiate Plot
+    fig = plt.figure(0, figsize=(15, 10))
+    fig.clf()
+    ax = plt.gca()
+
+    # Set plot settings
+    # Defaults colors #0072B2, #009E73, #D55E00, #CC79A7, #F0E442, #56B4E9
+    color_mhd          = '#0072B2'
+    color_mpi          = '#009E73'
+    color_total        = 'black'#'#D55E00'
+    marker_style_mhd   = 'o'
+    marker_style_mpi   = '1'
+    marker_style_total = '^'
+    marker_size     = 10
+
+    # Plot the data
+    ax, x, y = weak_scaling_efficiency_plot(scaling_data, 'Total', color_total, 'Total', ax, marker_size, marker_style=marker_style_total)
+    # Note that the timer for the integrator is named "Hydro" not "MHD"
+    # ax = weak_scaling_efficiency_plot(scaling_data, 'Hydro_Integrator', color_mhd, 'MHD Integrator', ax, marker_size, marker_style=marker_style_mhd)
+
+    # Print the performance results
+    print()
+    for i in range(len(x)):
+        print(f'Ranks: {int(x[i]):5d}, weak scaling efficiency: {round(y[i],2):5.2f}')
+
+    # Setup the rest of the plot
+    ax.set_xlim(xmin = 0.7, xmax = 1E5)
+    ax.set_ylim(ymin = 0, ymax = 102)
+
+    ax.set_xscale('log')
+
+    # locmaj = matplotlib.ticker.LogLocator(base=10.0,
+    #                                       subs=(1.0, ),
+    #                                       numticks=100)
+    # ax.yaxis.set_major_locator(locmaj)
+
+    # locmin = matplotlib.ticker.LogLocator(base=10.0,
+    #                                       subs=np.arange(2, 10) * .1,
+    #                                       numticks=100)
+    # ax.yaxis.set_minor_locator(locmin)
+    ax.tick_params(which='both', direction='in', labelsize=20, bottom=True, top=True, left=True, right=True)
+    ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter())
+
+    plt.grid(axis='x', color='0.5', which='major')
+    plt.grid(axis='y', color='0.5', which='major')
+    # plt.grid(axis='y', color='0.25', which='minor')
+
+
+    title_size      = 40
+    axis_label_size = 25
+    fig.suptitle('MHD Weak Scaling on Frontier (PLMC)', fontsize=title_size)
+    ax.set_ylabel(r'Weak Scaling Efficiency', fontsize=axis_label_size)
+    ax.set_xlabel(r'Number of GPUs', fontsize=axis_label_size)
+
+    # legend = ax.legend(fontsize=15)
+    fig.tight_layout()
+
+    output_path = shared_tools.repo_root / 'assets' / '3-mhd-tests' / f'scaling_tests_weak_efficiency.pdf'
+    fig.savefig(output_path, dpi=400)
+# ==============================================================================
+
+# ==============================================================================
+def weak_scaling_efficiency_plot(scaling_data, name, color, label, ax, marker_size, marker_style, delete_first=None):
     x = scaling_data.loc['n_proc'].to_numpy()
     y = scaling_data.loc[name].to_numpy() / (scaling_data.loc['n_steps'].to_numpy() - 1)
 
-    # Normalize
-    y = y[0] / y
+    # Normalize to percentage
+    y = (y[0] / y) * 100
 
-    ax.plot(x, y, '--', c=color, marker='o', markersize=marker_size)
+    ax.plot(x, y, '--', c=color, marker=marker_style, markersize=marker_size, label=label)
 
-    return ax
+    return ax, x, y
 # ==============================================================================
 
 # ==============================================================================
@@ -158,8 +226,7 @@ def cells_per_second_per_gpu(scaling_data, name, color, label, ax, marker_size, 
     y = cells_per_gpu / avg_time_step
 
     ax.plot(x, y, '--', c=color, marker=marker_style, markersize=marker_size, label=label)
-
-    return ax
+    return ax, x, y
 # ==============================================================================
 
 if __name__ == '__main__':
