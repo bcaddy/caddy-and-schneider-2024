@@ -433,7 +433,7 @@ Update the face-centered magnetic field using the electric fields calculated in 
 \subsubsection{Step 10. Increment the Time by \texorpdfstring{$\Delta t$}{dt}}
 \label{vlct:increment-time}
 
-Increment the time by $\Delta t$. After this point, but before restarting the integrator, is where we incorporate any other physic, gravity, chemistry, dust, etc. and also where all the MPI communication is done for the ghost/halo cells that surround each MPI rank's subdomain. This MPI communication time is what is shown in Figure \ref{fig:scaling-ms-per-gpu}.
+Increment the time by $\Delta t$. After this point, but before restarting the integrator, is where we incorporate any other physic, gravity, chemistry, dust, etc. and also where all the MPI communication is done for the ghost/halo cells that surround each MPI rank's subdomain.
 
 \subsection{Implementation on GPUs}
 \label{sec:gpu-vs-cpu}
