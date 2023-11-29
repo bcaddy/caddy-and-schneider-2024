@@ -26,6 +26,9 @@ num_outputs   = int(np.ceil(tout/outstep) + 1)
 B_0           = 1E-3
 radius        = 0.3
 
+# Plotting data save path
+save_path = shared_tools.repo_root / 'python' / 'afl.pkl'
+
 # ==============================================================================
 def main():
     # Check for CLI arguments
@@ -34,6 +37,7 @@ def main():
     parser.add_argument('-o', '--out_path', help='The path of the directory to write the plots out to. Defaults to writing in the same directory as the input files')
     parser.add_argument('-r', '--run_cholla', action="store_true", help='Runs cholla to generate all the data')
     parser.add_argument('-f', '--figure', action="store_true", help='Generate the plots')
+    parser.add_argument('-d', '--data', action="store_true", help='Load and generate the data to be plotted.')
 
     args = parser.parse_args()
 
@@ -49,6 +53,9 @@ def main():
 
     if args.run_cholla:
         runCholla()
+
+    if args.data:
+        shared_tools.pickle_dictionary(load_data(), save_path)
 
     if args.figure:
         plotAFL(OutPath)
@@ -117,9 +124,6 @@ def load_data():
 # ==============================================================================
 def plotAFL(outPath):
     # Plotting info
-    suptitle_font_size = 15
-    subtitle_font_size = 10
-    axslabel_font_size = 10
     line_width         = 1
     marker_size        = 5
     tick_font_size     = 7.5
@@ -128,10 +132,10 @@ def plotAFL(outPath):
     markers            = {'32':'o',       '64':'v',      '128':'s',     '256':'*'}
 
     # Setup figure
-    fig, subPlot = plt.subplots(1, 2)
+    fig, subPlot = plt.subplots(1, 2, figsize = (2*shared_tools.fig_width, shared_tools.fig_height))
 
     # Load data
-    data = load_data()
+    data = shared_tools.unpickle_dictionary(save_path)
 
     # Info for each sublot
     fields = ['b_squared_avg', 'divergence']
@@ -169,11 +173,12 @@ def plotAFL(outPath):
             subPlot[subplot_idx].set_yscale('log')
 
         # Set titles
-        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}')
-        subPlot[subplot_idx].set_xlabel('Time', fontsize=axslabel_font_size)
+        subPlot[subplot_idx].set_ylabel(f'{shared_tools.pretty_names[field]}')
+        subPlot[subplot_idx].set_xlabel('Time', fontsize=shared_tools.font_size_normal)
+        subPlot[subplot_idx].set_box_aspect(1)
 
         # Legend
-        subPlot[subplot_idx].legend()
+        subPlot[subplot_idx].legend(fontsize=shared_tools.font_size_small)
 
     # Save the figure and close it
     fig.tight_layout()

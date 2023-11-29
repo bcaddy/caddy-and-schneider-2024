@@ -52,8 +52,6 @@ def main():
 def plotOTV(rootPath, outPath):
     # Plotting info
     line_width         = 0.4
-    suptitle_font_size = 15
-    subtitle_font_size = 25
     num_contours       = 30
 
     # Field info
@@ -62,7 +60,7 @@ def plotOTV(rootPath, outPath):
 
     # Setup figure
     figSize = 10.0
-    fig, subPlot = plt.subplots(2, 2, layout='constrained', figsize = (figSize, 1.1*figSize))
+    fig, subPlot = plt.subplots(2, 2, layout='constrained', figsize = (2*shared_tools.fig_width, 2*shared_tools.fig_height))
 
     # Whole plot settings
     # fig.suptitle(f'', fontsize=suptitle_font_size)
@@ -90,10 +88,10 @@ def plotOTV(rootPath, outPath):
                                          bottom=False, left=False)
 
         # Ensure equal axis
-        subPlot[subplot_idx].set_aspect('equal')
+        subPlot[subplot_idx].set_box_aspect(1)
 
         # Set titles
-        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}', fontsize=subtitle_font_size)
+        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}', fontsize=shared_tools.font_size_normal)
 
     # Save the figure and close it
     plt.savefig(outPath / f'orszag-tang-vortex.pdf', transparent = True)

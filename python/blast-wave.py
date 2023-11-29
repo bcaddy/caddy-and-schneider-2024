@@ -53,8 +53,6 @@ def main():
 def plotBlastWave(rootPath, outPath):
     # Plotting info
     line_width         = 00.1
-    suptitle_font_size = 15
-    subtitle_font_size = 30
     num_contours       = 30
 
     # Field info
@@ -65,7 +63,7 @@ def plotBlastWave(rootPath, outPath):
     figSizeScale = 5                 # Scaling factor for the figure size
     figHeight    = 2.35 * figSizeScale # height of the plot in inches, default is 4.8
     figWidth     = 3.0 * figSizeScale # width of the plot in inches, default is 6.4
-    fig, subPlot = plt.subplots(1, 2, layout='constrained', figsize = (figWidth, figHeight))
+    fig, subPlot = plt.subplots(1, 2, layout='constrained', figsize = (1.4*shared_tools.fig_width, shared_tools.fig_height))
 
     # Whole plot settings
     # fig.suptitle(f'', fontsize=suptitle_font_size)
@@ -96,7 +94,7 @@ def plotBlastWave(rootPath, outPath):
         subPlot[subplot_idx].set_aspect('equal')
 
         # Set titles
-        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}', fontsize=subtitle_font_size)
+        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}', fontsize=shared_tools.font_size_normal)
 
     # Save the figure and close it
     plt.savefig(outPath / f'mhd-blast.pdf', transparent = True)

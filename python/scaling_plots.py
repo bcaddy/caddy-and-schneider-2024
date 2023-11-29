@@ -139,8 +139,7 @@ def cells_per_second_plot(scaling_data):
 # ==============================================================================
 def weak_scaling_efficiency(scaling_data):
     # Instantiate Plot
-    fig = plt.figure(0, figsize=(15, 10))
-    fig.clf()
+    fig = plt.figure(1, figsize=(shared_tools.fig_height, shared_tools.fig_height))
     ax = plt.gca()
 
     # Set plot settings
@@ -151,7 +150,7 @@ def weak_scaling_efficiency(scaling_data):
     marker_style_mhd   = 'o'
     marker_style_mpi   = '1'
     marker_style_total = '^'
-    marker_size     = 10
+    marker_size        = 5
 
     # Plot the data
     ax, x, y = weak_scaling_efficiency_plot(scaling_data, 'Total', color_total, 'Total', ax, marker_size, marker_style=marker_style_total)
@@ -178,19 +177,16 @@ def weak_scaling_efficiency(scaling_data):
     #                                       subs=np.arange(2, 10) * .1,
     #                                       numticks=100)
     # ax.yaxis.set_minor_locator(locmin)
-    ax.tick_params(which='both', direction='in', labelsize=20, bottom=True, top=True, left=True, right=True)
+    ax.tick_params(which='both', direction='in', labelsize=shared_tools.font_size_normal, bottom=True, top=True, left=True, right=True)
     ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter())
 
     plt.grid(axis='x', color='0.5', which='major')
     plt.grid(axis='y', color='0.5', which='major')
     # plt.grid(axis='y', color='0.25', which='minor')
 
-
-    title_size      = 40
-    axis_label_size = 25
-    fig.suptitle('MHD Weak Scaling on Frontier (PLMC)', fontsize=title_size)
-    ax.set_ylabel(r'Weak Scaling Efficiency', fontsize=axis_label_size)
-    ax.set_xlabel(r'Number of GPUs', fontsize=axis_label_size)
+    ax.set_ylabel(r'Weak Scaling Efficiency', fontsize=shared_tools.font_size_normal)
+    ax.set_xlabel(r'Number of GPUs', fontsize=shared_tools.font_size_normal)
+    ax.set_box_aspect(1)
 
     # legend = ax.legend(fontsize=15)
     fig.tight_layout()

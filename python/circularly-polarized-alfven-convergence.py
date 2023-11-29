@@ -131,14 +131,9 @@ def plotL2Norm(outPath, normalize = False):
     scaling_linestyle  = '--'
     alpha              = 0.6
     scaling_color      = 'black'
-    suptitle_font_size = 15
-    subtitle_font_size = 10
-    axslabel_font_size = 10
-    legend_font_size   = 7.5
-    tick_font_size     = 7.5
 
     # Plot the L2 Norm data
-    fig, subPlot = plt.subplots(1, 2)#, sharex=True, sharey=True)
+    fig, subPlot = plt.subplots(1, 2, figsize = (2*shared_tools.fig_width, shared_tools.fig_height))
 
     wave_position = {'standing':0, 'moving':1}
 
@@ -190,21 +185,17 @@ def plotL2Norm(outPath, normalize = False):
         subPlot[subplot_idx].set_xlim(1E1, 1E3)
 
         # Set ticks and grid
-        subPlot[subplot_idx].tick_params(axis='both', direction='in', which='both', labelsize=tick_font_size, bottom=True, top=True, left=True, right=True)
+        subPlot[subplot_idx].tick_params(axis='both', direction='in', which='both', labelsize=shared_tools.tick_font_size, bottom=True, top=True, left=True, right=True)
 
         # Set axis titles
-        subPlot[subplot_idx].set_xlabel('Resolution', fontsize=axslabel_font_size)
+        subPlot[subplot_idx].set_xlabel('Resolution', fontsize=shared_tools.font_size_normal)
         if (subplot_idx == 0):
-            subPlot[subplot_idx].set_ylabel(f'{norm_name}L2 Error', fontsize=axslabel_font_size)
-        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[wave]}', fontsize=subtitle_font_size)
+            subPlot[subplot_idx].set_ylabel(f'{norm_name}L2 Error', fontsize=shared_tools.font_size_normal)
+        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[wave]}', fontsize=shared_tools.font_size_normal)
 
-        subPlot[subplot_idx].legend(fontsize=legend_font_size)
+        subPlot[subplot_idx].legend(fontsize=shared_tools.font_size_small)
 
-    # Legend
-    # fig.legend()
-
-    # Whole plot settings
-    fig.suptitle(f'{norm_name}Circularly Polarized Alfvén Wave Convergence', fontsize=suptitle_font_size)
+        subPlot[subplot_idx].set_box_aspect(1)
 
     plt.tight_layout()
     plt.savefig(outPath / f'cpaw_convergence.pdf', transparent = True)

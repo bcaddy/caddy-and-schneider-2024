@@ -105,10 +105,6 @@ def plotShockTubes(rootPath, outPath):
     data_markersize    = 5
     data_linestyle     = '-'
     linewidth          = 0.1 * data_markersize
-    suptitle_font_size = 15
-    subtitle_font_size = 10
-    axslabel_font_size = 10
-    tick_font_size     = 7.5
     line_color         = 'black'
 
     # Field info
@@ -120,14 +116,7 @@ def plotShockTubes(rootPath, outPath):
     # Plot the shock tubes data
     for shock_tube in shock_tubes:
         # Setup figure
-        figSizeScale = 2.                 # Scaling factor for the figure size
-        figHeight    = 4.8 * figSizeScale # height of the plot in inches, default is 4.8
-        figWidth     = 7.0 * figSizeScale # width of the plot in inches, default is 6.4
-        fig, subPlot = plt.subplots(3, 3, sharex=True, figsize = (figWidth, figHeight))
-
-        # Whole plot settings
-        fig.suptitle(f'{shared_tools.pretty_names[shock_tube]}', fontsize=suptitle_font_size)
-        fig.tight_layout(pad = 1.5, w_pad = 1.5)
+        fig, subPlot = plt.subplots(3, 3, sharex=True, figsize = (3*shared_tools.fig_width, 3*shared_tools.fig_height))
 
         # Load data
         data = shared_tools.load_conserved_data(f'{shock_tube}', load_gamma=True, load_resolution=True)
@@ -165,18 +154,21 @@ def plotShockTubes(rootPath, outPath):
             subPlot[subplot_idx].tick_params(axis='both',
                                              direction='in',
                                              which='both',
-                                             labelsize=tick_font_size,
+                                             labelsize=shared_tools.tick_font_size,
                                              bottom=True,
                                              top=True,
                                              left=True,
                                              right=True)
 
+            subPlot[subplot_idx].set_box_aspect(1)
+
             # Set titles
-            subPlot[subplot_idx].set_ylabel(f'{shared_tools.pretty_names[field]}', fontsize=axslabel_font_size)
+            subPlot[subplot_idx].set_ylabel(f'{shared_tools.pretty_names[field]}', fontsize=shared_tools.font_size_normal)
             if (subplot_idx[0] == 2):
-                subPlot[subplot_idx].set_xlabel('Position', fontsize=axslabel_font_size)
+                subPlot[subplot_idx].set_xlabel('Position', fontsize=shared_tools.font_size_normal)
 
         # Save the figure and close it
+        fig.tight_layout()
         plt.savefig(outPath / f'{shock_tube}.pdf', transparent = True)
         plt.close()
 

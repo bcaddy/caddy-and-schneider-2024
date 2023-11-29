@@ -56,6 +56,14 @@ pretty_names = {'density':'Density',
                 'b_squared_avg':r'Normalized $\left< B^2 \right>$ Evolution',
                 'divergence':r'Divergence'}
 
+# Figure and font sizes
+fig_width  = 4
+fig_height = 4
+font_size_normal = 12
+font_size_small  = 10
+font_size_xsmall = 8
+tick_font_size   = 7.5
+
 # The colors for various quantities
 colors = {'density':'blue', 'gas_pressure':'green', 'energy':'red',
           'velocity_x':'purple', 'velocity_y':'purple', 'velocity_z':'purple',
