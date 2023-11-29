@@ -10,12 +10,12 @@
 
 Magnetic fields play a key role in many astrophysical phenomena, but are often neglected in numerical simulations due to the computational expense of magnetohydrodynamics. Part of this expense arises due to the wide range of temporal and physical scales over which magnetic field dynamos operate. Numerical integration of the MHD equations is also challenging; the additional waves compared to hydrodynamics and the requirement to maintain the divergence free condition result in considerable added complexity.
 
-Given these considerations, MHD simulations often need to be both high resolution and use robust, divergence free methods, which tend to increase the computational cost. This limitation can be overcome by harnessing new GPU based supercomputers efficiently. Thus, we have elected to expand the existing massively parallel GPU-based hydrodynamics code, Cholla, to incorporate the effects of MHD. In this section we describe the equations solved and methods used by the MHD module of Cholla. While the algorithms themselves are not new, our particular choices are not laid out in any one reference, so we outline them all here. We also highlight choices that are particularly relevant to solving these equations on GPUs.
+Given these considerations, MHD simulations often need to be both high resolution and use robust, divergence free methods, which tend to increase their computational cost. This limitation can be overcome by harnessing new GPU based supercomputers efficiently. Thus, we have elected to expand the existing massively parallel GPU-based hydrodynamics code, Cholla, to incorporate the effects of MHD. In this section we describe the equations solved and methods used by the MHD module of Cholla. While the algorithms themselves are not new, our particular combination of equations is not contained in any one reference, so we outline the full method here. We also highlight implementation choices that are particularly relevant to solving these equations on GPUs.
 
 \subsection{Magnetohydrodynamics}
 \label{sec:methods-mhd}
 
-Cholla solves the ideal MHD equations in their conserved Eulerian form using a finite volume method \citep{Godunov}. These equations neglect all dissipative processes: finite viscosity, electrical resistivity and thermal conductivity. These approximations are reasonable when simulation regions of low density such as the ISM, CGM, and IGM. Although we also neglect these additional processes at present, our methods are fully compatible with a future expansion to include additional physics that depends on magnetic fields, such as anisotropic conduction or cosmic ray transport.
+Cholla solves the ideal MHD equations in their conserved Eulerian form using a finite volume method \citep{Godunov}. These equations neglect all dissipative processes, including finite viscosity, electrical resistivity, and thermal conductivity. These approximations are reasonable when simulating regions of low density such as the ISM, CGM, and IGM. We note that although we neglect these additional processes at present, the methods implemented here are fully compatible with future extensions to include additional physics that depends on magnetic fields, such as anisotropic conduction, cosmic ray transport, or non-ideal MHD effects.
 
 The ideal MHD equations are:
 
@@ -39,14 +39,14 @@ The ideal MHD equations are:
     \frac{\partial \boldsymbol{B}}{\partial t} - \nabla \times (\boldsymbol{v} \times \boldsymbol{B}) = 0
 \end{equation}
 
-\noindent where $\rho$ is density, $\boldsymbol{v} = ( v_x, v_y, v_z)$ is the velocity vector, $t$ is time, $\boldsymbol{B} = ( B_x, B_y, B_z)$ is the magnetic field, $\boldsymbol{I}$ is the identity tensor, $P_T \equiv P + \frac{1}{2}(\boldsymbol{B} \cdot \boldsymbol{B})$ is the total pressure, $E$ is the total energy per unit volume $E \equiv \epsilon + \frac{1}{2}\rho(\boldsymbol{v}\cdot\boldsymbol{v}) + \frac{1}{2}(\boldsymbol{B}\cdot\boldsymbol{B})$, and the units are such that magnetic permeability $\mu_0 = 1$. 
+\noindent where $\rho$ is density, $\boldsymbol{v} = ( v_x, v_y, v_z)$ is the velocity vector, $t$ is time, $\boldsymbol{B} = ( B_x, B_y, B_z)$ is the magnetic field, $\boldsymbol{I}$ is the identity tensor, $P_T \equiv P + \frac{1}{2}(\boldsymbol{B} \cdot \boldsymbol{B})$ is the total pressure, and $E$ is the total energy per unit volume $E \equiv \epsilon + \frac{1}{2}\rho(\boldsymbol{v}\cdot\boldsymbol{v}) + \frac{1}{2}(\boldsymbol{B}\cdot\boldsymbol{B})$. We adopt units in which the magnetic permeability $\mu_0 = 1$. 
 
 Equation \ref{eqn:mass-conservation} describes the conservation of mass, equation \ref{eqn:momentum-conservation} describes the conservation of momentum, equation \ref{eqn:energy-conservation} describes the conservation of energy, and equation \ref{eqn:induction} is the induction equation, which describes the divergence free condition. Cholla uses an ideal gas equation of state  which is $P \equiv \epsilon(\gamma - 1)$ where $\gamma$ is the adiabatic index and $\epsilon$ is the internal energy density. 
 
 In practice these equations are used in their vector form, where $\boldsymbol{U}$ and $\boldsymbol{W}$ are the conserved and primitive variables respectively:
 
 \begin{align}
-    \boldsymbol{U} = \begin{bmatrix}
+    \boldsymbol{U} &= \begin{bmatrix}
             \rho &
             v_x &
             v_y &
@@ -57,7 +57,7 @@ In practice these equations are used in their vector form, where $\boldsymbol{U}
             B_z
          \end{bmatrix}
     \\
-    \boldsymbol{W} = \begin{bmatrix}
+    \boldsymbol{W} &= \begin{bmatrix}
             \rho &
             v_x &
             v_y &
@@ -66,9 +66,8 @@ In practice these equations are used in their vector form, where $\boldsymbol{U}
             B_x &
             B_y &
             B_z 
-         \end{bmatrix}
+         \end{bmatrix}.
 \end{align}
-
 The conservation equations, in Cartesian coordinates, can then be rewritten as
 
 \begin{equation}
@@ -78,7 +77,6 @@ The conservation equations, in Cartesian coordinates, can then be rewritten as
     \frac{\partial \boldsymbol{F_y}}{\partial y} + 
     \frac{\partial \boldsymbol{F_z}}{\partial z} = 0 
 \end{equation}
-
 where $\boldsymbol{F_x}$, $\boldsymbol{F_y}$, and $\boldsymbol{F_z}$ are the vectors of fluxes in the $x$, $y$, and $z$ direction respectively and are given by
 
 \begin{equation}
@@ -120,7 +118,7 @@ where $\boldsymbol{F_x}$, $\boldsymbol{F_y}$, and $\boldsymbol{F_z}$ are the vec
          \end{bmatrix}.
 \end{equation}
 
-Some other useful MHD equations are given in Appendix \ref{appen:mhd-glossary} such as the eigenvalues, wave speeds, etc.
+Additional relevant MHD equations are given in Appendix \ref{appen:mhd-glossary} including the eigenvalues, wave speeds, etc.
 
 
 
