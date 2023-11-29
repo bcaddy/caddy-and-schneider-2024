@@ -91,7 +91,7 @@ def plotOTV(rootPath, outPath):
         subPlot[subplot_idx].set_box_aspect(1)
 
         # Set titles
-        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}', fontsize=shared_tools.font_size_normal)
+        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}', fontsize=1.25*shared_tools.font_size_normal)
 
     # Save the figure and close it
     plt.savefig(outPath / f'orszag-tang-vortex.pdf', transparent = True)

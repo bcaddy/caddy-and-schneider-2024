@@ -163,9 +163,9 @@ def plotShockTubes(rootPath, outPath):
             subPlot[subplot_idx].set_box_aspect(1)
 
             # Set titles
-            subPlot[subplot_idx].set_ylabel(f'{shared_tools.pretty_names[field]}', fontsize=shared_tools.font_size_normal)
+            subPlot[subplot_idx].set_ylabel(f'{shared_tools.pretty_names[field]}', fontsize=1.25*shared_tools.font_size_normal)
             if (subplot_idx[0] == 2):
-                subPlot[subplot_idx].set_xlabel('Position', fontsize=shared_tools.font_size_normal)
+                subPlot[subplot_idx].set_xlabel('Position', fontsize=1.25*shared_tools.font_size_normal)
 
         # Save the figure and close it
         fig.tight_layout()
