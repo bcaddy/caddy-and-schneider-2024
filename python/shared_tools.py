@@ -59,9 +59,9 @@ pretty_names = {'density':'Density',
 # Figure and font sizes
 fig_width  = 4
 fig_height = 4
-font_size_normal = 12
-font_size_small  = 10
-font_size_xsmall = 8
+font_size_normal = 14
+font_size_small  = 12
+font_size_xsmall = 10
 tick_font_size   = 7.5
 
 # The colors for various quantities
