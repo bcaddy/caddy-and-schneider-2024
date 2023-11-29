@@ -69,7 +69,7 @@ colors = {'density':'blue', 'gas_pressure':'green', 'energy':'red',
           'velocity_x':'purple', 'velocity_y':'purple', 'velocity_z':'purple',
           'magnetic_x':'orange', 'magnetic_y':'orange', 'magnetic_z':'orange',
           'plmc':'red', 'ppmc':'blue'}
-color_maps = {'density':'viridis', 'magnetic_energy':'plasma', 'gas_pressure':'plasma', 'spec_kinetic':'inferno'}
+color_maps = {'density':'viridis', 'magnetic_energy':'inferno', 'gas_pressure':'cividis', 'spec_kinetic':'inferno'}
 
 
 # ==============================================================================
