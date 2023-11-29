@@ -116,7 +116,7 @@ def plotShockTubes(rootPath, outPath):
     # Plot the shock tubes data
     for shock_tube in shock_tubes:
         # Setup figure
-        fig, subPlot = plt.subplots(3, 3, sharex=True, figsize = (3*shared_tools.fig_width, 3*shared_tools.fig_height))
+        fig, subPlot = plt.subplots(3, 3, figsize = (3*shared_tools.fig_width, 3*shared_tools.fig_height))
 
         # Load data
         data = shared_tools.load_conserved_data(f'{shock_tube}', load_gamma=True, load_resolution=True)

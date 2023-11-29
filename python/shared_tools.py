@@ -62,13 +62,14 @@ fig_height = 4
 font_size_normal = 14
 font_size_small  = 12
 font_size_xsmall = 10
-tick_font_size   = 7.5
+tick_font_size   = 12
 
 # The colors for various quantities
 colors = {'density':'blue', 'gas_pressure':'green', 'energy':'red',
           'velocity_x':'purple', 'velocity_y':'purple', 'velocity_z':'purple',
           'magnetic_x':'orange', 'magnetic_y':'orange', 'magnetic_z':'orange',
           'plmc':'red', 'ppmc':'blue'}
+color_maps = {'density':'viridis', 'magnetic_energy':'plasma', 'gas_pressure':'plasma', 'spec_kinetic':'inferno'}
 
 
 # ==============================================================================

@@ -84,7 +84,7 @@ def plotBlastWave(rootPath, outPath):
         contours = np.linspace(np.min(field_data), np.max(field_data), num_contours)
 
         # Plot the data
-        subPlot[subplot_idx].contour(field_data, levels=num_contours, cmap='inferno', linewidths=line_width)
+        subPlot[subplot_idx].contour(field_data, levels=num_contours, cmap=shared_tools.color_maps[field], linewidths=line_width)
 
         # Set ticks and grid
         subPlot[subplot_idx].tick_params(labelleft=False, labelbottom=False,

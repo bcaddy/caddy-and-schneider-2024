@@ -126,7 +126,6 @@ def plotAFL(outPath):
     # Plotting info
     line_width         = 1
     marker_size        = 5
-    tick_font_size     = 7.5
     colors             = {'32':'blue',    '64':'red',    '128':'green', '256':'purple'}
     line_style         = {'32':'dashdot', '64':'dashed', '128':'solid', '256':'dotted'}
     markers            = {'32':'o',       '64':'v',      '128':'s',     '256':'*'}
@@ -163,7 +162,7 @@ def plotAFL(outPath):
         subPlot[subplot_idx].tick_params(axis='both',
                                          direction='in',
                                          which='both',
-                                         labelsize=tick_font_size,
+                                         labelsize=shared_tools.tick_font_size,
                                          bottom=True, top=True, left=True, right=True)
         if field == 'b_squared_avg':
             subPlot[subplot_idx].set_ylim(top=1.0)
@@ -173,7 +172,7 @@ def plotAFL(outPath):
             subPlot[subplot_idx].set_yscale('log')
 
         # Set titles
-        subPlot[subplot_idx].set_ylabel(f'{shared_tools.pretty_names[field]}')
+        subPlot[subplot_idx].set_ylabel(f'{shared_tools.pretty_names[field]}', fontsize=shared_tools.font_size_normal)
         subPlot[subplot_idx].set_xlabel('Time', fontsize=shared_tools.font_size_normal)
         subPlot[subplot_idx].set_box_aspect(1)
 
