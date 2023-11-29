@@ -118,18 +118,18 @@ where $\boldsymbol{F_x}$, $\boldsymbol{F_y}$, and $\boldsymbol{F_z}$ are the vec
          \end{bmatrix}.
 \end{equation}
 
-Additional relevant MHD equations are given in Appendix \ref{appen:mhd-glossary} including the eigenvalues, wave speeds, etc.
+Additional relevant MHD equations are given in Appendix \ref{appen:mhd-glossary}, including the eigenvalues, wave speeds, etc.
 
 
 
-\subsection{Overview of the VL+CT Integrator}
+\subsection{The VL+CT Integrator}
 \label{sec:vlct-summary}
 
-To integrate these equations in Cholla, we use the VL+CT (Van Leer plus Constrained Transport) integrator introduced in \cite{stone_2009}, along with the HLLD Riemann solver from \cite{hlld_2005}. The specific algorithm is from \cite{stone_2009} with some clarifying details from \cite{gardiner_2005,gardiner_unsplit_2008,stone_athena_2008} and the piecewise parabolic method is from \cite{felker_2018}. The VL+CT integrator is very similar in structure to the Van Leer integrator \citep{van_leer_2003, falle_1991, Toro}, though with significant new additions for Constrained Transport (CT). We note that this is now the default integrator used in Cholla, as we have found it to be more robust than the CTU algorithm described in \cite{schneider_2015}.
+To integrate these equations in Cholla, we implement the VL+CT (Van Leer plus Constrained Transport) integrator introduced in \cite{stone_2009}, along with the HLLD Riemann solver described in \cite{hlld_2005}. Many of the equations were first described in the context of the constrained-transport extension to the corner-transport upwind (CTU) method \citep{colella_1990} described in 2D \citep{gardiner_2005} and 3D \citep{gardiner_unsplit_2008} for the Athena MHD code \citep{stone_athena_2008}. Our specific implementation of the piecewise parabolic method follows \cite{felker_2018}, which is itself an extension of the original PPM method presented by \cite{collela_1984}. The VL+CT integrator is very similar in structure to the MUSCL-Hancock integrator \citep{van_leer_2003, falle_1991, Toro}, though with significant new additions for Constrained Transport (CT). We note that this is now the default integrator used in Cholla, as we have found it to be more robust than the CTU algorithm described in \cite{schneider_2015}.
 
-Constrained transport treats the magnetic field as a surface averaged quantity centered at cell interfaces rather than a volume averaged, cell centered quantity like the hydro variables; i.e. a staggered grid. Each face stores only the magnetic field perpendicular to that face, i.e. the $x,i+1/2,j,k$ face stores the $B_{x,i+1/2,j,k}$ magnetic field. At each time step, the magnetic field is then updated using edge averaged electric fields (Electromotive Force) computed from the magnetic flux returned by the Riemann solver. Updating the magnetic field with the electric field automatically fulfill the divergence free condition for magnetic fields, assuming that the initial conditions are divergence free.
+Constrained transport treats the magnetic field as a surface averaged quantity centered at cell interfaces rather than a volume averaged, cell centered quantity like the hydro variables; i.e. a staggered grid. Each face stores only the magnetic field perpendicular to that face, i.e. the $x,i+1/2,j,k$ face stores the $B_{x,i+1/2,j,k}$ magnetic field. At each time step, the magnetic field is then updated using edge averaged electric fields (Electromotive Force) computed from the magnetic flux returned by the Riemann solver. Updating the magnetic field with the electric field automatically fulfills the divergence free condition for magnetic fields, assuming that the initial conditions are also divergence free.
 
-A brief overview of the algorithm for a single time step using the VL+CT integrator is as follows; more detailed discussion of each step is presented in section \ref{vlct:header}.
+A brief overview of the algorithm for a single time step using the VL+CT integrator is as follows; more detailed discussion of each step is presented in the following subsections.
 
 \begin{enumerate}
     \item Compute the time step, $\Delta t$.
@@ -144,23 +144,19 @@ A brief overview of the algorithm for a single time step using the VL+CT integra
 \end{enumerate}
 
 % ===========================================================================
-\subsection{VL+CT Integrator in Detail}
-\label{vlct:header}
 
 \subsubsection{Step 1: Compute the Time Step}
 \label{vlct:dt}
 
-The first step is to compute the time step. This it the minimum crossing time of any wave in any cell multiplied by a Courant factor to maintain the Courant–Friedrichs–Lewy condition \cite{cfl}.
+The first step is to compute the time step. Cholla implements uniform time steps across the grid, so this is the minimum crossing time of any wave in any cell multiplied by a Courant factor to maintain the Courant–Friedrichs–Lewy condition \cite{cfl}:
 
 \begin{equation}
-    \begin{aligned}
         \label{eqn:dt}
         \Delta t = C_{CFL} \min \left(
-            \frac{\Delta x}{\mid v^n_{x,i,j,k} \mid + C^n_{f,i,j,k}}, \right. \\ \left.
-            \frac{\Delta y}{\mid v^n_{y,i,j,k} \mid + C^n_{f,i,j,k}}, 
-            \frac{\Delta z}{\mid v^n_{z,i,j,k} \mid + C^n_{f,i,j,k}}
-        \right).
-    \end{aligned}
+            \frac{\Delta x}{\mid v^n_{x,i,j,k} \mid + c^n_{f,i,j,k}},
+            \frac{\Delta y}{\mid v^n_{y,i,j,k} \mid + c^n_{f,i,j,k}}, 
+            \frac{\Delta z}{\mid v^n_{z,i,j,k} \mid + c^n_{f,i,j,k}}
+        \right),
 \end{equation}
 
 \noindent where $\Delta t$ is the time step, $C_{CFL} \leq 0.5$ is the CFL number, $\mid v^n_{l,i,j,k}\mid $ is the magnitude of the velocity in the $l$ direction velocity in the ${i,j,k}$ cell, and $c^n_f $ is the fast magnetosonic wave-speed computed using \emph{cell centered} values. The fast and slow magnetosonic speeds are
@@ -173,7 +169,7 @@ The first step is to compute the time step. This it the minimum crossing time of
 
 \noindent where the $+$ option corresponds to the fast magnetosonic speed, and $-$ to the slow.
 
-Equation \ref{eqn:dt} computes the minimum crossing time of a wave in a specific cell and then a global reduction is performed to find the minimum in the entire grid; that minimum is used as the time step $\Delta t$. This reduction is done primarily on the GPU followed by an MPI ALL\_REDUCE. GPU reductions are complex and their performance is extremely sensitive to the method used, details of our reduction method are discussed in section \ref{sec:gpu-vs-cpu}. 
+Equation \ref{eqn:dt} computes the minimum crossing time of a wave in a specific cell. A global reduction is then performed to find the minimum in the entire grid; that minimum is used as the time step $\Delta t$. This reduction is done primarily on the GPU followed by an MPI ALL\_REDUCE. Because GPUs programming methods are inherently parallel, GPU reductions are not trivial and their performance is sensitive to the method used. Details of our reduction method are discussed in section \ref{sec:gpu-vs-cpu}. 
 
 The cell-centered magnetic field is computed with a direct average of the face centered values:
 \begin{equation}
@@ -196,14 +192,14 @@ Reconstructing the interface states at first order, or the piecewise constant me
     \boldsymbol{W}_{L, i+1/2} = \boldsymbol{W}_{R, i-1/2} = \boldsymbol{W}_{i}
 \end{equation}
 
-\noindent where $ \boldsymbol{W}_{L/R, i\pm1/2} $ is the state on the left or right side of the cell. Even though Cholla only stored the conserved variables, the primitive variables are used for every reconstruction since the Riemann solver requires them. In higher order reconstructions we use the characteristic variables derived from the primitive variables.
+\noindent where $ \boldsymbol{W}_{L/R, i\pm1/2} $ is the state on the left or right side of the cell. Although Cholla evolves the conserved variables, primitive variables are typically used for interface reconstruction since they are required by the Riemann solver used to compute the fluxes. In higher order spatial reconstructions we also use the characteristic variables derived from the primitive variables.
 
-Although PCM is too diffusive to be used on its own in both reconstruction steps it is excellent for debugging. We use it here as a computationally-inexpensive way to calculate first-order fluxes, which will be used for the ``predictor" step of this predictor-corrector algorithm. Most higher order methods revert to PCM near large discontinuities.
+Although PCM is too diffusive to be used on its own in both reconstruction steps, we note that that mode is excellent for debugging. Here, it offers a computationally-inexpensive way to calculate first-order fluxes, which will be used for the ``predictor" step of this predictor-corrector algorithm. Most higher order methods revert to PCM near large discontinuities.
 
 \subsubsection{Step 3: First Riemann Solve}
 \label{vlct:first-riemann-solve}
 
-The next step is to solve the Riemann problem with the first order interface states. We use the HLLD Riemann solver introduced in \cite{hlld_2005}. The longitudinal magnetic field does not require reconstruction and can be used directly since it is stored at the face. The transverse fields (i.e. the fields parallel to the interface) are reconstructed from the cell centered average (computed as shown in section \ref{vlct:dt}), then reconstructed using PCM identically to other fields.
+The next step is to solve the Riemann problem with the first order interface states. To do this, we employ the HLLD Riemann solver introduced in \cite{hlld_2005}. The longitudinal magnetic field does not require reconstruction and can be used directly since it is stored at the face. The transverse fields (i.e. the fields parallel to the interface) are reconstructed from the cell centered average (computed as shown in section \ref{vlct:dt}), then reconstructed using PCM identically to other fields.
 
 The magnetic fluxes returned by the Riemann solver are the face centered electric fields \citep[see section 5.3 of][]{stone_athena_2008}. For clarity, we list in Table \ref{table:emf} the correlation between flux and electric field.
 
@@ -222,7 +218,7 @@ The magnetic fluxes returned by the Riemann solver are the face centered electri
     $ Z $ & $ V_x B_z - B_x V_z $ & $ -(V \times B)_y $ & $  \varepsilon_x $ \\ \hline
     \enddata
 
-    \tablecomments{The directions used here are relative to the internal workings of the HLLD solver. Since the HLLD solver is inherently 1D we run it once for each of the faces of a cell. So in the case where the solver is running in the Y direction the solver's Y field is actually the Z field and the solvers Z field is actually the X field, cyclically extended for the Z direction}
+    \tablecomments{The directions used here are relative to the internal workings of the HLLD solver. Since the HLLD solver is inherently 1D we run it once for each of the faces of a cell. So in the case where the solver is running in the Y direction the solver's Y field is actually the Z field and the solver's Z field is actually the X field, cyclically extended for the Z direction.}
 \end{deluxetable*}
 
 \subsubsection{Step 4: Compute the Constrained Transport Electric Field}
@@ -245,9 +241,9 @@ Example for computing the CT electric field in the $ z $-direction. The equation
     \end{aligned}
 \end{equation}
 
-$\mathcal{E}_{z, i-1/2, j-1/2, k}$ is the line averaged electric field, the firs four terms are the face averaged electric fields, and the four derivative terms are the derivatives of those fields in the direction towards the edge, details of which are in Equation \ref{eqn:emf-slope}. Figure \ref{fig:emf-graph} shows the spatial relationships between the derivatives and the relevant edge states and reference fields. Each edge requires 4 derivatives and they are computed as differences between a reference state and an edge state.
+$\mathcal{E}_{z, i-1/2, j-1/2, k}$ is the line averaged electric field, the first four terms are the face averaged electric fields, and the four derivative terms are the derivatives of those fields in the direction towards the edge, details of which are in Equation \ref{eqn:emf-slope}. Figure \ref{fig:emf-graph} shows the spatial relationships between the derivatives and the relevant edge states and reference fields. Each edge requires 4 derivatives and they are computed as differences between a reference state and an edge state.
 
-Technically, constrained transport uses the magnetic flux as the conservative variable and EMF (ElectroMotive Force) to update it. However, those values only differ from the magnetic flux density (i.e. the magnetic field) and the electric field respectively by factors of unit length we can treat them as the same thing, the same way we treat density and mass as the same for the hydro fields \cite{stone_athena_2008}. As such we use the magnetic field and electric field to evolve the grid. Electric fields have the proper units to evolve the magnetic flux density, $ B $, whereas EMF has the proper units to evolve the magnetic flux.
+Technically, constrained transport uses the magnetic flux as the conserved variable and EMF (ElectroMotive Force) to update it. However, because those values only differ from the magnetic flux density (i.e. the magnetic field) and the electric field respectively by factors of unit length we can treat them as the same thing, the same way we treat density and mass as the same for the hydro fields \citep{stone_athena_2008}. As such we use the magnetic field and electric field to evolve the grid. Electric fields have the proper units to evolve the magnetic flux density, $ B $, whereas EMF has the proper units to evolve the magnetic flux.
 
 On any face there are two non-zero electric fields; both transverse to the face. The component that is used to calculate the field along a given edge is the component that is parallel to that edge; i.e. if the edge points along the $ z $-direction then the field pointing along the $ z $-direction is used, not the field in the $ x $ or $ y $ direction.
 
@@ -277,7 +273,7 @@ where, for example, the derivatives are given by
     2 \left( \frac{\mathcal{E}_{z,i,j-1/2,k} - \mathcal{E}_{z,i,j,k}^{ref}}{\Delta y} \right).
 \end{equation}
 
-The $\mathcal{E}_{z,i,j,k}^{ref}$, is the cell centered reference field. This reference field can be computed with the following cross product
+$\mathcal{E}_{z,i,j,k}^{ref}$, is the cell centered reference field. This reference field is computed with the following cross product
 
 \begin{equation}
     \mathcal{E}_{i,j,k}^{ref,n} = - \left( \boldsymbol{v}^{n}_{i.j.k} \times \boldsymbol{B}^{n}_{i.j.k} \right).
@@ -294,7 +290,7 @@ The $\mathcal{E}_{z,i,j,k}^{ref}$, is the cell centered reference field. This re
 \subsubsection{Step 5. Perform the Half Time-step Update}
 \label{vlct:half-dt-update}
 
-Update the density, momenta, and energy, but not the magnetic fields, using the standard conservative update equation and the first-order fluxes from Step 3:
+We first update the density, momenta, and energy, but not the magnetic fields, using the standard conservative update equation and the first-order fluxes from Step 3:
 
 \begin{equation}
     \begin{aligned}
@@ -305,7 +301,7 @@ Update the density, momenta, and energy, but not the magnetic fields, using the 
     \end{aligned}
 \end{equation}
 
-Update the magnetic field using the electric fields computed in Step 4:
+We then update the magnetic field using the electric fields computed in Step 4:
 
 \begin{equation}
     \begin{aligned}
@@ -334,27 +330,26 @@ Update the magnetic field using the electric fields computed in Step 4:
 \subsubsection{Step 6. Half Time-step Second Order Reconstruction}
 \label{vlct:higher-order-reconstruction}
 
-Step 5 results in first order time-averaged values for the cell-centered conserved variables and face-centered magnetic fields. To make the integration second-order in time, we need to perform a ``corrector" step. First, weperform a higher order interface reconstruction. The method shown here is for Piecewise Linear Method (PLM), reconstruction. Cholla currently implements piecewise constant, piecewise linear, and piecewise parabolic reconstruction, with limiting in the characteristic variables, for MHD. The piecewise parabolic method that Cholla utilizes is discussed in detail in \cite{felker_2018}. Using the third order piecewise parabolic method for spatial reconstruction does typically give slightly more accurate results at a given resolution compared to PLM, but since the method is formally second order it does not improve the overall order of convergence.
+Step 5 results in first order time-averaged values for the cell-centered conserved variables and face-centered magnetic fields. To make the integration second-order in time, we need to perform a ``corrector" step. First, we perform a higher order interface reconstruction. The method shown here is for Piecewise Linear Method (PLM), reconstruction. Cholla currently implements piecewise constant, piecewise linear, and piecewise parabolic reconstruction, with limiting in the characteristic variables, for MHD. The piecewise parabolic method that Cholla utilizes is discussed in detail in \cite{felker_2018}. Using the third order piecewise parabolic method for spatial reconstruction does typically give slightly more accurate results at a given resolution compared to PLM, but since the method is formally second order it does not improve the overall order of convergence. Note that at a given face only the transverse components of the electric field need to be reconstructed. The longitudinal component is already given at the face.
 
-Note that at a given face only the transverse components of the electric field need to be reconstructed. The longitudinal component is already given at the face.
-
+The steps of the PLM update are:
 \begin{enumerate}
-    \item Compute the primitive variables
+    \item Compute the primitive variables from the conserved variables.
     
     \item Compute the left, right, centered, and Van Leer differences in the primitive variables
     \begin{align} 
-        \delta \boldsymbol{W}_{L,i} = \boldsymbol{W_{i}} - \boldsymbol{W_{i-1}} \\ 
-        \delta \boldsymbol{W}_{R,i} = \boldsymbol{W_{i+1}} - \boldsymbol{W_{i}} \\
-        \delta \boldsymbol{W}_{C,i} = \frac{\boldsymbol{W_{i+1}} - \boldsymbol{W_{i-1}}}{2} \\
-        \delta \boldsymbol{W}_{VL,i} = 
+        \delta \boldsymbol{W}_{L,i} &= \boldsymbol{W_{i}} - \boldsymbol{W_{i-1}} \\ 
+        \delta \boldsymbol{W}_{R,i} &= \boldsymbol{W_{i+1}} - \boldsymbol{W_{i}} \\
+        \delta \boldsymbol{W}_{C,i} &= \frac{\boldsymbol{W_{i+1}} - \boldsymbol{W_{i-1}}}{2} \\
+        \delta \boldsymbol{W}_{VL,i} &= 
         \begin{cases}
             \frac{2 \boldsymbol{W}_{L,i} \boldsymbol{W}_{R,i}}{\boldsymbol{W}_{L,i} +\boldsymbol{W}_{R,i}} ,& \text{if } \boldsymbol{W}_{L,i} \boldsymbol{W}_{R,i} > 0\\
             0,              & \text{otherwise}
         \end{cases}
     \end{align}
     
-    \item Project the slopes into the characteristic variables, $\boldsymbol{a}$, using the eigenvectors given in the appendix of \cite{stone_athena_2008}. Note that to maintain mathematical consistency we use the eigenvectors of the $\boldsymbol{w_{i}}$ cell for all four slopes and the later projection back to primitive variables.
-    \item Apply monotonicity constraints to the characteristic differences to ensure that the reconstruction is total variation diminishing (TVD). We use the following limiter, given in \cite{leveque2002finite}.
+    \item Project the slopes into the characteristic variables, $\boldsymbol{a}$, using the eigenvectors listed in the appendix of \cite{stone_athena_2008}. Note that to maintain mathematical consistency we use the eigenvectors of the $\boldsymbol{w_{i}}$ cell for all four slopes and the later projection back to primitive variables.
+    \item Apply monotonicity constraints to the characteristic differences to ensure that the reconstruction is total variation diminishing (TVD). We use the following limiter, given in \cite{leveque2002finite}:
     \begin{equation}
         \label{eqn:limiter}
         \delta \boldsymbol{a}_{m,i} = 
@@ -363,7 +358,7 @@ Note that at a given face only the transverse components of the electric field n
             0,              & \text{otherwise}
         \end{cases}
     \end{equation}
-    \item Project the limited characteristic slopes, $\delta \boldsymbol{a}_{m}$, back into the primitive variables, $\delta \boldsymbol{W}_{m}$, using the eigenvectors given in \cite{stone_athena_2008}.
+    \item Project the limited characteristic slopes, $\delta \boldsymbol{a}_{m}$, back into the primitive variables, $\delta \boldsymbol{W}_{m}$, using the eigenvectors.
     \item Compute the interface states $\boldsymbol{W}_{L, i+1/2}$ and $\boldsymbol{W}_{R, i-1/2}$:
 \end{enumerate}
 
