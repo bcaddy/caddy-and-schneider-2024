@@ -191,3 +191,10 @@ With a single MPI rank there is no communication overhead, as no halo cells need
     \caption{Weak scaling performance of Cholla MHD. When running on a single GPU Cholla updates $2.04\times10^8$ cells per second per GPU; the largest run with 74,088 GPUs updates $1.67\times10^8$ cells per second per GPU, a weak scaling efficiency of 82.2\%. The 74,088 GPU run updates a total of $1.24\times10^{13}$ cells per second. \input{|python ../python/get_links.py 'scaling'}}
     \label{fig:scaling-weak-efficiency}
 \end{figure}
+
+\begin{figure}[ht!]
+    \epsscale{0.5}
+    \includegraphics[width=0.5\linewidth]{assets/3-mhd-tests/scaling_tests_ms_per_gpu.pdf}
+    \caption{Weak scaling performance of Cholla MHD. The time required for the MHD integrator dominates over the MPI communication time even at 74,088 MPI ranks. \input{|python ../python/get_links.py 'scaling'}}
+    \label{fig:scaling-ms-per-gpu}
+\end{figure}
