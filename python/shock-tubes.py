@@ -8,6 +8,7 @@
 """
 
 from timeit import default_timer
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import argparse
@@ -16,6 +17,11 @@ import pathlib
 import shared_tools
 
 plt.close('all')
+
+matplotlib.rcParams['font.sans-serif'] = "Helvetica"
+matplotlib.rcParams['font.family'] = "sans-serif"
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
 
 # Global Variables
 shock_tubes = ['b&w', 'd&w', 'rj1a', 'rj4d', 'einfeldt']
