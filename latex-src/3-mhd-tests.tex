@@ -1,7 +1,7 @@
 \section{MHD Tests}
 \label{sec:mhd-tests}
 
-We have implemented a large suite of test problems to demonstrate the accuracy, robustness and performance of Cholla MHD. We chose problems that are common stables in the literature and specifically selected problems that are challenging for the integrator and, when possible, have quantifiable measures of correctness for comparisons to other methods and codes. All of these problems are also present in our automated test suite as either accuracy and/or regression system tests, see Section \ref{sec:testing} for details. Section \ref{sec:accuracy_tests} discusses the accuracy tests and Section \ref{sec:mhd-perf-tests} discusses the performance and scaling of Cholla MHD on up to 74,088 GPUs.
+In this Section, we show the results of a suite of test problems that demonstrate the accuracy, robustness and performance of Cholla MHD. We have included many problems that are common stables in the literature and specifically selected tests that are challenging for the integrator and, when possible, have quantifiable measures of correctness for comparison to other methods and codes. All of these problems are also included in our automated test suite as either accuracy and/or regression system tests (see Section \ref{sec:testing} for details). Section \ref{sec:accuracy_tests} discusses tests for accuracy, while Section \ref{sec:mhd-perf-tests} discusses the performance and scaling of Cholla MHD on up to 74,088 GPUs.
 
 \subsection{Accuracy Tests}
 \label{sec:accuracy_tests}
@@ -9,7 +9,7 @@ We have implemented a large suite of test problems to demonstrate the accuracy, 
 \subsubsection{Linear Wave Convergence}
 \label{sec:lwc}
 
-The propagation of the four MHD linear waves provide an excellent quantitative measure of the accuracy of computation methods. Our linear wave tests use a domain of $1.0\times1.0\times1.0$ and a resolution of $N\times16\times16$ where $N$ goes from 16 to 512 in powers of 2. The equation of the wave is
+The propagation of the four MHD linear waves provides an excellent quantitative measure of the accuracy of a numberical MHD method. Our linear wave tests use a periodic domain of $1.0\times1.0\times1.0$ and a resolution of $N\times16\times16$ where $N$ goes from 16 to 512 in powers of 2. The wave equation is
 
 \begin{equation}
     q = \overline{q} + A R_w \sin{\frac{2\pi x}{\lambda}},
@@ -21,13 +21,13 @@ $\overline{v_x}=\overline{v_y}=\overline{v_z}=0$ (except for the contact wave wh
 $\overline{P}=1/\gamma$,
 $\overline{B_x}=1$,
 $\overline{B_y}=1.5$,
-$\overline{B_z}=0$ 
-and the right eigenvectors for this state are given in Appendix A of \cite{gardiner_unsplit_2008}. 
+and $\overline{B_z}=0$.
+The right eigenvectors for this state are given in Appendix A of \cite{gardiner_unsplit_2008}. 
 
-The wave is propagated for one period, and then the error is computed between the initial and final state. First, we compute the L1 norm, which is the absolute difference for each conserved variable between the initial and final state:
+The wave propogates for one period, after which the error is computed between the initial and final state. First we compute the L1 norm, which is the absolute difference for each conserved variable between the initial and final state:
 
 \begin{equation}
-    \delta q_s = \frac{1}{n_x n_y n_z} \sum_{i,j,k} \mid q^f_{i,j,k,s} - q^i_{i,j,k,s} \mid
+    \delta q_s = \frac{1}{n_x n_y n_z} \sum_{i,j,k} \mid q^f_{i,j,k,s} - q^i_{i,j,k,s} \mid,
 \end{equation}
 
 \noindent where $q_s$ is a specific conserved variable. We then compute the L2 norm of this vector of L1 norms as
@@ -36,11 +36,11 @@ The wave is propagated for one period, and then the error is computed between th
     \mid \mid \delta q \mid \mid = \sqrt{\sum_s \left( \delta q_s \right)^2}.
 \end{equation}
 
-These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both the PLM and PPM reconstructions. The results are comparable to the results in \cite{stone_2009} and demonstrate the expected second order convergence for this second order method. Using PPM does improve the accuracy of the method, but maintains the second order convergence due to the second order nature of the integrator. We have implemented these tests in all three directions with the waves moving in the positive or negative directions and find identical results.
+These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both the PLM and PPM reconstructions. The results are comparable to the results in \cite{stone_2009} and demonstrate the expected second order convergence. Using PPM improves the accuracy of the solution by approximately an order of magnitude at any given resolution, but maintains the second order convergence due to the second order nature of the integrator. We have implemented these tests in all three directions with the waves moving in the positive or negative directions and find identical results.
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \plotone{assets/3-mhd-tests/linear_convergence.pdf}
+    \includegraphics[width=\linewidth]{assets/3-mhd-tests/linear_convergence.pdf}
     \caption{Linear Wave Convergence of all four MHD waves using PLM and PPM reconstruction. \input{|python ../python/get_links.py 'linear_wave_convergence'}}
     \label{fig:linear-wave-convergence}
 \end{figure}
@@ -48,9 +48,9 @@ These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both th
 \subsubsection{Circularly Polarized Alfv\'en Wave}
 \label{sec:cpaw}
 
-The circularly polarized Alfv\'en wave is a non-linear wave that tests a code's accuracy in the non-linear regime with the quantitative benefits of a regular wave test \citep{Toth1996}. The tests use a domain of $3.0\times1.5\times1.5$ and a resolution of $2N\times N \times N$ where $N$ goes from 8 to 256 in powers of 2 and periodic boundary conditions. The wave is set to travel at an oblique angle the grid, making this a fully 3D test.
+The circularly polarized Alfv\'en wave is a non-linear wave that tests a code's accuracy in the non-linear regime with the quantitative benefits of a regular wave test \citep{Toth1996}. The tests use a periodic domain of $3.0\times1.5\times1.5$ and a resolution of $2N\times N \times N$ where $N$ goes from 8 to 256 in powers of 2. The wave is initialized at an oblique angle the grid, making this a fully 3D test.
 
-In a coordinate system aligned with the movement of the wave the initial conditions are 
+In a coordinate system aligned with the movement of the wave, the initial conditions are 
 $\rho = 1.0$,
 $P = 0.1$,
 $v_x = (0,-1)$ for traveling or standing waves respectively,
@@ -58,8 +58,8 @@ $v_y = A \sin{\frac{2\pi x}{\lambda}}$,
 $v_z = A \cos{\frac{2\pi x}{\lambda}}$,
 $B_x = 1.0$,
 $B_y = A \sin{\frac{2\pi x}{\lambda}}$,
-$B_z = A \cos{\frac{2\pi x}{\lambda}}$,
-where the amplitude of the wave $A = 0.1$ and the wavelength $\lambda = 1.0$. These coordinates are then transformed with the following rotation
+and $B_z = A \cos{\frac{2\pi x}{\lambda}}$,
+where the amplitude of the wave $A = 0.1$ and the wavelength $\lambda = 1.0$. These coordinates are then transformed with the rotation
 
 \begin{eqnarray}
     x\prime = x \cos\alpha\cos\beta - y \sin\beta - z \sin\alpha\cos\beta \nonumber \\
@@ -67,13 +67,13 @@ where the amplitude of the wave $A = 0.1$ and the wavelength $\lambda = 1.0$. Th
     z\prime = x \sin\alpha + z \cos\alpha \nonumber
 \end{eqnarray}
 
-\noindent with $\sin\alpha = 2/3$ and $\sin\beta = 1/\sqrt{5}$. This ensures the domain is fully periodic through the boundaries and the wave can travel (or stand) indefinitely. The magnetic fields are initialized with the vector potential to ensure initial divergence is zero to round off. The waves are then run for a single period and the L2 norm of the L2 error vector is plotted in Figure \ref{fig:cpaw} using the same method as in Section \ref{sec:lwc}. It is interesting to note that the improvement in accuracy that PPM brought over PLM in the linear waves is absent in this non-linear test.
+\noindent with $\sin\alpha = 2/3$ and $\sin\beta = 1/\sqrt{5}$. This ensures the domain is fully periodic through the boundaries and the wave can travel (or stand) indefinitely. The magnetic fields are initialized with the vector potential to ensure initial divergence is zero to round off. The waves are then run for a single period and the L2 norm of the L2 error vector is plotted in Figure \ref{fig:cpaw} using the same method as in Section \ref{sec:lwc}. It is interesting to note that the accuracy improvement of PPM versus PLM seen for the linear waves is absent in this non-linear test.
 
-These Alfv\'en waves are subject to a parametric instability \citep{del_zanna_parametric_2001} which should not be present for these initial conditions. However, the truncation error will result in small variations in the magnetic pressure which will drive low amplitude compression waves \citep{stone_athena_2008}. 
+These Alfv\'en waves are subject to a parametric instability \citep{del_zanna_parametric_2001}, which should not be present for these initial conditions. However, the truncation error will result in small variations in the magnetic pressure which drives low amplitude compression waves \citep{stone_athena_2008}. 
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \plotone{assets/3-mhd-tests/cpaw_convergence.pdf}
+    \includegraphics[width=\linewidth]{assets/3-mhd-tests/cpaw_convergence.pdf}
     \caption{Circularly Polarized Alfv\'en Wave Convergence using PLM and PPM reconstruction. \input{|python ../python/get_links.py 'cpaw'}}
     \label{fig:cpaw}
 \end{figure}
@@ -81,19 +81,19 @@ These Alfv\'en waves are subject to a parametric instability \citep{del_zanna_pa
 \subsubsection{Advecting Field Loop}
 \label{sec:afl}
 
-In this test we advect a tilted spherical current loop across the domain at an oblique angle to the grid. This test requires particularly accurate balancing of the non-zero components of the induction equation. It also has zero magnetic field outside the spherical current loop; as the current loops moves across the grid those cells that are no longer in the loop should return to zero to within round off error. It is also a good test of the dissipation of the magnetic field, as the magnetic pressure should remain constant.
+The advecting field loop test consists of a tilted spherical current loop that travels across the domain at an oblique angle to the grid. This test requires particularly accurate balancing of the non-zero components of the induction equation. It also has zero magnetic field outside the spherical current loop; as the current loops moves across the grid those cells that are no longer in the loop should return to zero to within round off error. It is also a good test of the dissipation of the magnetic field, as the magnetic pressure should remain constant.
 
-The initial conditions for this test are most easily described using the magnetic vector potential, which is defined as $\boldsymbol{B} = \nabla \times\boldsymbol{A}$. The background state is
+The initial conditions for this test are most easily described using the magnetic vector potential, which is the vector quantity whose curl equals the magnetic field, $\boldsymbol{B} = \nabla \times\boldsymbol{A}$. The background state is
 $\rho = 1.0$,
 $P = 1.0$,
 $v_x = 1.0$,
 $v_y = 1.0$,
 $v_z = 2.0$,
 $B_x = 0$,
-$B_y = 0$,
+$B_y = 0$, and
 $B_z = 0$.
 
-In the central region the state is given by the following vector potential that we have chosen such that $A_x = 0$,
+In the central region the state is given by the following vector potential, which we have chosen such that $A_x = 0$:
 \begin{equation}
     A_y = A_z = 
     \begin{cases}
@@ -102,13 +102,13 @@ In the central region the state is given by the following vector potential that 
     \end{cases}
 \end{equation}
 
-where $r$ is the Euclidean distance from the center of the domain. Note that since the vector potential is along the vertices of the cells $A_y$ and $A_z$ will never have the same value at the same position since they are not stored at identical positions. The test is conducted in a grid of $N\times N\times 2N$ cells for $N=(32, 64, 128, 256)$ with a domain of $1.0\times1.0\times2.0$ centered at zero and evolved for two periods; $t_{max} = 2.0$.
+\noindent where $r$ is the Euclidean distance from the center of the domain. Note that since the vector potential is along the vertices of the cells, $A_y$ and $A_z$ will never have the same value at the same position as they are not stored at identical positions. The test is conducted on a grid of $N\times N\times 2N$ cells for $N=(32, 64, 128, 256)$ with a periodic domain of $1.0\times1.0\times2.0$ centered at zero and evolved for two periods; $t_{max} = 2.0$.
 
-In Figure \ref{fig:afl} the mean of cell centered $B^2$ normalized to the initial value is plotted to show the convergence of the dissipation rate. The dissipation rate is comparable to those found in the literature \citep{stone_athena_2008} and improves at approximately first order. Figure \ref{fig:afl} also shows the maximum divergence in the domain as a function of time. Throughout the entire evolution it remains near round off and, after an initial rise, remains fairly constant. The zero magnetic field region outside of the current loop also remains near zero throughout the entire evolution of the problem.
+Figure \ref{fig:afl} shows the mean of cell centered $B^2$, normalized to the initial value, in order to demonstrate the convergence of the dissipation rate. The dissipation rate is comparable to those found in the literature \citep{stone_athena_2008} and improves at approximately first order. Figure \ref{fig:afl} also shows the maximum divergence in the domain as a function of time. Throughout the entire evolution it remains near round off and, after an initial rise, remains fairly constant. The zero magnetic field region outside of the current loop also remains near zero throughout the entire evolution of the problem.
  
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \plotone{assets/3-mhd-tests/afl.pdf}
+    \includegraphics[width=\linewidth]{assets/3-mhd-tests/afl.pdf}
     \caption{Evolution of tilted spherical magnetic field loop through two full periods. Mean of $B^2$ normalized to the initial value as a function of time (left) and the maximum divergence in the domain as a function of time (right). \input{|python ../python/get_links.py 'afl'}}
     \label{fig:afl}
 \end{figure}
@@ -116,9 +116,9 @@ In Figure \ref{fig:afl} the mean of cell centered $B^2$ normalized to the initia
 \subsubsection{MHD Riemann Problems}
 \label{sec:riemann}
 
-MHD Riemann problems are staple tests for new MHD codes and methods due to their mix of different flow types and extreme conditions. There are many different MHD Riemann problems in the literature \citep{brio_wu_1988, einfeldt_1991, ryu_jones_1995, dai_woodward_1998}; we have chosen to present five that cover a variety of challenging cases. 
+MHD Riemann problems are standard tests for new MHD codes and methods due to their mix of different flow types and extreme conditions. There are many different MHD Riemann problems in the literature \citep{brio_wu_1988, einfeldt_1991, ryu_jones_1995, dai_woodward_1998}; we have chosen to present five that cover a variety of challenging cases. 
 
-The Riemann problem is defined as having a single state for half of the domain which suddenly switches at a discontinuity to a different state on the other half of the domain. All of Riemann problems here have a domain of $1\times1\times1$ and resolution of $512\times16\times16$ and are run until the $t_{max}$ for that particular Riemann problem. All have been run in all three spatial directions with both possible orientations of the two states and achieved identical results. The details of each left and right state are given in Table \ref{table:riemann} and the details of each Riemann problem are discussed in the captions of Figures \ref{fig:brio-and-wu}-\ref{fig:einfeldt}.
+The Riemann problem is defined as having a single state for half of the domain which suddenly switches at a discontinuity to a different state on the other half of the domain. All of Riemann problems here have a domain of $1\times1\times1$ and resolution of $512\times16\times16$ and are run until the $t_{max}$ for that particular Riemann problem. All have been run in all three spatial directions with both possible orientations of the two states and achieved identical results. The details of each left and right state are given in Table \ref{table:riemann}.
 
 \input{../assets/3-mhd-tests/riemann-table.tex}
 
@@ -127,7 +127,7 @@ The Riemann problem is defined as having a single state for half of the domain w
 \subsubsection{MHD Blast Wave in a Strongly Magnetized Medium}
 \label{sec:mhd-blast}
 
-Blast waves in different forms are staple tests for hydrodynamics and MHD codes. They combine strong shocked flows, smooth flows, and, in MHD, strong magnetic fields. The results are qualitative rather than quantitative but thoroughly test the robustness of the algorithm and act act as an excellent regression test for our automated testing (see Section \ref{sec:testing}). In this test $\beta = 0.2$, like \cite{stone_2009}, we find instabilities if $\beta$ is decreased by a factor of 10. 
+Blast waves in different forms are staple tests for hydrodynamics and MHD codes. They combine strong shocked flows, smooth flows, and, in MHD, strong magnetic fields. The results are qualitative rather than quantitative, but thoroughly test the robustness of the algorithm and are excellent regression tests for automated testing (see Section \ref{sec:testing}). For this test we use $\beta = 0.2$; like \cite{stone_2009}, we find instabilities if $\beta$ is decreased by a factor of 10. 
 
 The background state is
 $\rho = 1.0$,
@@ -138,13 +138,11 @@ $v_z = 0.0$,
 $B_x = 1/\sqrt{2}$,
 $B_y = 1/\sqrt{2}$,
 $B_z = 0.0$,
-and the over pressure region is a central sphere of size $R = 0.1$ which has $P=10.0$.
-
-The test was then run with a domain of $1\times1.5\times1$ and resolution of $200\times300\times200$ until $t = 0.2$. Figure \ref{fig:blast} shows contours in the density and magnetic energy in an $x-y$ slice through the center of the domain. The contours are smooth and symmetric and show clear elongation of the blast wave rarefaction parallel to the magnetic field. The blast wave propagates slowly parallel to the magnetic field but much more rapidly perpendicular to the magnetic field.
+and the over pressure region is a central sphere of size $R = 0.1$ which has $P=10.0$. The test is then run on a domain of $1\times1.5\times1$ with a resolution of $200\times300\times200$ cells until $t = 0.2$. Figure \ref{fig:blast} shows contours of the density and magnetic energy fields in an $x-y$ slice through the center of the domain. The contours are smooth and symmetric and show clear elongation of the blast wave rarefaction parallel to the magnetic field. The blast wave propagates slowly parallel to the magnetic field but much more rapidly perpendicular to the magnetic field.
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \plotone{assets/3-mhd-tests/mhd-blast.pdf}
+    \includegraphics[width=\linewidth]{assets/3-mhd-tests/mhd-blast.pdf}
     \caption{Contour plot of the MHD blast wave test at $t=0.2$. 30 evenly spaced contours are shown in an $x-y$ slice through the center of the domain. \input{|python ../python/get_links.py 'mhd-blast'}}
     \label{fig:blast}
 \end{figure}
@@ -154,7 +152,7 @@ The test was then run with a domain of $1\times1.5\times1$ and resolution of $20
 
 The Orszag-Tang vortex is a standard 2D MHD test from \cite{otv_1979}. While it does not provide a quantitative measure of accuracy like the linear wave tests or a test of the robustness of the method like the MHD blast wave, it does have a very complex flow that is sensitive to changes in the integrator, making it ideal for regression testing.
 
-The test was conducted with a periodic domain of $1\times1\times1$ and resolution of $192\times192\times192$ until $t = 0.5$ with the following initial conditions: 
+The test was conducted on a periodic domain of $1\times1\times1$ with a resolution of $192\times192\times192$ cells until $t = 0.5$ with the following initial conditions: 
 $\rho = 25 / \left( 36 \pi \right)$,
 $P    =  5 / \left( 12 \pi \right)$,
 $v_x  = \sin 2\pi y$,
@@ -162,13 +160,12 @@ $v_y  = -\sin 2\pi x$,
 $v_z  = 0.0$,
 $A_x  = 0.0$,
 $A_y  = 0.0$,
-$A_z  = \left( B_0/4\pi \right) \left( \cos{4\pi x} + 2 \cos{2\pi y} \right)$, with $B_0 = 1/sqrt{4\pi}$.
-
+$A_z  = \left( B_0/4\pi \right) \left( \cos{4\pi x} + 2 \cos{2\pi y} \right)$, with $B_0 = 1\sqrt{4\pi}$.
 The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure 22 in \cite{stone_athena_2008} as a qualitative check for correctness of the flow structure.
 
 \begin{figure}[!ht]
     % \epsscale{0.5}
-    \plotone{assets/3-mhd-tests/orszag-tang-vortex.pdf}
+    \includegraphics[width=\linewidth]{assets/3-mhd-tests/orszag-tang-vortex.pdf}
     \caption{Contour plot of the Orszag-Tang Vortex at $t=0.5$. Thirty evenly spaced contours are shown for each plot in an $x-y$ slice through the center of the domain.  \input{|python ../python/get_links.py 'otv'}}
     \label{fig:otv}
 \end{figure}
@@ -176,21 +173,21 @@ The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure
 \subsection{MHD Performance Tests}
 \label{sec:mhd-perf-tests}
 
-Given that Cholla is a massively parallel code and so the scaling properties warrant discussion. We focus on weak scaling rather than strong scaling as our primary goal, since good weak scaling enables much larger problems to be simulated, while strong scaling rapidly reduces the number of cells per GPU to the point where the whole GPU cannot be utilized. Thus, GPUs may not be a good choice for algorithms and applications that require strong scaling. Results of our weak scaling tests are shown in Figure \ref{fig:scaling-weak-efficiency}. 
+Given that Cholla is a massively parallel code, its scaling properties warrant discussion. We focus on weak scaling rather than strong scaling as our primary goal, since good weak scaling enables much larger problems to be simulated, while strong scaling rapidly reduces the number of cells per GPU to the point where the whole GPU cannot be utilized. Thus, GPUs may not be a good choice for algorithms and applications that require strong scaling. Results of our weak scaling tests are shown in Figure \ref{fig:scaling-weak-efficiency}. 
 
-All the weak scaling tests here were performed with a slow magnetosonic wave perturbation (described in Section \ref{sec:lwc}), periodic boundary conditions, in double precision, and with $459^3$ cells per MPI rank; each rank corresponds to one GPU. We evolve the wave for 100 time steps and average the results over the number of time steps, excluding setup and tear down time. This wave was chosen as it is generally the most challenging of the waves to reproduce accurately in our experience. This problem requires that every cell be updated and uses the second order piecewise linear reconstruction method in the characteristic variables. Overall this means that this test is a reasonably worst case scenario.
+All of the weak scaling tests shown were performed with a slow magnetosonic wave perturbation (described in Section \ref{sec:lwc}), periodic boundary conditions, in double precision, and with $459^3$ cells per MPI rank; each rank is assigned one GPU. We employ the second order piecewise linear reconstruction method with limiting in the characteristic variables. The wave is evolved for 100 time steps and the resulting time per step is averaged over the total number of time steps, excluding setup and tear down time. This wave was chosen as it is generally the most challenging of the waves to reproduce accurately in our experience. This problem requires that every cell be updated in each time step, and should thus provide a reasonable estimate for a typical full-grid update in a simulation.
 
 Our primary scaling tests were performed on the \textit{Frontier} Supercomputer at the Oak Ridge Leadership Computing Facility. \textit{Frontier} utilizes AMD Radeon Instinct MI250X GPUs, each of which contains two Graphics Compute Dies (GCDs) that largely function as separate GPUs and can be treated as such in software. Thus, for the sake of clear comparison to other systems, we will refer to each GCD as a single GPU for the remainder of this paper. 
 
-On \textit{Frontier} Cholla updates $2.04\times10^8$ cells per second per GPU when running with a single GPU. Using nearly the entirety of \textit{Frontier}, 74,088 GPUs, Cholla MHD was able to perform $1.67\times10^8$ cell updates per second with a weak scaling efficiency of 82.2\%. The 74,088 GPU run updated a total of $1.24\times10^{13}$ cells per second on a total grid size of $19,278^3$ cells. In some runs significantly degraded performance was noticed not due to MPI overhead but instead due to a small number, or a single, MPI rank that is much slower than the rest. Timing data from these runs shows that the minimum and average time per GPU required for the integrator, not the MPI communication, is similar to the "fast" runs but the maximum time is significantly higher. This pattern of low minimums and averages with high maximums also occasionally appears on smaller runs, leading credence to the theory that there is a small number of slow GPUs in \textit{Frontier}. As supercomputing clusters continue to grow in scale and complexity, rare hardware issues are more likely to become something that users of these machines need to contend with.
+On \textit{Frontier} Cholla updates $2.04\times10^8$ cells per second per GPU when running with a single GPU. On 74,088 GPUs, nearly the entirety of \textit{Frontier}, Cholla performs $1.67\times10^8$ cell updates per second, a weak scaling efficiency of 82.2\%. The 74,088 GPU run updated a total of $1.24\times10^{13}$ cells per second on a total grid size of $19,278^3$ cells. In some runs significantly degraded performance was observed, not due to MPI overhead but instead due to a small number, or a single, MPI rank that is much slower than the rest. Timing data from these slow runs shows that the minimum and average time per GPU required for the integrator is similar to the normal runs, but the maximum time is significantly higher. This pattern of low minimums and averages with high maximums also occasionally appears on smaller runs, leading credence to the theory that there is a small number of slow GPUs in \textit{Frontier}. This is not entirely suprising -- as supercomputing clusters continue to grow in scale and complexity, one-off hardware issues in large runs will become more common.
 
-With a single MPI rank there is no communication overhead. As the number of ranks grows the MPI overhead quickly stabilizes at around 15ms with a moderate increase when running on the full size of \textit{Frontier}. Perhaps most importantly, the VL+CT integrator scales almost perfectly and takes up most of the time on each time steps, dominating over the MPI communication time by nearly a factor of 10. Overall this shows that Cholla has excellent weak scaling up to the full size of \textit{Frontier}.
+With a single MPI rank there is no communication overhead, as no halo cells need to be exchanged. As the number of ranks grows the MPI overhead quickly stabilizes at around 15ms with a moderate increase when running on the full size of \textit{Frontier}. Perhaps most importantly, the VL+CT integrator scales almost perfectly and takes up most of the time on each time step, dominating over the MPI communication time by nearly a factor of 10. Overall these tests demonstrate that Cholla has excellent weak scaling up to the full size of \textit{Frontier}.
 
 % Performance on different hardware: CRC V100+PPC, CRC A100+x86, Summit, Frontier, Grace Hopper?
 
 \begin{figure}[ht!]
     \epsscale{0.5}
-    \plotone{assets/3-mhd-tests/scaling_tests_weak_efficiency.pdf}
-    \caption{Weak scaling performance of Cholla MHD. When running with a single GPU the performance is $2.04\times10^8$ cells per second per GPU, the largest run with 74,088 GPUs updates $1.67\times10^8$ cells per second per GPU with a weak scaling efficiency of 82.2\%. Across the entire machine the 74,088 GPU run updates a total of $1.24\times10^{13}$ cells per second. \input{|python ../python/get_links.py 'scaling'}}
+    \includegraphics[width=0.5\linewidth]{assets/3-mhd-tests/scaling_tests_weak_efficiency.pdf}
+    \caption{Weak scaling performance of Cholla MHD. When running on a single GPU Cholla updates $2.04\times10^8$ cells per second per GPU; the largest run with 74,088 GPUs updates $1.67\times10^8$ cells per second per GPU, a weak scaling efficiency of 82.2\%. The 74,088 GPU run updates a total of $1.24\times10^{13}$ cells per second. \input{|python ../python/get_links.py 'scaling'}}
     \label{fig:scaling-weak-efficiency}
 \end{figure}
