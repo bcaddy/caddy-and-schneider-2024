@@ -39,8 +39,9 @@ def main():
 
     scaling_data = load_data(data_path)
 
-    cells_per_second_plot(scaling_data)
+    # cells_per_second_plot(scaling_data)
     weak_scaling_efficiency(scaling_data)
+    ms_per_timestep(scaling_data)
 
     shared_tools.update_plot_entry('scaling', 'python/scaling_plots.py')
 # ==============================================================================
@@ -196,7 +197,69 @@ def weak_scaling_efficiency(scaling_data):
 # ==============================================================================
 
 # ==============================================================================
-def weak_scaling_efficiency_plot(scaling_data, name, color, label, ax, marker_size, marker_style, delete_first=None):
+def ms_per_timestep(scaling_data):
+    # Instantiate Plot
+    fig = plt.figure(3, figsize=(shared_tools.fig_height, shared_tools.fig_height))
+    ax = plt.gca()
+
+    # Set plot settings
+    # Defaults colors #0072B2, #009E73, #D55E00, #CC79A7, #F0E442, #56B4E9
+    color_mhd          = '#0072B2'
+    color_mpi          = '#009E73'
+    color_total        = 'black'#'#D55E00'
+    marker_style_mhd   = 'o'
+    marker_style_mpi   = 's'
+    marker_style_total = '^'
+    marker_size        = 5
+
+    # Plot the data
+    scale_to = 256**3
+    ax, x, y = ms_per_timestep_plot(scaling_data, 'Total', color_total, 'Total runtime (excluding initialization)', ax, marker_size, marker_style=marker_style_total, scale_to=scale_to)
+    ax = ms_per_timestep_plot(scaling_data, 'Boundaries', color_mpi, 'MPI Communication', ax, marker_size, marker_style=marker_style_mpi, scale_to=scale_to)[0]
+    # Note that the timer for the integrator is named "Hydro" not "MHD"
+    ax = ms_per_timestep_plot(scaling_data, 'Hydro_Integrator', color_mhd, 'MHD Integrator', ax, marker_size, marker_style=marker_style_mhd, scale_to=scale_to)[0]
+
+    # Print the performance results
+    print()
+    for i in range(len(x)):
+        print(f'Ranks: {int(x[i]):5d},  ms/{int(np.cbrt(scale_to))}^3 cells/GPU: {round(y[i],2):5.2f}')
+
+    # Setup the rest of the plot
+    ax.set_xlim(xmin = 0.7, xmax = 1E5)
+    ax.set_ylim(ymax = 120)
+
+    ax.set_xscale('log')
+    # ax.set_yscale('log')
+
+    # locmaj = matplotlib.ticker.LogLocator(base=10.0,
+    #                                       subs=(1.0, ),
+    #                                       numticks=100)
+    # ax.yaxis.set_major_locator(locmaj)
+
+    # locmin = matplotlib.ticker.LogLocator(base=10.0,
+    #                                       subs=np.arange(2, 10) * .1,
+    #                                       numticks=100)
+    # ax.yaxis.set_minor_locator(locmin)
+    ax.tick_params(which='both', direction='in', labelsize=shared_tools.font_size_normal, bottom=True, top=True, left=True, right=True)
+    # ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter())
+
+    plt.grid(axis='x', color='0.5', which='major')
+    plt.grid(axis='y', color='0.5', which='major')
+    # plt.grid(axis='y', color='0.25', which='minor')
+
+    ax.set_ylabel(r'Milliseconds / $256^3$ Cells / GPU', fontsize=shared_tools.font_size_normal)
+    ax.set_xlabel(r'Number of GPUs', fontsize=shared_tools.font_size_normal)
+    ax.set_box_aspect(1)
+
+    legend = ax.legend(loc='upper left', fontsize=shared_tools.font_size_tiny)
+    fig.tight_layout()
+
+    output_path = shared_tools.repo_root / 'assets' / '3-mhd-tests' / f'scaling_tests_ms_per_gpu.pdf'
+    fig.savefig(output_path, dpi=400)
+# ==============================================================================
+
+# ==============================================================================
+def weak_scaling_efficiency_plot(scaling_data, name, color, label, ax, marker_size, marker_style):
     x = scaling_data.loc['n_proc'].to_numpy()
     y = scaling_data.loc[name].to_numpy() / (scaling_data.loc['n_steps'].to_numpy() - 1)
 
@@ -205,6 +268,19 @@ def weak_scaling_efficiency_plot(scaling_data, name, color, label, ax, marker_si
 
     ax.plot(x, y, '--', c=color, marker=marker_style, markersize=marker_size, label=label)
 
+    return ax, x, y
+# ==============================================================================
+
+# ==============================================================================
+def ms_per_timestep_plot(scaling_data, name, color, label, ax, marker_size, marker_style, scale_to):
+    x = scaling_data.loc['n_proc'].to_numpy()
+    y = scaling_data.loc[name].to_numpy() / (scaling_data.loc['n_steps'].to_numpy() - 1)
+
+    # Scale to the requested number of cells
+    n_cells_per_gpu = int(scaling_data.loc['nx'][1]) * int(scaling_data.loc['ny'][1]) * int(scaling_data.loc['nz'][1])
+    y *= scale_to / n_cells_per_gpu
+
+    ax.plot(x, y, '--', c=color, marker=marker_style, markersize=marker_size, label=label)
     return ax, x, y
 # ==============================================================================
 

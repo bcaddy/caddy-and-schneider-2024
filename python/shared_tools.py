@@ -62,6 +62,7 @@ fig_height = 4
 font_size_normal = 14
 font_size_small  = 12
 font_size_xsmall = 10
+font_size_tiny   = 8
 tick_font_size   = 12
 
 # The colors for various quantities
