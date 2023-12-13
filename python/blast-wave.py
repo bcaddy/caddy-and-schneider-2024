@@ -100,7 +100,7 @@ def plotBlastWave(rootPath, outPath):
         subPlot[subplot_idx].set_aspect('equal')
 
         # Set titles
-        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}', fontsize=shared_tools.font_size_normal)
+        subPlot[subplot_idx].set_title(f'{shared_tools.pretty_names[field]}', fontsize=shared_tools.font_size_small)
 
     # Save the figure and close it
     plt.savefig(outPath / f'mhd-blast.pdf', transparent = True)
