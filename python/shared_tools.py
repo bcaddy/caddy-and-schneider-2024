@@ -31,9 +31,9 @@ data_files_path = repo_root / 'data'
 github_url_root = 'https://github.com/bcaddy/caddy-et-al-2023/blob'
 
 # The titles of plots with their pretty formatting
-pretty_names = {'density':'Density',
-                'gas_pressure':'Gas Pressure',
-                'energy':'Energy',
+pretty_names = {'density':r'$\rho$',
+                'gas_pressure':r'$P_{gas}$',
+                'energy':r'$E$',
                 'velocity_x':'$V_x$',
                 'velocity_y':'$V_y$',
                 'velocity_z':'$V_z$',
