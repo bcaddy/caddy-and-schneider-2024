@@ -10,8 +10,6 @@
 	year = {2009},
 	keywords = {MHD, Hydrodynamics, Methods: numerical},
 	pages = {139--148},
-	annote = {This is the VL+CT paper},
-	file = {PDF:/Users/Bob/Zotero/storage/6VRXXH98/Stone & Gardiner 2008.pdf:application/pdf},
 }
 
 @article{stone_athena_2008,
@@ -23,9 +21,6 @@
 	author = {Stone, James M and Gardiner, Thomas A and Teuben, Peter and Hawley, John F and Simon, Jacob B},
 	year = {2008},
 	pages = {137--177},
-	annote = {Extracted Annotations
-should be + min not - min(note on p. 7)},
-	file = {Stone et al. - 2008 - ATHENA A NEW CODE FOR ASTROPHYSICAL MHD.pdf:/Users/Bob/Zotero/storage/GK9JCGUT/Stone et al. - 2008 - ATHENA A NEW CODE FOR ASTROPHYSICAL MHD.pdf:application/pdf},
 }
 
 @article{gardiner_2005,
@@ -41,7 +36,6 @@ should be + min not - min(note on p. 7)},
 	year = {2005},
 	note = {Publisher: Academic Press Inc.},
 	pages = {509--539},
-	file = {PDF:/Users/Bob/Zotero/storage/XRI5SRJA/Gardiner & Stone 2005.pdf:application/pdf},
 }
 
 @article{gardiner_unsplit_2008,
@@ -59,7 +53,6 @@ should be + min not - min(note on p. 7)},
 	note = {Publisher: Academic Press Inc.},
 	keywords = {Magnetohydrodynamics, Compressible flow, Numerical methods},
 	pages = {4123--4141},
-	file = {PDF:/Users/Bob/Zotero/storage/JYAR4JNB/Gardiner & Stone 2008.pdf:application/pdf},
 }
 
 @article{athena++_2020,
@@ -78,7 +71,6 @@ should be + min not - min(note on p. 7)},
 	month = jun,
 	year = {2020},
 	pages = {4},
-	file = {Stone et al. - 2020 - The Athena++ Adaptive Mesh Refinement Framework D.pdf:/Users/Bob/Zotero/storage/K7VX6423/Stone et al. - 2020 - The Athena++ Adaptive Mesh Refinement Framework D.pdf:application/pdf},
 }
 
 
@@ -96,30 +88,6 @@ should be + min not - min(note on p. 7)},
 	note = {Publisher: Academic Press Inc.},
 	keywords = {Magnetohydrodynamics, HLL, HLLC, Approximate Riemann solver, HLLD, Positivity},
 	pages = {315--344},
-	annote = {Annotations(2/7/2022, 11:17:53 AM)
-(Miyoshi and Kusano, 2005, p. 316) FVS = Flux Vector Splitting
-“The organization of the paper is as follows: After introduction, the MHD equations and their nature are presented in Section 2. We briefly review the single-state and two-state HLL approximate Riemann solvers in Sections 3 and 4. In Section 5.1, new multi-state approximate Riemann solver for MHD, called HLLD solver, is proposed. The important properties of the HLLD solver such as an exact resolution of discontinuities and a positivity preserving property are argued in Sections 5.2 and 5.3. In Section 6, several numerical tests are performed, and those results are discussed. Finally, concluding remarks are given in Section 7.” (Miyoshi and Kusano, 2005, p. 317)
-(Miyoshi and Kusano, 2005, p. 317) Table of Contents1. Intro (p315)2. MHD Equations (p317)3. HLL Solvers (p318)4. HLLC Solvers (p320)5. HLLD (p324)6. Numerical Tests (p332)7. Conclusions (p342)
-“Bx is given as a constant in one dimension.” (Miyoshi and Kusano, 2005, p. 317)
-(Miyoshi and Kusano, 2005, p. 324) HLLD Solver
-(Miyoshi and Kusano, 2005, p. 324) The HLLD Solver ignores slow shocks (the slow magnetoacoustic wave)
-“Slow shocks cannot be formed inside the Riemann fan.” (Miyoshi and Kusano, 2005, p. 324)
-(Miyoshi and Kusano, 2005, p. 324) Check if their S\_M is the same as mine (except with total pressure instead of just regular pressure)
-(Miyoshi and Kusano, 2005, p. 325) y and z velocity and magnetic field in star region
-(Miyoshi and Kusano, 2005, p. 326) Might need a check for divide by zero errors
-“Note that the numerical operations of 0/0 seem to appear in (44)–(47) if SM = ua, Sa ¼ ua cf a, Bya ¼ Bza ¼ 0, and B2 x P cpa. In these cases, (44)–(47) can be simply replaced by v a ¼ va; w a ¼ wa, and B ya ¼ B za ¼ 0 since there is no shock across Sa i.e., q a ¼ qa; u a ¼ ua; and p Ta ¼ p” (Miyoshi and Kusano, 2005, p. 326)
-(Miyoshi and Kusano, 2005, p. 327) Fluxes
-“Note also that the HLLC solver for the Euler equations [2,29] is included in the HLLD solver for the MHD equations as the limit of zero magnetic field” (Miyoshi and Kusano, 2005, p. 328)
-(Miyoshi and Kusano, 2005, p. 333) Excellent tests for my HLLD Solver including a Sod equivalent
-“Dai and Woodward” (Miyoshi and Kusano, 2005, p. 333)
-“nd many others, where the initial states are given by ðq; p; u; v; w; By; BzÞ¼ð1:08; 0:95; 1:2; 0:01; 0:5; 3:6= ffiffiffiffiffiffi 4p p ; 2= ffiffiffiffiffiffi 4p p Þ for x {\textless}0,ð1; 1; 0; 0; 0; 4= ffiffiffiffiffiffi 4p p ; 2= ffiffiffiffiffiffi 4p p Þ for x {\textgreater} 0, with Bx ¼ 4= ffiffiffiffiffiffi 4p p .” (Miyoshi and Kusano, 2005, p. 333)
-“We also test a standard shock tube problem first discussed by Brio and Wu [4] and tested by many others, where the initial states are (q, p, u, v, w, By, Bz) = (1, 1, 0, 0, 0, 1, 0) for x {\textless} 0, (0.125, 0.1, 0, 0, 0, 1, 0) for x {\textgreater} 0, with Bx = 0.75. Although c = 2 in the original test, our test follows the corresponding test by Ryu and Jones [27] with c = 5/3” (Miyoshi and Kusano, 2005, p. 333)
-(Miyoshi and Kusano, 2005, p. 333) My shock tube
-(Miyoshi and Kusano, 2005, p. 338) Applicability to Multi-Dimensional problems
-“The HLLD Riemann solver was constructed under the assumption that the normal velocity is constant over the Riemann fan” (Miyoshi and Kusano, 2005, p. 342)
-“W. Dai, P.R. Woodward, An approximate Riemann solver for ideal magnetohydrodynamics, J. Comput. Phys. 111 (1994) 354.” (Miyoshi and Kusano, 2005, p. 343)
-},
-	file = {PDF:/Users/Bob/Zotero/storage/RBY456WH/Miyoshi & Kusano 2005.pdf:application/pdf},
 }
 @book{leveque2002finite,
   title={Finite volume methods for hyperbolic problems},
@@ -141,7 +109,6 @@ should be + min not - min(note on p. 7)},
 	year = {1998},
 	keywords = {methods, Subject headings, numerical È MHD È shock waves},
 	pages = {317--335},
-	file = {PDF:/Users/Bob/Zotero/storage/PLSKS685/Dai & Woodward 1998.pdf:application/pdf},
 }
 
 @article{brio_wu_1988,
@@ -154,7 +121,6 @@ should be + min not - min(note on p. 7)},
 	author = {Brio, M and Wu, C C},
 	year = {1988},
 	pages = {40--422},
-	file = {PDF:/Users/Bob/Zotero/storage/IRZKQ4G8/Brio & Wu 1988.pdf:application/pdf},
 }
 
 @article{einfeldt_1991,
@@ -167,7 +133,6 @@ should be + min not - min(note on p. 7)},
 	author = {Einfeldt, B and Munz, C D and Roe, P L and Wgreen, B},
 	year = {1991},
 	pages = {213--295},
-	file = {PDF:/Users/Bob/Zotero/storage/4GKG7JCG/Einfeldt et al 1991.pdf:application/pdf},
 }
 
 @article{ryu_jones_1995,
@@ -178,7 +143,6 @@ should be + min not - min(note on p. 7)},
 	month = mar,
 	year = {1995},
 	pages = {228--258},
-	file = {PDF:/Users/Bob/Zotero/storage/PKSDE5V3/Ryu & Jones 1995.pdf:application/pdf},
 }
 
 @article{charm_2011,
@@ -195,7 +159,6 @@ should be + min not - min(note on p. 7)},
 	month = jul,
 	year = {2011},
 	keywords = {methods: numerical, cosmology: theory, magnetohydrodynamics (MHD)},
-	file = {PDF:/Users/Bob/Zotero/storage/ELV6I2FR/Miniati & Martin 2011.pdf:application/pdf},
 }
 @article{godunov,
   TITLE = {{Finite difference method for numerical computation of discontinuous solutions of the equations of fluid dynamics}},
@@ -226,7 +189,6 @@ should be + min not - min(note on p. 7)},
 	note = {Publisher: IOP Publishing},
 	keywords = {hydrodynamics, methods: numerical},
 	pages = {24},
-	file = {PDF:/Users/Bob/Zotero/storage/BGWSU76S/Schneider 2015.pdf:application/pdf},
 }
 @book{Toro,
 	title = {Riemann {Solvers} and {Numerical} {Methods} for {Fluid} {Dynamics} {Third} {Edition}},
@@ -251,7 +213,6 @@ should be + min not - min(note on p. 7)},
 	month = jun,
 	year = {1991},
 	pages = {581--596},
-	file = {Falle - 1991 - Self-similar jets.pdf:/Users/Bob/Zotero/storage/8GQTE83W/Falle - 1991 - Self-similar jets.pdf:application/pdf},
 }
 @inproceedings{van_leer_2006,
 	address = {Orlando, Florida},
@@ -268,7 +229,6 @@ should be + min not - min(note on p. 7)},
 	author = {Van Leer, Bram},
 	month = {April},
 	year = {2006},
-	file = {Van Leer - 2003 - Upwind and High-Resolution Methods for Compressibl.pdf:/Users/Bob/Zotero/storage/CKSCNMUV/Van Leer - 2003 - Upwind and High-Resolution Methods for Compressibl.pdf:application/pdf},
 }
 
 @article{cfl,
@@ -278,7 +238,6 @@ should be + min not - min(note on p. 7)},
 	author = {Courant, R and Friedrichs, K and Lewyt, H},
 	month = mar,
 	year = {1967},
-	file = {Courant et al. - On the Partial Difference Equations of Mathematica.pdf:/Users/Bob/Zotero/storage/3S54R2EP/Courant et al. - On the Partial Difference Equations of Mathematica.pdf:application/pdf},
 }
 @article{del_zanna_parametric_2001,
 	title = {Parametric decay of circularly polarized {Alfvén} waves: {Multidimensional} simulations in periodic and open domains},
@@ -296,7 +255,6 @@ should be + min not - min(note on p. 7)},
 	month = feb,
 	year = {2001},
 	pages = {705--718},
-	file = {Del Zanna et al. - 2001 - Parametric decay of circularly polarized Alfvén wa.pdf:/Users/Bob/Zotero/storage/XKIQXIQS/Del Zanna et al. - 2001 - Parametric decay of circularly polarized Alfvén wa.pdf:application/pdf},
 }
 @ARTICLE{otv_1979,
        author = {{Orszag}, S.~A. and {Tang}, C. -M.},
@@ -327,24 +285,22 @@ should be + min not - min(note on p. 7)},
 	note = {arXiv:1711.07439 [astro-ph, physics:physics]},
 	keywords = {Astrophysics - Instrumentation and Methods for Astrophysics, Physics - Computational Physics, Mathematics - Numerical Analysis},
 	pages = {1365--1400},
-	annote = {Comment: 42 pages, 22 figures, accepted for publication in J. Comp. Phys},
-	file = {Felker and Stone - 2018 - A fourth-order accurate finite volume method for i.pdf:/Users/Bob/Zotero/storage/IMHKMRVU/Felker and Stone - 2018 - A fourth-order accurate finite volume method for i.pdf:application/pdf},
 }
 @incollection{Toth1996,
-author="T{\'o}th, G{\'a}bor",
-editor="Uchida, Yutaka
-and Kosugi, Takeo
-and Hudson, Hugh S.",
-title="A General Code for Modeling MHD Flows on Parallel Computers: Versatile Advection Code",
-bookTitle="Magnetodynamic Phenomena in the Solar Atmosphere: Prototypes of Stellar Magnetic Activity",
-year="1996",
-publisher="Springer Netherlands",
-address="Dordrecht",
-pages="471--472",
-abstract="A general tool for solving MHD and hydrodynamical problems typical of astrophysical applications is designed and implemented. The code allows the user to solve a hyperbolic system of partial differential equations with a variety of modern high resolution numerical schemes on 1, 2 or 3D non-uniform Cartesian grids with slab or axial symmetry. The equations may contain fluxes and source terms. The boundary conditions can be chosen from a number of implemented types, --- fixed, periodic, reflective or `free' --- but the code is structured in a manner that allows the user to write his/her own subroutines for a new type of boundary condition, or even to implement a new set of equations. The choice of algorithms allows the user to find the optimal one for the application at hand and/or to compare results of different schemes thus gaining insight into the numerical effects. An emphasis is put on independence of computer platforms. Efficiency of the code is also a high priority, the options available for the user should not compromise the performance.",
-isbn="978-94-009-0315-9",
-doi="10.1007/978-94-009-0315-9_101",
-url="https://doi.org/10.1007/978-94-009-0315-9_101"
+    author="T{\'o}th, G{\'a}bor",
+    editor="Uchida, Yutaka
+    and Kosugi, Takeo
+    and Hudson, Hugh S.",
+    title="A General Code for Modeling MHD Flows on Parallel Computers: Versatile Advection Code",
+    bookTitle="Magnetodynamic Phenomena in the Solar Atmosphere: Prototypes of Stellar Magnetic Activity",
+    year="1996",
+    publisher="Springer Netherlands",
+    address="Dordrecht",
+    pages="471--472",
+    abstract="A general tool for solving MHD and hydrodynamical problems typical of astrophysical applications is designed and implemented. The code allows the user to solve a hyperbolic system of partial differential equations with a variety of modern high resolution numerical schemes on 1, 2 or 3D non-uniform Cartesian grids with slab or axial symmetry. The equations may contain fluxes and source terms. The boundary conditions can be chosen from a number of implemented types, --- fixed, periodic, reflective or `free' --- but the code is structured in a manner that allows the user to write his/her own subroutines for a new type of boundary condition, or even to implement a new set of equations. The choice of algorithms allows the user to find the optimal one for the application at hand and/or to compare results of different schemes thus gaining insight into the numerical effects. An emphasis is put on independence of computer platforms. Efficiency of the code is also a high priority, the options available for the user should not compromise the performance.",
+    isbn="978-94-009-0315-9",
+    doi="10.1007/978-94-009-0315-9_101",
+    url="https://doi.org/10.1007/978-94-009-0315-9_101"
 }
 @article{sod_1978,
 	title = {A survey of several finite difference methods for systems of nonlinear hyperbolic conservation laws},
@@ -360,7 +316,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	month = apr,
 	year = {1978},
 	pages = {1--31},
-	file = {Sod - 1978 - A survey of several finite difference methods for .pdf:/Users/Bob/Zotero/storage/M93VZVYE/Sod - 1978 - A survey of several finite difference methods for .pdf:application/pdf},
 }
 @article{bruggen_2023,
 	title = {The {Launching} of {Cold} {Clouds} by {Galaxy} {Outflows}. {V}. {The} {Role} of {Anisotropic} {Thermal} {Conduction}},
@@ -377,7 +332,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	month = jul,
 	year = {2023},
 	pages = {113},
-	file = {Brüggen et al. - 2023 - The Launching of Cold Clouds by Galaxy Outflows. V.pdf:/Users/Bob/Zotero/storage/YZPKBHTK/Brüggen et al. - 2023 - The Launching of Cold Clouds by Galaxy Outflows. V.pdf:application/pdf},
 }
 @article{h-amr_2022,
 	title = {H-{AMR}: {A} {New} {GPU}-accelerated {GRMHD} {Code} for {Exascale} {Computing} with {3D} {Adaptive} {Mesh} {Refinement} and {Local} {Adaptive} {Time} {Stepping}},
@@ -395,7 +349,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	month = dec,
 	year = {2022},
 	pages = {26},
-	file = {Liska et al. - 2022 - H-AMR A New GPU-accelerated GRMHD Code for Exasca.pdf:/Users/Bob/Zotero/storage/3NMKUM58/Liska et al. - 2022 - H-AMR A New GPU-accelerated GRMHD Code for Exasca.pdf:application/pdf},
 }
 @article{white_2023,
 	title = {An {Extension} of the {Athena}++ {Code} {Framework} for {Radiation}-magnetohydrodynamics in {General} {Relativity} {Using} a {Finite}-solid-angle {Discretization}},
@@ -412,7 +365,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	month = jun,
 	year = {2023},
 	pages = {103},
-	file = {White et al. - 2023 - An Extension of the Athena++ Code Framework for Ra.pdf:/Users/Bob/Zotero/storage/4K6PFASS/White et al. - 2023 - An Extension of the Athena++ Code Framework for Ra.pdf:application/pdf},
 }
 @article{k_athena_2021,
 	title = {K-{Athena}: {A} {Performance} {Portable} {Structured} {Grid} {Finite} {Volume} {Magnetohydrodynamics} {Code}},
@@ -430,7 +382,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	month = jan,
 	year = {2021},
 	pages = {85--97},
-	file = {Grete et al. - 2021 - K-Athena A Performance Portable Structured Grid F.pdf:/Users/Bob/Zotero/storage/RCRR62VE/Grete et al. - 2021 - K-Athena A Performance Portable Structured Grid F.pdf:application/pdf},
 }
 @article{parthenon_2023,
 	title = {Parthenon -- a performance portable block-structured adaptive mesh refinement framework},
@@ -449,8 +400,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	note = {arXiv:2202.12309 [astro-ph]},
 	keywords = {Astrophysics - Instrumentation and Methods for Astrophysics, Computer Science - Distributed, Parallel, and Cluster Computing},
 	pages = {465--486},
-	annote = {Comment: 17 pages, 11 figures, accepted for publication in IJHPCA, Codes available at https://github.com/parthenon-hpc-lab},
-	file = {Grete et al. - 2023 - Parthenon -- a performance portable block-structured adaptive mesh refinement framework.pdf:/Users/Bob/Zotero/storage/E5DCIUPF/Grete et al. - 2023 - Parthenon -- a performance portable block-structured adaptive mesh refinement framework.pdf:application/pdf},
 }
 @inproceedings{athenaPK_2023,
 	address = {Helsinki, Finland},
@@ -462,7 +411,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	author = {Holmen, John K and Grete, Philipp and Vergara, Veronica G Melesse},
 	month = may,
 	year = {2023},
-	file = {Holmen et al. - Early Experiences on the OLCF Frontier System with AthenaPK and Parthenon-Hydro.pdf:/Users/Bob/Zotero/storage/BWB4PG5I/Holmen et al. - Early Experiences on the OLCF Frontier System with AthenaPK and Parthenon-Hydro.pdf:application/pdf},
 }
 @ARTICLE{beck_1999,
   author={Beck, K.},
@@ -483,7 +431,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	author = {Wilson, Greg and Aruliah, D A and Brown, C Titus and Hong, Neil P Chue and Davis, Matt and Guy, Richard T and Haddock, Steven H D and Huff, Kathryn D and Mitchell, Ian M and Plumbley, Mark D and Waugh, Ben and White, Ethan P and Wilson, Paul},
 	year = {2014},
 	pages = {7},
-	file = {Wilson et al. - 2014 - Best Practices for Scientific Computing.pdf:/Users/Bob/Zotero/storage/SBY8YRLJ/Wilson et al. - 2014 - Best Practices for Scientific Computing.pdf:application/pdf},
 }
 
 @article{wilson_2017,
@@ -501,7 +448,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	month = jun,
 	year = {2017},
 	pages = {e1005510},
-	file = {Wilson et al. - 2017 - Good enough practices in scientific computing.pdf:/Users/Bob/Zotero/storage/UZI9RG9Q/Wilson et al. - 2017 - Good enough practices in scientific computing.pdf:application/pdf},
 }
 
 @misc{petre_code_reviews_2014,
@@ -516,8 +462,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	year = {2014},
 	note = {arXiv:1407.5648 [cs]},
 	keywords = {Computer Science - Software Engineering},
-	annote = {Comment: 4 pages},
-	file = {Petre and Wilson - 2014 - Code Review For and By Scientists.pdf:/Users/Bob/Zotero/storage/DCAZX6DN/Petre and Wilson - 2014 - Code Review For and By Scientists.pdf:application/pdf},
 }
 @article{dedner_hyperbolic_2002,
 	title = {Hyperbolic {Divergence} {Cleaning} for the {MHD} {Equations}},
@@ -533,7 +477,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	month = jan,
 	year = {2002},
 	pages = {645--673},
-	file = {Dedner et al. - 2002 - Hyperbolic Divergence Cleaning for the MHD Equatio.pdf:/Users/Bob/Zotero/storage/P5NPR9G7/Dedner et al. - 2002 - Hyperbolic Divergence Cleaning for the MHD Equatio.pdf:application/pdf},
 }
 
 @article{evans_1988,
@@ -545,22 +488,6 @@ url="https://doi.org/10.1007/978-94-009-0315-9_101"
 	author = {Evans, Charles R and Hawley, John F},
 	year = {1988},
 	pages = {659--677},
-	annote = {This is the CT paper + General CT Notes
-
-
-Uses the Magnetic Flux as the fundamental variable. B, the magnetic flux density, is measured in Tesla
-
-
-EMF = Total Electromotive Force
-
-
-In the same way that flux works because you use the exact same flux to remove material from one cell and add it to another EMFs work because each edge field is used twice in each cell, once for each face that touches it.
-CT only works if there are no magnetic monopoles initially. Inflow and outflow BCs can also give issues:
-“It is worth noting here that the CT scheme only guarantees that field evolution changes are divergence free. If the initial magnetic field fails to satisfy the constraint, it will continue to do so. A more serious issue arises with inflow and outflow boundary conditions. Here one must be careful to not underspecify or overspecify the field and flow at the boundary. Failure to prescribe free-flow boundary conditions properly can lead to subtle inflow of nondivergence-free magnetic field. Because boundary conditions are frequently changed, we recommend that a global measure of the constraint satisfaction, like the example given in § Yh equation (5 6) be monitored as a diagnostic during simulations.” (Evans and Hawley, 1988, p. 666)
-Another option for computing error??
-“the cell-volume average, of the divergence-free constraint, constructed using the time-advanced field” (Stone et al., 2008, p. 141)
-},
-	file = {PDF:/Users/Bob/Zotero/storage/XIQBWIXC/Evans & Hawley 1988.pdf:application/pdf},
 }
 
 @article{pakmor_magnetizing_2020,
@@ -578,7 +505,6 @@ Another option for computing error??
 	month = sep,
 	year = {2020},
 	pages = {3125--3137},
-	file = {Pakmor et al. - 2020 - Magnetizing the circumgalactic medium of disc galaxies.pdf:/Users/Bob/Zotero/storage/GRTGA7QS/Pakmor et al. - 2020 - Magnetizing the circumgalactic medium of disc galaxies.pdf:application/pdf},
 }
 @article{kobayashi_metallicity_2023,
 	title = {Metallicity {Dependence} of {Molecular} {Cloud} {Hierarchical} {Structure} at {Early} {Evolutionary} {Stages}},
@@ -597,8 +523,6 @@ Another option for computing error??
 	note = {arXiv:2307.01278 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies},
 	pages = {38},
-	annote = {Comment: 23 pages, 11 figures. Accepted for publication in ApJ},
-	file = {Kobayashi et al. - 2023 - Metallicity Dependence of Molecular Cloud Hierarch.pdf:/Users/Bob/Zotero/storage/4P7MAGJ2/Kobayashi et al. - 2023 - Metallicity Dependence of Molecular Cloud Hierarch.pdf:application/pdf},
 }
 
 @article{wang_three-dimensional_2023,
@@ -618,8 +542,6 @@ Another option for computing error??
 	note = {arXiv:2308.10494 [astro-ph, physics:physics]},
 	keywords = {Astrophysics - Solar and Stellar Astrophysics, Physics - Plasma Physics},
 	pages = {L36},
-	annote = {Comment: 15 pages, 8 figure, accepted for publication in ApJL},
-	file = {Wang et al. - 2023 - Three-dimensional Turbulent Reconnection within So.pdf:/Users/Bob/Zotero/storage/MKB44X6A/Wang et al. - 2023 - Three-dimensional Turbulent Reconnection within So.pdf:application/pdf},
 }
 
 @article{kaaz_nozzle_2023,
@@ -639,8 +561,6 @@ Another option for computing error??
 	note = {arXiv:2210.10053 [astro-ph]},
 	keywords = {Astrophysics - High Energy Astrophysical Phenomena},
 	pages = {72},
-	annote = {Comment: 17 pages, 10 figures. Published in ApJ},
-	file = {Kaaz et al. - 2023 - Nozzle Shocks, Disk Tearing and Streamers Drive Ra.pdf:/Users/Bob/Zotero/storage/LQY7P45V/Kaaz et al. - 2023 - Nozzle Shocks, Disk Tearing and Streamers Drive Ra.pdf:application/pdf},
 }
 
 @article{mori_scale-dependent_2023,
@@ -660,7 +580,6 @@ Another option for computing error??
 	note = {arXiv:2307.09975 [astro-ph]},
 	keywords = {Astrophysics - Solar and Stellar Astrophysics},
 	pages = {4746--4751},
-	file = {Mori and Hotta - 2023 - Scale-dependent analysis of angular momentum flux .pdf:/Users/Bob/Zotero/storage/GDGUPK2J/Mori and Hotta - 2023 - Scale-dependent analysis of angular momentum flux .pdf:application/pdf},
 }
 
 @article{werhahn_gamma-ray_2023,
@@ -680,8 +599,6 @@ Another option for computing error??
 	note = {arXiv:2301.04163 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies, Astrophysics - High Energy Astrophysical Phenomena},
 	pages = {4437--4455},
-	annote = {Comment: 18 pages, 11 figures, submitted to MNRAS, comments are welcome!},
-	file = {Werhahn et al. - 2023 - Gamma-ray emission from spectrally resolved cosmic.pdf:/Users/Bob/Zotero/storage/RZALR5NP/Werhahn et al. - 2023 - Gamma-ray emission from spectrally resolved cosmic.pdf:application/pdf},
 }
 
 @misc{zhang_particle_2023,
@@ -696,8 +613,6 @@ Another option for computing error??
 	year = {2023},
 	note = {arXiv:2308.07572 [astro-ph, physics:physics]},
 	keywords = {Astrophysics - High Energy Astrophysical Phenomena, Astrophysics - Solar and Stellar Astrophysics, Physics - Plasma Physics, Physics - Space Physics},
-	annote = {Comment: 13 pages, 5 Figures. Accepted for publication in Journal of High Energy Astrophysics},
-	file = {Zhang et al. - 2023 - Particle acceleration in self-driven turbulent rec.pdf:/Users/Bob/Zotero/storage/M4KNVI4X/Zhang et al. - 2023 - Particle acceleration in self-driven turbulent rec.pdf:application/pdf},
 }
 
 @misc{varma_3d_2023,
@@ -712,8 +627,6 @@ Another option for computing error??
 	year = {2023},
 	note = {arXiv:2307.04833 [astro-ph]},
 	keywords = {Astrophysics - High Energy Astrophysical Phenomena, Astrophysics - Solar and Stellar Astrophysics},
-	annote = {Comment: Submitted to MNRAS (14 pages, 11 Figures)},
-	file = {Varma and Mueller - 2023 - 3D Simulations of Magnetoconvection in a Rapidly R.pdf:/Users/Bob/Zotero/storage/C3C2VYRB/Varma and Mueller - 2023 - 3D Simulations of Magnetoconvection in a Rapidly R.pdf:application/pdf},
 }
 
 @article{stimpson_numerical_2023,
@@ -734,8 +647,6 @@ Another option for computing error??
 	note = {arXiv:2310.00780 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies, Astrophysics - High Energy Astrophysical Phenomena},
 	pages = {3421--3440},
-	annote = {Comment: 20 pages, 18 figures, 2 tables},
-	file = {Stimpson et al. - 2023 - Numerical modelling of the lobes of radio galaxies.pdf:/Users/Bob/Zotero/storage/2VVT38DY/Stimpson et al. - 2023 - Numerical modelling of the lobes of radio galaxies.pdf:application/pdf},
 }
 @article{yoshida_trajectory_2021,
 	title = {Trajectory {Analysis} of {Galactic} {Cosmic} {Rays} {Invading} into the {Heliosphere}},
@@ -752,7 +663,6 @@ Another option for computing error??
 	month = jul,
 	year = {2021},
 	pages = {29},
-	file = {Yoshida et al. - 2021 - Trajectory Analysis of Galactic Cosmic Rays Invading into the Heliosphere.pdf:/Users/Bob/Zotero/storage/P59QYF8B/Yoshida et al. - 2021 - Trajectory Analysis of Galactic Cosmic Rays Invading into the Heliosphere.pdf:application/pdf},
 }
 @article{kim_introducing_2023,
 	title = {Introducing {TIGRESS}-{NCR}: {I}. {Co}-{Regulation} of the {Multiphase} {Interstellar} {Medium} and {Star} {Formation} {Rates}},
@@ -772,8 +682,6 @@ Another option for computing error??
 	note = {arXiv:2211.13293 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies},
 	pages = {3},
-	annote = {Comment: ApJ accepted},
-	file = {Kim et al. - 2023 - Introducing TIGRESS-NCR I. Co-Regulation of the Multiphase Interstellar Medium and Star Formation R.pdf:/Users/Bob/Zotero/storage/JJJZIPRG/Kim et al. - 2023 - Introducing TIGRESS-NCR I. Co-Regulation of the Multiphase Interstellar Medium and Star Formation R.pdf:application/pdf},
 }
 
 @article{jones_density_2023,
@@ -793,7 +701,6 @@ Another option for computing error??
 	note = {arXiv:2112.05543 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies},
 	pages = {1005--1021},
-	file = {Jones et al. - 2023 - On the density regime probed by HCN emission.pdf:/Users/Bob/Zotero/storage/SPH4ZSVQ/Jones et al. - 2023 - On the density regime probed by HCN emission.pdf:application/pdf},
 }
 
 @article{lu_effect_2020,
@@ -813,8 +720,6 @@ Another option for computing error??
 	note = {arXiv:2007.09518 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies, Astrophysics - Solar and Stellar Astrophysics},
 	pages = {58},
-	annote = {Comment: 33 pages, 23 figures, submitted to ApJ},
-	file = {Lu et al. - 2020 - The Effect of Supernovae on the Turbulence and Dispersal of Molecular Clouds.pdf:/Users/Bob/Zotero/storage/Y2Q2MH4Q/Lu et al. - 2020 - The Effect of Supernovae on the Turbulence and Dispersal of Molecular Clouds.pdf:application/pdf},
 }
 
 @article{kortgen_shape_2019,
@@ -834,8 +739,6 @@ Another option for computing error??
 	note = {arXiv:1811.02864 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies},
 	pages = {5233--5240},
-	annote = {Comment: accepted for publication by MNRAS. 9 pages, 5 figures, comments welcome},
-	file = {Körtgen et al. - 2019 - On the shape and completeness of the column density probability distribution function of molecular c.pdf:/Users/Bob/Zotero/storage/U733RANK/Körtgen et al. - 2019 - On the shape and completeness of the column density probability distribution function of molecular c.pdf:application/pdf},
 }
 
 @misc{galishnikova_tearing_2022,
@@ -850,8 +753,6 @@ Another option for computing error??
 	year = {2022},
 	note = {arXiv:2201.07757 [astro-ph, physics:physics]},
 	keywords = {Astrophysics - High Energy Astrophysical Phenomena, Physics - Plasma Physics},
-	annote = {Comment: 15 pages, 11 figures, accepted for publication in PRX},
-	file = {Galishnikova et al. - 2022 - Tearing instability and current-sheet disruption in the turbulent dynamo.pdf:/Users/Bob/Zotero/storage/ME72WM8G/Galishnikova et al. - 2022 - Tearing instability and current-sheet disruption in the turbulent dynamo.pdf:application/pdf},
 }
 
 @article{pellegrini_warpfield_2020,
@@ -872,8 +773,6 @@ Another option for computing error??
 	note = {arXiv:1905.04158 [astro-ph]},
 	keywords = {Astrophysics - Instrumentation and Methods for Astrophysics, Astrophysics - Astrophysics of Galaxies, Astrophysics - Cosmology and Nongalactic Astrophysics},
 	pages = {3193--3214},
-	annote = {Comment: 23 pages, 26 figures, submitted},
-	file = {Pellegrini et al. - 2020 - WARPFIELD Population Synthesis The physics of (extra-)Galactic star formation and feedback driven c.pdf:/Users/Bob/Zotero/storage/F3KPYM6K/Pellegrini et al. - 2020 - WARPFIELD Population Synthesis The physics of (extra-)Galactic star formation and feedback driven c.pdf:application/pdf},
 }
 
 @article{su_stellar_2018,
@@ -893,8 +792,6 @@ Another option for computing error??
 	note = {arXiv:1710.05932 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies},
 	pages = {L111--L115},
-	annote = {Comment: 6 pages, 3 figures, Accepted for publication in MNRAS Letters},
-	file = {Su et al. - 2018 - Stellar feedback strongly alters the amplification and morphology of galactic magnetic fields.pdf:/Users/Bob/Zotero/storage/QGNV3GCW/Su et al. - 2018 - Stellar feedback strongly alters the amplification and morphology of galactic magnetic fields.pdf:application/pdf},
 }
 
 @misc{smith_arkenstone_2023,
@@ -910,8 +807,6 @@ Another option for computing error??
 	year = {2023},
 	note = {arXiv:2301.07116 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies},
-	annote = {Comment: Submitted to MNRAS, 26 pages, 15 figures},
-	file = {Smith et al. - 2023 - Arkenstone I A Novel Method for Robustly Capturing High Specific Energy Outflows In Cosmological Si.pdf:/Users/Bob/Zotero/storage/8RF6J6GU/Smith et al. - 2023 - Arkenstone I A Novel Method for Robustly Capturing High Specific Energy Outflows In Cosmological Si.pdf:application/pdf},
 }
 
 @misc{roy_seeding_2023,
@@ -927,8 +822,6 @@ Another option for computing error??
 	year = {2023},
 	note = {arXiv:2310.04404 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies},
-	annote = {Comment: 17 pages, 12 figures, 2 tables Accepted for publication in MNRAS on Oct 6, 2023},
-	file = {Roy et al. - 2023 - Seeding the CGM How Satellites Populate the Cold Phase of Milky Way Halos.pdf:/Users/Bob/Zotero/storage/G4H9MPF7/Roy et al. - 2023 - Seeding the CGM How Satellites Populate the Cold Phase of Milky Way Halos.pdf:application/pdf},
 }
 
 @article{martizzi_simulations_2019,
@@ -947,7 +840,6 @@ Another option for computing error??
 	month = feb,
 	year = {2019},
 	pages = {2465--2486},
-	file = {Martizzi et al. - 2019 - Simulations of jet heating in galaxy clusters successes and challenges.pdf:/Users/Bob/Zotero/storage/7I7FB5K2/Martizzi et al. - 2019 - Simulations of jet heating in galaxy clusters successes and challenges.pdf:application/pdf},
 }
 
 @article{fielding_how_2017,
@@ -965,7 +857,6 @@ Another option for computing error??
 	month = sep,
 	year = {2017},
 	pages = {L39--L43},
-	file = {Fielding et al. - 2017 - How supernovae launch galactic winds.pdf:/Users/Bob/Zotero/storage/JGEZCZ5J/Fielding et al. - 2017 - How supernovae launch galactic winds.pdf:application/pdf},
 }
 
 @article{martizzi_supernova_2016,
@@ -984,7 +875,6 @@ Another option for computing error??
 	month = jul,
 	year = {2016},
 	pages = {2311--2326},
-	file = {Martizzi et al. - 2016 - Supernova feedback in a local vertically stratified medium interstellar turbulence and galactic win.pdf:/Users/Bob/Zotero/storage/PGLCDB2H/Martizzi et al. - 2016 - Supernova feedback in a local vertically stratified medium interstellar turbulence and galactic win.pdf:application/pdf},
 }
 
 @article{pakmor_faraday_2018,
@@ -1002,7 +892,6 @@ Another option for computing error??
 	month = dec,
 	year = {2018},
 	pages = {4410--4418},
-
 }
 
 @article{ntormousi_dynamo_2020,
@@ -1038,7 +927,6 @@ Conclusions. This result underlines the importance of the mean-ﬁeld dynamo in 
 	month = jun,
 	year = {2013},
 	pages = {176--193},
-	file = {Pakmor and Springel - 2013 - Simulations of magnetic fields in isolated disc ga.pdf:/Users/Bob/Zotero/storage/QQZ9CN8G/Pakmor and Springel - 2013 - Simulations of magnetic fields in isolated disc ga.pdf:application/pdf},
 }
 
 @article{pakmor_magnetic_2017,
@@ -1056,7 +944,6 @@ Conclusions. This result underlines the importance of the mean-ﬁeld dynamo in 
 	month = aug,
 	year = {2017},
 	pages = {3185--3199},
-	file = {Pakmor et al. - 2017 - Magnetic field formation in the Milky Way like dis.pdf:/Users/Bob/Zotero/storage/ZLATPCK7/Pakmor et al. - 2017 - Magnetic field formation in the Milky Way like dis.pdf:application/pdf},
 }
 @article{van_de_voort_effect_2021,
 	title = {The effect of magnetic fields on properties of the circumgalactic medium},
@@ -1075,8 +962,6 @@ Conclusions. This result underlines the importance of the mean-ﬁeld dynamo in 
 	note = {arXiv:2008.07537 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies},
 	pages = {4888--4902},
-	annote = {Comment: Accepted for publication in MNRAS. Revised version: added Appendix B (on haloes with different initial conditions) and Appendix C (showing the full probability density function for CGM properties at {\textasciitilde}100 kpc distance) and updated figures and minor textual changes},
-	file = {van de Voort et al. - 2021 - The effect of magnetic fields on properties of the.pdf:/Users/Bob/Zotero/storage/EPY5RBIR/van de Voort et al. - 2021 - The effect of magnetic fields on properties of the.pdf:application/pdf},
 }
 @article{grand_auriga_2017,
 	title = {The {Auriga} {Project}: the properties and formation mechanisms of disc galaxies across cosmic time},
@@ -1092,7 +977,6 @@ Conclusions. This result underlines the importance of the mean-ﬁeld dynamo in 
 	month = jan,
 	year = {2017},
 	pages = {stx071},
-	file = {Grand et al. - 2017 - The Auriga Project the properties and formation mechanisms of disc galaxies across cosmic time.pdf:/Users/Bob/Zotero/storage/3TDH69L9/Grand et al. - 2017 - The Auriga Project the properties and formation mechanisms of disc galaxies across cosmic time.pdf:application/pdf},
 }
 
 @article{colella_1984,
@@ -1109,7 +993,6 @@ Conclusions. This result underlines the importance of the mean-ﬁeld dynamo in 
 	month = apr,
 	year = {1984},
 	pages = {174--201},
-	file = {Colella and Woodward - 1984 - The Piecewise Parabolic Method (PPM) for gas-dynamical simulations.pdf:/Users/Bob/Zotero/storage/SUB7Z4B4/Colella and Woodward - 1984 - The Piecewise Parabolic Method (PPM) for gas-dynamical simulations.pdf:application/pdf},
 }
 
 @article{colella_1990,
@@ -1126,7 +1009,6 @@ Conclusions. This result underlines the importance of the mean-ﬁeld dynamo in 
 	month = mar,
 	year = {1990},
 	pages = {171--200},
-	file = {Colella - 1990 - Multidimensional upwind methods for hyperbolic conservation laws.pdf:/Users/Bob/Zotero/storage/GB9EF4VS/Colella - 1990 - Multidimensional upwind methods for hyperbolic conservation laws.pdf:application/pdf},
 }
 
 @article{teyssier_2015,
@@ -1141,13 +1023,6 @@ Conclusions. This result underlines the importance of the mean-ﬁeld dynamo in 
 	year = {2015},
 	keywords = {Conservation laws, Gas dynamics, Magnetohydrodynamics, Numerical simulations, Radiation},
 	pages = {325--364},
-	annote = {- non-ideal = deviation from LTE
-- Why don't we include angular momentum?
-- Some numerical diffusion is good. It keeps the solution stable
-- This numerical diffusion can mimic real non ideal terms to a cetain extent
-
-- non-ideal terms are super important in rarefied gasses},
-	file = {PDF:/Users/Bob/Zotero/storage/J58M5MKB/Teyssier 2015.pdf:application/pdf},
 }
 
 @article{naab_2017,
@@ -1161,8 +1036,6 @@ Conclusions. This result underlines the importance of the mean-ﬁeld dynamo in 
 	month = dec,
 	year = {2017},
 	pages = {59--109},
-	annote = {I have sections 3.3-3.5},
-	file = {PDF:/Users/Bob/Zotero/storage/7KIMKY7M/Naab & Ostriker 2016.pdf:application/pdf},
 }
 
 @article{tumlinson_2017,
@@ -1178,7 +1051,6 @@ Conclusions. This result underlines the importance of the mean-ﬁeld dynamo in 
 	note = {Publisher: Annual Reviews Inc.},
 	keywords = {Cosmology, Galaxies, Galaxy evolution, Gas},
 	pages = {389--432},
-	file = {PDF:/Users/Bob/Zotero/storage/8VMAWNNC/Tumlinson et al 2017.pdf:application/pdf},
 }
 
 @article{han_2017,
@@ -1196,7 +1068,6 @@ Conclusions. This result underlines the importance of the mean-ﬁeld dynamo in 
 	month = aug,
 	year = {2017},
 	pages = {111--157},
-	file = {Han - 2017 - Observing Interstellar and Intergalactic Magnetic .pdf:/Users/Bob/Zotero/storage/F3QUMZ3F/Han - 2017 - Observing Interstellar and Intergalactic Magnetic .pdf:application/pdf},
 }
 @article{beck_1996,
 	title = {{GALACTIC} {MAGNETISM}: {Recent} {Developments} and {Perspectives}},
@@ -1214,18 +1085,6 @@ Conclusions. This result underlines the importance of the mean-ﬁeld dynamo in 
 	month = sep,
 	year = {1996},
 	pages = {155--206},
-	annote = {This is the alpha/omega dynamo paper
-
-
-
-Alpha effect = large scale dynamo  involving a collective inductance effect of turbulence
-
-
-Omega = differential rotation
-
-
-},
-	file = {Beck et al. - 1996 - GALACTIC MAGNETISM Recent Developments and Perspe.pdf:/Users/Bob/Zotero/storage/RGQDGXSG/Beck et al. - 1996 - GALACTIC MAGNETISM Recent Developments and Perspe.pdf:application/pdf},
 }
 
 @misc{carteret_2022,
@@ -1240,8 +1099,6 @@ Omega = differential rotation
 	year = {2022},
 	note = {arXiv:2208.14178 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies},
-	annote = {Comment: 16 pages, 18 figures},
-	file = {Carteret et al. - 2022 - Observational Signatures of Galactic Turbulent Dyn.pdf:/Users/Bob/Zotero/storage/2N8BTCZQ/Carteret et al. - 2022 - Observational Signatures of Galactic Turbulent Dyn.pdf:application/pdf},
 }
 
 @misc{brandenburg_2022,
@@ -1256,6 +1113,453 @@ Omega = differential rotation
 	year = {2022},
 	note = {arXiv:2211.03476 [astro-ph]},
 	keywords = {Astrophysics - Astrophysics of Galaxies},
-	annote = {Comment: 46 pages, 15 figures, 4 tables, comments welcome!},
-	file = {Brandenburg and Ntormousi - 2022 - Galactic Dynamos.pdf:/Users/Bob/Zotero/storage/ET65JYMY/Brandenburg and Ntormousi - 2022 - Galactic Dynamos.pdf:application/pdf},
+}
+@article{shin_2008,
+	title = {{THE} {MAGNETOHYDRODYNAMICS} {OF} {SHOCK}-{CLOUD} {INTERACTION} {IN} {THREE} {DIMENSIONS}},
+	volume = {680},
+	doi = {10.1086/587775},
+	abstract = {The magnetohydrodynamic evolution of a dense spherical cloud as it interacts with a strong planar shock is studied, as a model for shock interactions with density inhomogeneities in the interstellar medium. The cloud is assumed to be small enough that radiative cooling, thermal conduction, and self-gravity can be ignored. A variety of initial orientations (including parallel, perpendicular, and oblique to the incident shock normal) and strengths for the magnetic field are investigated. During the early stages of the interaction (less than twice the time taken for the transmitted shock to cross the interior of the cloud), the structure and dynamics of the shocked cloud are fairly insensitive to the magnetic field strength and orientation. However, at late times strong fields substantially alter the dynamics of the cloud, suppressing fragmentation and mixing by stabilizing the interface at the cloud surface. Even weak magnetic fields can drastically alter the evolution of the cloud compared to the hydrodynamic case. Weak fields of different geometries result in different distributions and amplifications of the magnetic energy density, which may affect the thermal and nonthermal X-ray emission expected from shocked clouds associated with, for example, supernova remnants.},
+	journal = {APJ},
+	author = {Shin, Min-Su and Stone, James M and Snyder, Gregory F},
+	year = {2008},
+	keywords = {ISM, clouds-ISM, Subject headingg s},
+	pages = {336--348},
+}
+@article{banda_2016,
+	title = {Filament formation in wind-cloud interactions - {I}. {Spherical} clouds in uniform magnetic fields},
+	volume = {455},
+	issn = {13652966},
+	doi = {10.1093/mnras/stv2405},
+	abstract = {Filamentary structures are ubiquitous in the interstellar medium, yet their formation, internal structure, and longevity have not been studied in detail. We report the results from a comprehensive numerical study that investigates the characteristics, formation, and evolution of filaments arising from magnetohydrodynamic interactions between supersonic winds and dense clouds. Here, we improve on previous simulations by utilizing sharper density contrasts and higher numerical resolutions. By following multiple density tracers, we find that material in the envelopes of the clouds is removed and deposited downstream to form filamentary tails, while the cores of the clouds serve as footpoints and late-stage outer layers of these tails. Aspect ratios ≳12, subsonic velocity dispersions {\textasciitilde}0.1-0.3 of the wind sound speed, and magnetic field amplifications {\textasciitilde}100 are found to be characteristic of these filaments. We also report the effects of different magnetic field strengths and orientations. The magnetic field strength regulates vorticity production: sinuous filamentary towers arise in non-magnetic environments, while strong magnetic fields inhibit small-scale perturbations at boundary layers making tails less turbulent. Magnetic field components aligned with the direction of the flow favour the formation of pressure-confined flux ropes inside the tails, whilst transverse components tend to form current sheets. Softening the equation of state to nearly isothermal leads to suppression of dynamical instabilities and further collimation of the tail. Towards the final stages of the evolution, we find that small cloudlets and distorted filaments survive the break-up of the clouds and become entrained in the winds, reaching velocities {\textasciitilde}0.1 of the wind speed.},
+	number = {2},
+	journal = {Monthly Notices of the Royal Astronomical Society},
+	author = {Banda-Barragán, W. E. and Parkin, E. R. and Federrath, C. and Crocker, R. M. and Bicknel, G. V.},
+	year = {2016},
+	note = {Publisher: Oxford University Press},
+	keywords = {Galaxies: starburst, ISM: clouds, ISM: magnetic fields, MHD- methods: numerical, Stars: winds, outflows},
+	pages = {1309--1333},
+}
+@article{wibking_2021,
+	title = {The global structure of magnetic fields and gas in simulated {Milky} {Way}-analogue galaxies},
+	url = {http://arxiv.org/abs/2105.04136},
+	abstract = {We simulate an isolated, magnetised Milky Way-like disc galaxy using a self-consistent model of unresolved star formation and feedback, evolving the system until it reaches statistical steady state. We show that the quasi-steady-state structure is distinctly layered in galactocentric height \$z\$, with an innermost region having comparable gas and magnetic pressures (plasma beta \${\textbackslash}beta {\textbackslash}sim 1\$), an outermost region having dominant gas pressures (\${\textbackslash}beta {\textbackslash}gg 1\$), and an intermediate region between \$300\$ pc \${\textbackslash}lesssim {\textbar}z{\textbar} {\textbackslash}lesssim 3\$ kpc that is dynamically dominated by magnetic fields (\${\textbackslash}beta {\textbackslash}ll 1\$). We find field strengths, gas surface densities, and star formation rates that agree well with those observed both in the Galactic centre and in the Solar neighbourhood. The most significant dynamical effect of magnetic fields on the global properties of the disc is a reduction of the star formation rate by a factor of 1.5-2 with respect to an unmagnetised control simulation. At fixed star formation rate, there is no significant difference in the mass outflow rates or profiles between the magnetised and non-magnetised simulations. Our results for the global structure of the magnetic field have significant implications for models of cosmic ray-driven winds and cosmic-ray propagation in the Galaxy, and can be tested against observations with the forthcoming Square Kilometre Array and other facilities. Finally, we report the discovery of a physical error in the implementation of neutral gas heating and cooling in the popular GIZMO code, which may lead to qualitatively incorrect phase structures if not corrected.},
+	language = {en},
+	urldate = {2022-03-07},
+	journal = {arXiv:2105.04136 [astro-ph]},
+	author = {Wibking, Benjamin D. and Krumholz, Mark R.},
+	month = may,
+	year = {2021},
+	note = {arXiv: 2105.04136},
+	keywords = {Astrophysics - Astrophysics of Galaxies},
+}
+@article{gent_2021,
+	title = {Small-scale {Dynamo} in {Supernova}-driven {Interstellar} {Turbulence}},
+	volume = {910},
+	issn = {2041-8205, 2041-8213},
+	url = {https://iopscience.iop.org/article/10.3847/2041-8213/abed59},
+	doi = {10.3847/2041-8213/abed59},
+	
+	language = {en},
+	number = {2},
+	urldate = {2022-04-19},
+	journal = {The Astrophysical Journal Letters},
+	author = {Gent, Frederick A. and Mac Low, Mordecai-Mark and Käpylä, Maarit J. and Singh, Nishant K.},
+	month = apr,
+	year = {2021},
+	pages = {L15},
+}
+@article{beck_2016,
+	title = {Magnetic fields in spiral galaxies},
+	volume = {24},
+	issn = {0935-4956, 1432-0754},
+	url = {https://ui.adsabs.harvard.edu/abs/2015A%26ARv..24....4B/abstract},
+	doi = {10.1007/s00159-015-0084-4},
+	language = {en},
+	number = {1},
+	urldate = {2022-03-14},
+	journal = {The Astronomy and Astrophysics Review},
+	author = {Beck, Rainer},
+	month = dec,
+	year = {2016},
+	pages = {4},
+
+}
+@article{girichidis_spectrally_2019,
+	title = {Spectrally resolved cosmic ray hydrodynamics -- {I}. {Spectral} scheme},
+	issn = {0035-8711, 1365-2966},
+	url = {http://arxiv.org/abs/1909.12840},
+	doi = {10.1093/mnras/stz2961},
+	abstract = {Cosmic ray (CR) protons are an important component in many astrophysical systems. Processes like CR injection, cooling, adiabatic changes as well as active CR transport through the medium strongly modify the CR momentum distribution and have to be taken into account in hydrodynamical simulations. We present an eﬃcient novel numerical scheme to accurately compute the evolution of the particle distribution function by solving the Fokker-Planck equation with a low number of spectral bins (10 − 20), which is required to include a full spectrum for every computational ﬂuid element. The distribution function is represented by piecewise power laws and is not forced to be continuous, which enables an optimal representation of the spectrum. The Fokker-Planck equation is solved with a two-moment approach evolving the CR number and energy density. The low numerical diﬀusion of the scheme reduces the numerical errors by orders of magnitude in comparison to classical schemes with piecewise constant spectral representations. With this method not only the spectral evolution of CRs can be computed accurately in magnetohydrodynamic simulations but also their dynamical impact as well as CR ionisation. This allows for more accurate models for astrophysical plasmas, like the interstellar medium, and direct comparisons with observations.},
+	language = {en},
+	urldate = {2022-12-13},
+	journal = {Monthly Notices of the Royal Astronomical Society},
+	author = {Girichidis, Philipp and Pfrommer, Christoph and Hanasz, Michal and Naab, Thorsten},
+	month = nov,
+	year = {2019},
+	note = {arXiv:1909.12840 [astro-ph]},
+	keywords = {Astrophysics - Astrophysics of Galaxies, Astrophysics - High Energy Astrophysical Phenomena},
+	pages = {stz2961},
+}
+
+@article{chan_cosmic_2019,
+	title = {Cosmic ray feedback in the {FIRE} simulations: constraining cosmic ray propagation with {GeV} γ-ray emission},
+	volume = {488},
+	issn = {0035-8711, 1365-2966},
+	shorttitle = {Cosmic ray feedback in the {FIRE} simulations},
+	url = {https://academic.oup.com/mnras/article/488/3/3716/5530789},
+	doi = {10.1093/mnras/stz1895},
+	abstract = {We present the implementation and the ﬁrst results of cosmic ray (CR) feedback in the Feedback In Realistic Environments (FIRE) simulations. We investigate CR feedback in non-cosmological simulations of dwarf, sub-L starburst, and L galaxies with different propagation models, including advection, isotropic, and anisotropic diffusion, and streaming along ﬁeld lines with different transport coefﬁcients. We simulate CR diffusion and streaming simultaneously in galaxies with high resolution, using a two-moment method. We forwardmodel and compare to observations of γ -ray emission from nearby and starburst galaxies. We reproduce the γ -ray observations of dwarf and L galaxies with constant isotropic diffusion coefﬁcient κ ∼ 3 × 1029 cm2 s−1. Advection-only and streaming-only models produce order of magnitude too large γ -ray luminosities in dwarf and L galaxies. We show that in models that match the γ -ray observations, most CRs escape low-gas-density galaxies (e.g. dwarfs) before signiﬁcant collisional losses, while starburst galaxies are CR proton calorimeters. While adiabatic losses can be signiﬁcant, they occur only after CRs escape galaxies, so they are only of secondary importance for γ -ray emissivities. Models where CRs are ‘trapped’ in the star-forming disc have lower star formation efﬁciency, but these models are ruled out by γ -ray observations. For models with constant κ that match the γ -ray observations, CRs form extended haloes with scale heights of several kpc to several tens of kpc.},
+	language = {en},
+	number = {3},
+	urldate = {2022-12-13},
+	journal = {Monthly Notices of the Royal Astronomical Society},
+	author = {Chan, T K and Kereš, D and Hopkins, P F and Quataert, E and Su, K-Y and Hayward, C C and Faucher-Giguère, C-A},
+	month = sep,
+	year = {2019},
+	pages = {3716--3744},
+}
+
+@misc{nunez-castineyra_cosmic-ray_2022,
+	title = {Cosmic-ray diffusion and the multi-phase interstellar medium in a dwarf galaxy. {I}. {Large}-scale properties and \${\textbackslash}gamma\$-ray luminosities},
+	url = {http://arxiv.org/abs/2205.08163},
+	abstract = {Context. Dynamically, cosmic rays with energies above about one GeV/nucleon may be important agents of galaxy evolution. Their pressure and pressure gradients compare with the thermal and magnetic ones to alter gas accretion onto a galaxy, drive fountains and massive galactic outﬂows, and alter the mass cycling between the diﬀuse gas reserves and the dense clouds where stars form. The feedback eﬃciency depends on the actual properties of cosmic-ray transport in the diﬀerent media, so we crucially need theoretical clues and observational constraints on these properties in order to assess the impact of cosmic rays on galaxy evolution.},
+	language = {en},
+	urldate = {2023-12-21},
+	publisher = {arXiv},
+	author = {Nuñez-Castiñeyra, A. and Grenier, I. A. and Bournaud, F. and Dubois, Y. and Youssef, F. R. Kamal and Hennebelle, P.},
+	month = may,
+	year = {2022},
+	note = {arXiv:2205.08163 [astro-ph]},
+	keywords = {Astrophysics - Astrophysics of Galaxies, Astrophysics - High Energy Astrophysical Phenomena},
+}
+
+@article{werhahn_cosmic_2021,
+	title = {Cosmic rays and non-thermal emission in simulated galaxies – {II}. γ-ray maps, spectra, and the far-infrared–γ-ray relation},
+	volume = {505},
+	issn = {0035-8711, 1365-2966},
+	url = {https://academic.oup.com/mnras/article/505/3/3295/6273147},
+	doi = {10.1093/mnras/stab1325},
+	abstract = {The γ -ray emission of star-forming (SF) galaxies is attributed to hadronic interactions of cosmic ray (CR) protons with the interstellar gas and contributions from CR electrons via bremsstrahlung and inverse Compton (IC) scattering. The relative importance of these processes in different galaxy types is still unclear. We model these processes in three-dimensional magnetohydrodynamical (MHD) simulations of the formation of isolated galactic discs using the moving-mesh code AREPO, including dynamically coupled CR protons and adopting different CR transport models. We calculate steady-state CR spectra and also account for the emergence of secondary electrons and positrons. This allows us to produce detailed γ -ray maps, luminosities, and spectra of our simulated galaxies at different evolutionary stages. Our simulations with anisotropic CR diffusion and a low CR injection efﬁciency at supernovae (SNe; ζSN = 0.05) can successfully reproduce the observed far-infrared (FIR)–γ -ray relation. Starburst galaxies are close to the calorimetric limit, where CR protons lose most of their energy due to hadronic interactions and hence, their γ -ray emission is dominated by neutral pion decay. However, in low SF galaxies, the increasing diffusive losses soften the CR proton spectra due to energy-dependent diffusion, and likewise steepen the pionic γ -ray spectra. In turn, IC emission hardens the total spectra and can contribute up to ∼40 per cent of the total luminosity in low SF galaxies. Furthermore, in order to match the observed γ -ray spectra of starburst galaxies, we require a weaker energy dependence of the CR diffusion coefﬁcient, D ∝ E0.3, in comparison to Milky Way-like galaxies.},
+	language = {en},
+	number = {3},
+	urldate = {2023-12-21},
+	journal = {Monthly Notices of the Royal Astronomical Society},
+	author = {Werhahn, Maria and Pfrommer, Christoph and Girichidis, Philipp and Winner, Georg},
+	month = jun,
+	year = {2021},
+	pages = {3295--3313},
+}
+
+@article{buck_effects_2020,
+	title = {The effects of cosmic rays on the formation of {Milky} {Way}-mass galaxies in a cosmological context},
+	volume = {497},
+	issn = {0035-8711, 1365-2966},
+	url = {https://academic.oup.com/mnras/article/497/2/1712/5868827},
+	doi = {10.1093/mnras/staa1960},
+	abstract = {We investigate the impact of cosmic rays (CRs) and different modes of CR transport on the properties of Milky Way-mass galaxies in cosmological magnetohydrodynamical simulations in the context of the AURIGA project. We systematically study how advection, anisotropic diffusion, and additional Alfv´en-wave cooling affect the galactic disc and the circumgalactic medium (CGM). Global properties such as stellar mass and star formation rate vary little between simulations with and without various CR transport physics, whereas structural properties such as disc sizes, CGM densities, or temperatures can be strongly affected. In our simulations, CRs affect the accretion of gas on to galaxies by modifying the CGM ﬂow structure. This alters the angular momentum distribution that manifests itself as a difference in stellar and gaseous disc size. The strength of this effect depends on the CR transport model: CR advection results in the most compact discs while the Alfv´en-wave model resembles more the AURIGA model. The advection and diffusion models exhibit large (r ∼ 50 kpc) CR pressure-dominated gas haloes causing a smoother and partly cooler CGM. The additional CR pressure smoothes small-scale density peaks and compensates for the missing thermal pressure support at lower CGM temperatures. In contrast, the Alfv´en-wave model is only CR pressure dominated at the disc–halo interface and only in this model the gamma-ray emission from hadronic interactions agrees with observations. In contrast to previous ﬁndings, we conclude that details of CR transport are critical for accurately predicting the impact of CR feedback on galaxy formation.},
+	language = {en},
+	number = {2},
+	urldate = {2023-12-21},
+	journal = {Monthly Notices of the Royal Astronomical Society},
+	author = {Buck, Tobias and Pfrommer, Christoph and Pakmor, Rüdiger and Grand, Robert J J and Springel, Volker},
+	month = sep,
+	year = {2020},
+	pages = {1712--1737},
+}
+
+@article{pfrommer_simulating_2017,
+	title = {Simulating {Gamma}-{Ray} {Emission} in {Star}-forming {Galaxies}},
+	volume = {847},
+	issn = {2041-8213},
+	url = {https://iopscience.iop.org/article/10.3847/2041-8213/aa8bb1},
+	doi = {10.3847/2041-8213/aa8bb1},
+	abstract = {Star-forming galaxies emit GeV and TeV gamma-rays that are thought to originate from hadronic interactions of cosmic-ray (CR) nuclei with the interstellar medium. To understand the emission, we have used the moving-mesh code AREPO to perform magnetohydrodynamical galaxy formation simulations with self-consistent CR physics. Our galaxy models exhibit a ﬁrst burst of star formation that injects CRs at supernovae. Once CRs have sufﬁciently accumulated in ourMilkyWay–like galaxy, their buoyancy force overcomes the magnetic tension of the toroidal disk ﬁeld. As ﬁeld lines open up, they enable anisotropically diffusing CRs to escape into the halo and to accelerate a bubble-like, CR-dominated outﬂow. However, these bubbles are invisible in our simulated gamma-ray maps of hadronic pion-decay and secondary inverse-Compton emission because of low gas density in the outﬂows. By adopting a phenomenological relation between star formation rate (SFR) and far-infrared emission and assuming that gamma-rays mainly originate from decaying pions, our simulated galaxies can reproduce the observed tight relation between far-infrared and gamma-ray emission, independent of whether we account for anisotropic CR diffusion. This demonstrates that uncertainties in modeling active CR transport processes only play a minor role in predicting gamma-ray emission from galaxies. We ﬁnd that in starbursts, most of the CR energy is “calorimetrically” lost to hadronic interactions. In contrast, the gamma-ray emission deviates from this calorimetric property at low SFRs due to adiabatic losses, which cannot be identiﬁed in traditional one-zone models.},
+	language = {en},
+	number = {2},
+	urldate = {2023-12-21},
+	journal = {The Astrophysical Journal},
+	author = {Pfrommer, Christoph and Pakmor, Rüdiger and Simpson, Christine M. and Springel, Volker},
+	month = sep,
+	year = {2017},
+	pages = {L13},
+}
+
+@article{girichidis_spectrally_2022,
+	title = {Spectrally resolved cosmic rays: {II} -- {Momentum}-dependent cosmic ray diffusion drives powerful galactic winds},
+	volume = {510},
+	issn = {0035-8711, 1365-2966},
+	shorttitle = {Spectrally resolved cosmic rays},
+	url = {http://arxiv.org/abs/2109.13250},
+	doi = {10.1093/mnras/stab3462},
+	abstract = {Cosmic ray (CR) feedback has been identiﬁed as a critical process in galaxy formation. Most previous simulations have integrated out the energy-dependence of the CR distribution, despite its large extent over more than twelve decades in particle energy. To improve upon this simpliﬁcation, we present the implementation and ﬁrst application of spectrally resolved CRs which are coupled to the magneto-hydrodynamics in simulations of galaxy formation. The spectral model for the CRs enables more accurate CR cooling and allows for an energy-dependent spatial diﬀusion, for which we introduce a new stable numerical algorithm that proves essential in highly dynamical systems. We perform galaxy formation simulations with this new model and compare the results to a grey CR approach with a simpliﬁed diﬀusive transport and eﬀective cooling that assumes steady-state spectra. We ﬁnd that the galaxies with spectrally resolved CRs diﬀer in morphology, star formation rate, and strength and structure of the outﬂows. The ﬁrst outﬂow front is driven by CRs with average momenta of   200 600 GeV �� 1. The subsequent formation of outﬂows, which reach mass loading factors of order unity, are primarily launched by CRs of progressively smaller average momenta of   8 15 GeV �� 1. The CR spectra in the galactic centre quickly approach a steady state, with small temporal variations. In the outer disc and outﬂow regions, the spectral shape approaches steady state only after   2 Gyr of evolution. Furthermore, the shapes of the approximate steady state spectra diﬀer for individual regions of the galaxy, which highlights the importance of actively including the full CR spectrum.},
+	language = {en},
+	number = {3},
+	urldate = {2023-12-21},
+	journal = {Monthly Notices of the Royal Astronomical Society},
+	author = {Girichidis, Philipp and Pfrommer, Christoph and Pakmor, Rüdiger and Springel, Volker},
+	month = jan,
+	year = {2022},
+	note = {arXiv:2109.13250 [astro-ph]},
+	keywords = {Astrophysics - Astrophysics of Galaxies, Astrophysics - High Energy Astrophysical Phenomena},
+	pages = {3917--3938},
+}
+
+@article{simpson_role_2016,
+	title = {{THE} {ROLE} {OF} {COSMIC}-{RAY} {PRESSURE} {IN} {ACCELERATING} {GALACTIC} {OUTFLOWS}},
+	volume = {827},
+	issn = {2041-8213},
+	url = {https://iopscience.iop.org/article/10.3847/2041-8205/827/2/L29},
+	doi = {10.3847/2041-8205/827/2/L29},
+	abstract = {We study the formation of galactic outﬂows from supernova (SN) explosions with the moving-mesh code AREPO in a stratiﬁed column of gas with a surface density similar to the Milky Way disk at the solar circle. We compare different simulation models for SN placement and energy feedback, including cosmic rays (CRs), and ﬁnd that models that place SNe in dense gas and account for CR diffusion are able to drive outﬂows with similar mass loading as obtained from a random placement of SNe with no CRs. Despite this similarity, CR-driven outﬂows differ in several other key properties including their overall clumpiness and velocity. Moreover, the forces driving these outﬂows originate in different sources of pressure, with the CR diffusion model relying on non-thermal pressure gradients to create an outﬂow driven by internal pressure and the random-placement model depending on kinetic pressure gradients to propel a ballistic outﬂow. CRs therefore appear to be non-negligible physics in the formation of outﬂows from the interstellar medium.},
+	language = {en},
+	number = {2},
+	urldate = {2023-12-21},
+	journal = {The Astrophysical Journal},
+	author = {Simpson, Christine M. and Pakmor, Rüdiger and Marinacci, Federico and Pfrommer, Christoph and Springel, Volker and Glover, Simon C. O. and Clark, Paul C. and Smith, Rowan J.},
+	month = aug,
+	year = {2016},
+	pages = {L29},
+}
+
+@article{girichidis_launching_2016,
+	title = {{LAUNCHING} {COSMIC}-{RAY}-{DRIVEN} {OUTFLOWS} {FROM} {THE} {MAGNETIZED} {INTERSTELLAR} {MEDIUM}},
+	volume = {816},
+	issn = {2041-8213},
+	url = {https://iopscience.iop.org/article/10.3847/2041-8205/816/2/L19},
+	doi = {10.3847/2041-8205/816/2/L19},
+	language = {en},
+	number = {2},
+	urldate = {2023-12-21},
+	journal = {The Astrophysical Journal},
+	author = {Girichidis, Philipp and Naab, Thorsten and Walch, Stefanie and Hanasz, Michał and Low, Mordecai-Mark Mac and Ostriker, Jeremiah P. and Gatto, Andrea and Peters, Thomas and Wünsch, Richard and Glover, Simon C. O. and Klessen, Ralf S. and Clark, Paul C. and Baczynski, Christian},
+	month = jan,
+	year = {2016},
+	pages = {L19},
+}
+
+@article{yang_fermi_2012,
+	title = {{THE} {FERMI} {BUBBLES}: {SUPERSONIC} {ACTIVE} {GALACTIC} {NUCLEUS} {JETS} {WITH} {ANISOTROPIC} {COSMIC}-{RAY} {DIFFUSION}},
+	volume = {761},
+	issn = {0004-637X, 1538-4357},
+	shorttitle = {{THE} {FERMI} {BUBBLES}},
+	url = {https://iopscience.iop.org/article/10.1088/0004-637X/761/2/185},
+	doi = {10.1088/0004-637X/761/2/185},
+	abstract = {The Fermi Gamma-Ray Space Telescope reveals two large bubbles in the Galaxy, which extend nearly symmetrically ∼50◦ above and below the Galactic center. Using three-dimensional (3D) magnetohydrodynamic simulations that self-consistently include the dynamical interaction between cosmic rays (CRs) and thermal gas and anisotropic CR diffusion along the magnetic ﬁeld lines, we show that the key characteristics of the observed gamma-ray bubbles and the spatially correlated X-ray features in the ROSAT 1.5 keV map can be successfully reproduced by recent jet activity from the central active galactic nucleus. We ﬁnd that after taking into account the projection of the 3D bubbles onto the sky the physical heights of the bubbles can be much smaller than previously thought, greatly reducing the formation time of the bubbles to about a Myr. This relatively small bubble age is needed to reconcile the simulations with the upper limit of bubble ages estimated from the cooling time of high-energy electrons. No additional physical mechanisms are required to suppress large-scale hydrodynamic instabilities because the evolution time is too short for them to develop. The simulated CR bubbles are edge-brightened, which is consistent with the observed projected ﬂat surface brightness distribution. Furthermore, we demonstrate that the sharp edges of the observed bubbles can be due to anisotropic CR diffusion along magnetic ﬁeld lines that drape around the bubbles during their supersonic expansion, with suppressed perpendicular diffusion across the bubble surface. Possible causes of the slight bends of the Fermi bubbles to the west are also discussed.},
+	language = {en},
+	number = {2},
+	urldate = {2023-12-21},
+	journal = {The Astrophysical Journal},
+	author = {Yang, H.-Y. K. and Ruszkowski, M. and Ricker, P. M. and Zweibel, E. and Lee, D.},
+	month = dec,
+	year = {2012},
+	pages = {185},
+}
+
+@article{pakmor_galactic_2016,
+	title = {{GALACTIC} {WINDS} {DRIVEN} {BY} {ISOTROPIC} {AND} {ANISOTROPIC} {COSMIC}-{RAY} {DIFFUSION} {IN} {DISK} {GALAXIES}},
+	volume = {824},
+	issn = {2041-8213},
+	url = {https://iopscience.iop.org/article/10.3847/2041-8205/824/2/L30},
+	doi = {10.3847/2041-8205/824/2/L30},
+	abstract = {The physics of cosmic rays (CRs) is a promising candidate for explaining the driving of galactic winds and outﬂows. Recent galaxy formation simulations have demonstrated the need for active CR transport either in the form of diffusion or streaming to successfully launch winds in galaxies. However, due to computational limitations, most previous simulations have modeled CR transport isotropically. Here, we discuss high-resolution simulations of isolated disk galaxies in a 1011 Me halo with the moving-mesh code AREPO that include injection of CRs from supernovae, advective transport, CR cooling, and CR transport through isotropic or anisotropic diffusion. We show that either mode of diffusion leads to the formation of strong bipolar outﬂows. However, they develop signiﬁcantly later in the simulation with anisotropic diffusion compared to the simulation with isotropic diffusion. Moreover, we ﬁnd that isotropic diffusion allows most of the CRs to quickly diffuse out of the disk, while in the simulation with anisotropic diffusion, most CRs remain in the disk once the magnetic ﬁeld becomes dominated by its azimuthal component, which occurs after ∼300 Myr. This has important consequences for the gas dynamics in the disk. In particular, we show that isotropic diffusion strongly suppresses the ampliﬁcation of the magnetic ﬁeld in the disk compared to anisotropic or no diffusion models. We therefore conclude that reliable simulations which include CR transport inevitably need to account for anisotropic diffusion.},
+	language = {en},
+	number = {2},
+	urldate = {2023-12-21},
+	journal = {The Astrophysical Journal},
+	author = {Pakmor, R. and Pfrommer, C. and Simpson, C. M. and Springel, V.},
+	month = jun,
+	year = {2016},
+	pages = {L30},
+}
+
+@article{hanasz_cosmic_2013,
+	title = {{COSMIC} {RAYS} {CAN} {DRIVE} {STRONG} {OUTFLOWS} {FROM} {GAS}-{RICH} {HIGH}-{REDSHIFT} {DISK} {GALAXIES}},
+	volume = {777},
+	issn = {2041-8205, 2041-8213},
+	url = {https://iopscience.iop.org/article/10.1088/2041-8205/777/2/L38},
+	doi = {10.1088/2041-8205/777/2/L38},
+	abstract = {We present simulations of the magnetized interstellar medium (ISM) in models of massive star-forming (40 M  yr−1) disk galaxies with high gas surface densities (Σgas ∼ 100 M  pc−2) similar to observed star-forming high-redshift disks. We assume that type II supernovae deposit 10\% of their energy into the ISM as cosmic rays (CRs) and neglect the additional deposition of thermal energy or momentum. With a typical Galactic diffusion coefﬁcient for CRs (3 × 1028 cm2 s−1), we demonstrate that this process alone can trigger the local formation of a strong low-density galactic wind maintaining vertically open ﬁeld lines. Driven by the additional pressure gradient of the relativistic ﬂuid, the wind speed can exceed 103 km s−1, much higher than the escape velocity of the galaxy. The global mass loading, i.e., the ratio of the gas mass leaving the galactic disk in a wind to the star formation rate, becomes of order unity once the system has settled into an equilibrium. We conclude that relativistic particles accelerated in supernova remnants alone provide a natural and efﬁcient mechanism to trigger winds similar to observed mass-loaded galactic winds in high-redshift galaxies. These winds also help in explaining the low efﬁciencies for the conversion of gas into stars in galaxies, as well as the early enrichment of the intergalactic medium with metals. This mechanism may be at least of similar importance to the traditionally considered momentum feedback from massive stars and thermal and kinetic feedback from supernova explosions.},
+	language = {en},
+	number = {2},
+	urldate = {2023-12-21},
+	journal = {The Astrophysical Journal},
+	author = {Hanasz, M. and Lesch, H. and Naab, T. and Gawryszczak, A. and Kowalik, K. and Wóltański, D.},
+	month = oct,
+	year = {2013},
+	pages = {L38},
+}
+
+@article{hopkins_but_2020,
+	title = {But what about...: cosmic rays, magnetic fields, conduction, and viscosity in galaxy formation},
+	volume = {492},
+	issn = {0035-8711, 1365-2966},
+	shorttitle = {But what about...},
+	url = {https://academic.oup.com/mnras/article/492/3/3465/5658708},
+	doi = {10.1093/mnras/stz3321},
+	abstract = {We present and study a large suite of high-resolution cosmological zoom-in simulations, using the FIRE-2 treatment of mechanical and radiative feedback from massive stars, together with explicit treatment of magnetic ﬁelds, anisotropic conduction and viscosity (accounting for saturation and limitation by plasma instabilities at high β), and cosmic rays (CRs) injected in supernovae shocks (including anisotropic diffusion, streaming, adiabatic, hadronic and Coulomb losses). We survey systems from ultrafaint dwarf (M∗ ∼ 104 M , Mhalo ∼ 109 M ) through Milky Way/Local Group (MW/LG) masses, systematically vary uncertain CR parameters (e.g. the diffusion coefﬁcient κ and streaming velocity), and study a broad ensemble of galaxy properties [masses, star formation (SF) histories, mass proﬁles, phase structure, morphologies, etc.]. We conﬁrm previous conclusions that magnetic ﬁelds, conduction, and viscosity on resolved ( 1 pc) scales have only small effects on bulk galaxy properties. CRs have relatively weak effects on all galaxy properties studied in dwarfs (M∗ 1010 M , Mhalo 1011 M ), or at high redshifts (z 1–2), for any physically reasonable parameters. However, at higher masses (Mhalo 1011 M ) and z 1–2, CRs can suppress SF and stellar masses by factors ∼2–4, given reasonable injection efﬁciencies and relatively high effective diffusion coefﬁcients κ 3 × 1029 cm2 s−1. At lower κ, CRs take too long to escape dense star-forming gas and lose their energy to collisional hadronic losses, producing negligible effects on galaxies and violating empirical constraints from spallation and γ -ray emission. At much higher κ CRs escape too efﬁciently to have appreciable effects even in the CGM. But around κ ∼ 3 × 1029 cm2 s−1, CRs escape the galaxy and build up a CR-pressure-dominated halo which maintains approximate virial equilibrium and supports relatively dense, cool (T 106 K) gas that would otherwise rain on to the galaxy. CR ‘heating’ (from collisional and streaming losses) is never dominant.},
+	language = {en},
+	number = {3},
+	urldate = {2022-05-05},
+	journal = {Monthly Notices of the Royal Astronomical Society},
+	author = {Hopkins, Philip F and Chan, T K and Garrison-Kimmel, Shea and Ji, Suoqing and Su, Kung-Yi and Hummels, Cameron B and Kereš, Dušan and Quataert, Eliot and Faucher-Giguère, Claude-André},
+	month = mar,
+	year = {2020},
+	pages = {3465--3498},
+}
+
+@inproceedings{holmen_early_2023,
+	address = {Helsinki, Finland},
+	title = {Early {Experiences} on the {OLCF} {Frontier} {System} with {AthenaPK} and {Parthenon}-{Hydro}},
+	url = {https://www.ornl.gov/publication/early-experiences-olcf-frontier-system-athenapk-and-parthenon-hydro},
+	abstract = {The Oak Ridge Leadership Computing Facility (OLCF) has been preparing the nation’s first exascale system, Frontier, for production and end users. Frontier is based on HPE Cray’s new EX architecture and Slingshot interconnect and features 74 cabinets of optimized 3rd Gen AMD EPYC CPUs for HPC and AI and AMD Instinct 250X accelerators. As a part of this preparation, “real-world” user codes have been selected to help assess the functionality, performance, and usability of the system. This paper describes early experiences using the system in collaboration with the Hamburg Observatory for two selected codes, which have since been adopted in the OLCF Test Harness. Experiences discussed include efforts to resolve performance variability and per-cycle slowdowns. Results are shown for a performance portable astrophysical magnetohydronamics code, AthenaPK, and a mini-application stressing the core functionality of a performance portable block-structured adaptive mesh refinement (AMR) framework, Parthenon-Hydro. These results show good scaling characteristics to the full system. At the largest scale, the Parthenon-Hydro miniapp reaches a total of 1.7 × 1013 zone-cycles/s on 9,216 nodes (73,728 logical GPUs) at ≈ 92\% weak scaling parallel efficiency (starting from a single node using a second-order, finite-volume method).},
+	language = {en},
+	booktitle = {{CUG} {Conference} {Proceedings}},
+	author = {Holmen, John K and Grete, Philipp and Vergara, Veronica G Melesse},
+	month = may,
+	year = {2023},
+}
+
+@misc{shankar_gram-x_2022,
+	title = {{GRaM}-{X}: {A} new {GPU}-accelerated dynamical spacetime {GRMHD} code for {Exascale} computing with the {Einstein} {Toolkit}},
+	shorttitle = {{GRaM}-{X}},
+	url = {http://arxiv.org/abs/2210.17509},
+	abstract = {We present GRaM-X (General Relativistic accelerated Magnetohydrodynamics on AMReX), a new GPU-accelerated dynamical-spacetime general relativistic magnetohydrodynamics (GRMHD) code which extends the GRMHD capability of Einstein Toolkit to GPU-based exascale systems. GRaM-X supports 3D adaptive mesh refinement (AMR) on GPUs via a new AMR driver for the Einstein Toolkit called CarpetX which in turn leverages AMReX, an AMR library developed for use by the United States DOE's Exascale Computing Project (ECP). We use the Z4c formalism to evolve the equations of GR and the Valencia formulation to evolve the equations of GRMHD. GRaM-X supports both analytic as well as tabulated equations of state. We implement TVD and WENO reconstruction methods as well as the HLLE Riemann solver. We test the accuracy of the code using a range of tests on static spacetime, e.g. 1D MHD shocktubes, the 2D magnetic rotor and a cylindrical explosion, as well as on dynamical spacetimes, i.e. the oscillations of a 3D TOV star. We find excellent agreement with analytic results and results of other codes reported in literature. We also perform scaling tests and find that GRaM-X shows a weak scaling efficiency of \${\textbackslash}sim 40-50{\textbackslash}\%\$ on 2304 nodes (13824 NVIDIA V100 GPUs) with respect to single-node performance on OLCF's supercomputer Summit.},
+	language = {en},
+	urldate = {2023-12-22},
+	publisher = {arXiv},
+	author = {Shankar, Swapnil and Mösta, Philipp and Brandt, Steven R. and Haas, Roland and Schnetter, Erik and de Graaf, Yannick},
+	month = nov,
+	year = {2022},
+	note = {arXiv:2210.17509 [astro-ph, physics:gr-qc]},
+	keywords = {Astrophysics - Instrumentation and Methods for Astrophysics, General Relativity and Quantum Cosmology},
+}
+
+@article{begue_cuharm_2023,
+	title = {{cuHARM}: {A} {New} {GPU}-accelerated {GRMHD} {Code} and {Its} {Application} to {ADAF} {Disks}},
+	volume = {264},
+	issn = {0067-0049, 1538-4365},
+	shorttitle = {{cuHARM}},
+	url = {https://iopscience.iop.org/article/10.3847/1538-4365/aca276},
+	doi = {10.3847/1538-4365/aca276},
+	abstract = {We introduce a new GPU-accelerated general relativistic magnetohydrodynamic code based on HARM, which we call cuHARM. The code is written in CUDA-C and uses OpenMP to parallelize multi-GPU setups. Our code allows us to run high-resolution simulations of accretion disks and the formation and structure of jets without a need for multinode supercomputer infrastructure. A 2563 simulation is well within the reach of an Nvidia DGX-V100 server, with the computation being about 10 times faster than if only the CPU is used. We use this code to examine several disk structures all in the SANE state. We ﬁnd that (i) increasing the magnetic ﬁeld in the SANE state does not affect the mass accretion rate; (ii) simultaneously increasing the disk size and the magnetic ﬁeld, while keeping the ratio of energies ﬁxed, leads to the destruction of the jet once the magnetic ﬂux through the horizon decreases below a certain limit (this demonstrates that the existence of a jet is a function of the initial mass distribution, and not of the initial intensity of the magnetic ﬁeld, since the magnetorotational instability dictates the evolution of the magnetic ﬁeld); and (iii) the structure of the jet is a weak function of the adiabatic index of the gas, with relativistic gas tending to have a wider jet.},
+	language = {en},
+	number = {2},
+	urldate = {2023-12-22},
+	journal = {The Astrophysical Journal Supplement Series},
+	author = {Bégué, D. and Pe’er, A. and Zhang, G.-Q. and Zhang, B.-B. and Pevzner, B.},
+	month = feb,
+	year = {2023},
+	pages = {32},
+}
+
+@article{liska_h-amr_2022,
+	title = {H-{AMR}: {A} {New} {GPU}-accelerated {GRMHD} {Code} for {Exascale} {Computing} with {3D} {Adaptive} {Mesh} {Refinement} and {Local} {Adaptive} {Time} {Stepping}},
+	volume = {263},
+	issn = {0067-0049, 1538-4365},
+	shorttitle = {H-{AMR}},
+	url = {https://iopscience.iop.org/article/10.3847/1538-4365/ac9966},
+	doi = {10.3847/1538-4365/ac9966},
+	abstract = {General relativistic magnetohydrodynamic (GRMHD) simulations have revolutionized our understanding of black hole accretion. Here, we present a GPU-accelerated GRMHD code H-AMR with multifaceted optimizations that, collectively, accelerate computation by 2–5 orders of magnitude for a wide range of applications. First, it introduces a spherical grid with 3D adaptive mesh reﬁnement that operates in each of the three dimensions independently. This allows us to circumvent the Courant condition near the polar singularity, which otherwise cripples high-resolution computational performance. Second, we demonstrate that local adaptive time stepping on a logarithmic spherical-polar grid accelerates computation by a factor of 10 compared to traditional hierarchical time-stepping approaches. Jointly, these unique features lead to an effective speed of ∼109 zone cycles per second per node on 5400 NVIDIA V100 GPUs (i.e., 900 nodes of the OLCF Summit supercomputer). We illustrate H-AMRʼs computational performance by presenting the ﬁrst GRMHD simulation of a tilted thin accretion disk threaded by a toroidal magnetic ﬁeld around a rapidly spinning black hole. With an effective resolution of 13,440 × 4608 × 8092 cells and a total of 22 billion cells and ∼0.65 × 108 time steps, it is among the largest astrophysical simulations ever performed. We ﬁnd that frame dragging by the black hole tears up the disk into two independently precessing subdisks. The innermost subdisk rotation axis intermittently aligns with the black hole spin, demonstrating for the ﬁrst time that such long-sought alignment is possible in the absence of large-scale poloidal magnetic ﬁelds.},
+	language = {en},
+	number = {2},
+	urldate = {2023-12-22},
+	journal = {The Astrophysical Journal Supplement Series},
+	author = {Liska, M. T. P. and Chatterjee, K. and Issa, D. and Yoon, D. and Kaaz, N. and Tchekhovskoy, A. and Van Eijnatten, D. and Musoke, G. and Hesp, C. and Rohoza, V. and Markoff, S. and Ingram, A. and Van Der Klis, M.},
+	month = dec,
+	year = {2022},
+	pages = {26},
+}
+
+@article{zingale_castro_2020,
+	title = {The {Castro} {AMR} {Simulation} {Code}: {Current} and {Future} {Developments}},
+	volume = {1623},
+	issn = {1742-6588, 1742-6596},
+	shorttitle = {The {Castro} {AMR} {Simulation} {Code}},
+	url = {https://iopscience.iop.org/article/10.1088/1742-6596/1623/1/012021},
+	doi = {10.1088/1742-6596/1623/1/012021},
+	abstract = {We describe recent developments to the Castro astrophysics simulation code, focusing on new features that enable our simulations of X-ray bursts. Two highlights of Castro’s ongoing development are the new integration technique to couple hydrodynamics and reactions to high order and GPU oﬄoading. We discuss how these features will help oﬀset some of the computational expense in X-ray burst models.},
+	language = {en},
+	number = {1},
+	urldate = {2023-12-22},
+	journal = {Journal of Physics: Conference Series},
+	author = {Zingale, M. and Almgren, A. S. and Sazo, M. Barrios and Bell, J. B. and Eiden, K. and Harpole, A. and Katz, M. P. and Nonaka, A. J. and Willcox, D. E. and Zhang, W.},
+	month = sep,
+	year = {2020},
+	pages = {012021},
+}
+
+@article{schive_gamer-2_2018,
+	title = {gamer-2: a {GPU}-accelerated adaptive mesh refinement code – accuracy, performance, and scalability},
+	volume = {481},
+	issn = {0035-8711, 1365-2966},
+	shorttitle = {gamer-2},
+	url = {https://academic.oup.com/mnras/article/481/4/4815/5106358},
+	doi = {10.1093/mnras/sty2586},
+	abstract = {We present GAMER-2, a GPU-accelerated adaptive mesh reﬁnement (AMR) code for astrophysics. It provides a rich set of features, including adaptive time-stepping, several hydrodynamic schemes, magnetohydrodynamics, self-gravity, particles, star formation, chemistry, and radiative processes with GRACKLE, data analysis with YT, and memory pool for efﬁcient object allocation. GAMER-2 is fully bitwise reproducible. For the performance optimization, it adopts hybrid OpenMP/MPI/GPU parallelization and utilizes overlapping CPU computation, GPU computation, and CPU–GPU communication. Load balancing is achieved using a Hilbert space-ﬁlling curve on a level-by-level basis without the need to duplicate the entire AMR hierarchy on each MPI process. To provide convincing demonstrations of the accuracy and performance of GAMER-2, we directly compare with ENZO on isolated disc galaxy simulations and with FLASH on galaxy cluster merger simulations. We show that the physical results obtained by different codes are in very good agreement, and GAMER-2 outperforms ENZO and FLASH by nearly one and two orders of magnitude, respectively, on the Blue Waters supercomputers using 1–256 nodes. More importantly, GAMER-2 exhibits similar or even better parallel scalability compared to the other two codes. We also demonstrate good weak and strong scaling using up to 4096 GPUs and 65 536 CPU cores, and achieve a uniform resolution as high as 10 2403 cells. Furthermore, GAMER-2 can be adopted as an AMR + GPUs framework and has been extensively used for the wave dark matter simulations. GAMER-2 is open source (available at https://github.com/gamer-project/gamer) and new contributions are welcome.},
+	language = {en},
+	number = {4},
+	urldate = {2023-12-22},
+	journal = {Monthly Notices of the Royal Astronomical Society},
+	author = {Schive, Hsi-Yu and ZuHone, John A and Goldbaum, Nathan J and Turk, Matthew J and Gaspari, Massimo and Cheng, Chin-Yu},
+	month = dec,
+	year = {2018},
+	pages = {4815--4840},
+}
+
+@article{almgren_castro_2020,
+	title = {{CASTRO}: {A} {Massively} {Parallel} {Compressible} {Astrophysics} {Simulation} {Code}},
+	volume = {5},
+	issn = {2475-9066},
+	shorttitle = {{CASTRO}},
+	url = {https://joss.theoj.org/papers/10.21105/joss.02513},
+	doi = {10.21105/joss.02513},
+	abstract = {Castro is a highly parallel, adaptive mesh, multiphysics simulation code for compressible astrophysical flows. It has been used to simulate different progenitor models of Type Ia supernovae, X-ray bursts, core-collapse and electron capture supernovae, and dynamics in exoplanets. Together, Castro, the low Mach number code MAESTROeX (Fan, Nonaka, Almgren, Harpole, \& Zingale, 2019), and the cosmology code Nyx (Almgren, Bell, Lijewski, Lukić, \& Van Andel, 2013) make up the AMReX-Astrophysics Suite of open-source, adaptive mesh, performance portable astrophysical simulation codes.},
+	language = {en},
+	number = {54},
+	urldate = {2023-12-22},
+	journal = {Journal of Open Source Software},
+	author = {Almgren, Ann and Sazo, Maria and Bell, John and Harpole, Alice and Katz, Max and Sexton, Jean and Willcox, Donald and Zhang, Weiqun and Zingale, Michael},
+	month = oct,
+	year = {2020},
+	pages = {2513},
+}
+
+@article{pariev_magnetic_1_2007,
+	title = {A {Magnetic} {Alpha}-{Omega} {Dynamo} in {Active} {Galactic} {Nuclei} {Disks}: {I}. {The} {Hydrodynamics} of {Star}-{Disk} {Collisions} and {Keplerian} {Flow}},
+	volume = {658},
+	issn = {0004-637X, 1538-4357},
+	shorttitle = {A {Magnetic} {Alpha}-{Omega} {Dynamo} in {Active} {Galactic} {Nuclei} {Disks}},
+	url = {http://arxiv.org/abs/astro-ph/0611139},
+	doi = {10.1086/510734},
+	abstract = {A magnetic ﬁeld dynamo in the inner regions of the accretion disk surrounding the supermassive black holes in Active Galactic Nuclei (AGNs) may be the mechanism for the generation of magnetic ﬁelds in galaxies and in extragalactic space. We argue that the two coherent motions produced by 1) the Keplerian motion and 2) star-disk collisions, numerous in the inner region of AGN accretion disks, are both basic to the formation of a robust, coherent dynamo and consequently the generation of large scale magnetic ﬁelds. In addition we ﬁnd that the predicted rate, 10 to 100 per year at ∼ 1000rg, rg the gravitational radius, and the consequences of star-disk collisions are qualitatively, at least, not inconsistent with observations of broad emission and absorption lines. They are frequent enough to account for an integrated dynamo gain, e109 at 100rg, many orders of magnitude greater than required to amplify any seed ﬁeld no matter how small. The existence of extra-galactic, coherent, large scale magnetic ﬁelds whose energies greatly exceed all but massive black hole energies is recognized. In paper II (Pariev, Colgate \& Finn 2006) we argue that in order to produce a dynamo that can access the free energy of black hole formation and produce all the magnetic ﬂux in a coherent fashion the existence of these two coherent motions in a conducting ﬂuid is required. The diﬀerential winding of Keplerian motion is obvious, but the disk structure depends upon the model of ”α”, the transport coeﬃcient of angular momentum chosen. The counter rotation of driven plumes in a rotating frame is less well known, but fortunately the magnetic eﬀect is independent of the disk model. Both motions are discussed in this paper, paper I. The description of the two motions are preliminary to two theoretical derivations and one numerical simulation of the αω dynamo in paper II.},
+	language = {en},
+	number = {1},
+	urldate = {2022-04-28},
+	journal = {The Astrophysical Journal},
+	author = {Pariev, Vladimir I. and Colgate, Stirling A.},
+	month = mar,
+	year = {2007},
+	note = {arXiv: astro-ph/0611139},
+	keywords = {Astrophysics},
+	pages = {114--128},
+}
+
+@article{pariev_magnetic_2_2007,
+	title = {A {Magnetic} {Alpha}-{Omega} {Dynamo} in {Active} {Galactic} {Nuclei} {Disks}: {II}. {Magnetic} {Field} {Generation}, {Theories} and {Simulations}},
+	volume = {658},
+	issn = {0004-637X, 1538-4357},
+	shorttitle = {A {Magnetic} {Alpha}-{Omega} {Dynamo} in {Active} {Galactic} {Nuclei} {Disks}},
+	url = {http://arxiv.org/abs/astro-ph/0611188},
+	doi = {10.1086/510735},
+	abstract = {It is shown that a dynamo can operate in an Active Galactic Nuclei (AGN) accretion disk due to the Keplerian shear and due to the helical motions of expanding and twisting plumes of plasma heated by many star passages through the disk. Each plume rotates a fraction of the toroidal ﬂux into poloidal ﬂux, always in the same direction, through a ﬁnite angle, and proportional to its diameter. The predicted growth rate of poloidal magnetic ﬂux, based upon two analytic approaches and numerical simulations, leads to a rapid exponentiation of a seed ﬁeld, ∼ 0.1 to ∼ 0.01 per Keplerian period of the inner part of the disk. The initial value of the seed ﬁeld may therefore be arbitrarily small yet reach, through dynamo gain, saturation very early in the disk history. Because of tidal disruption of stars close to the black hole, the maximum growth rate occurs at a radius of about 100 gravitational radii from the central object. The generated mean magnetic ﬁeld, a quadrupole ﬁeld, has predominantly even parity so that the radial component does not reverse sign across the midplane. The linear growth is predicted to be the same by each of the following three theoretical analyses: the ﬂux conversion model, the mean ﬁeld approach, and numerical modeling. The common feature is the conducting ﬂuid ﬂow, considered in companion Paper I (Pariev \& Colgate 2006) where two coherent large scale ﬂows occur naturally: the diﬀerential winding of Keplerian motion and diﬀerential rotation of expanding plumes.},
+	language = {en},
+	number = {1},
+	urldate = {2022-04-29},
+	journal = {The Astrophysical Journal},
+	author = {Pariev, Vladimir I. and Colgate, Stirling A. and Finn, John M.},
+	month = mar,
+	year = {2007},
+	note = {arXiv: astro-ph/0611188},
+	keywords = {Astrophysics},
+	pages = {129--160},
 }

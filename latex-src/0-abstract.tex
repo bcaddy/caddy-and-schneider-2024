@@ -9,11 +9,11 @@ Cholla's MHD module can perform over 200 million cell updates per GPU-second whi
 % S4: How big of a grid can we do per GPU?
 The inherently parallel nature of GPUs combined with increased memory in new hardware allows Cholla's MHD module to perform simulation with resolutions of $>450^3$ cells on a single GPU.
 % S5: Scaling
-We employ GPU direct MPI to attain nearly perfect weak scaling on up to 74,000 GPUs while simulating a total grid size of over 1.2 trillion cells.
+We employ GPU direct MPI to attain nearly perfect weak scaling on the exascale supercomputer \textit{Frontier}, while using up to 74,000 GPUs and simulating a total grid size of over 1.2 trillion cells.
 % S6: We did test problems
 A suite of test problems highlights the accuracy of Cholla's MHD module and demonstrates that zero magnetic divergence in solutions is maintained to round off error.
 % S7: Summary of new testing framework
-We also present new testing and continuous integration tools for Cholla that utilize GoogleTest, GitHub Actions, and Jenkins which have helped make Cholla more robust and accurate.
+We also present new testing and continuous integration tools using GoogleTest, GitHub Actions, and Jenkins that have made development more robust and accurate and ensure reliability in the future.
 % S9:  
 
 \end{abstract}
