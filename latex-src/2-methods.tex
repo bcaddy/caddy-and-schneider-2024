@@ -39,9 +39,9 @@ The ideal MHD equations are:
     \frac{\partial \boldsymbol{B}}{\partial t} - \nabla \times (\boldsymbol{v} \times \boldsymbol{B}) = 0
 \end{equation}
 
-\noindent where $\rho$ is density, $\boldsymbol{v} = ( v_x, v_y, v_z)$ is the velocity vector, $t$ is time, $\boldsymbol{B} = ( B_x, B_y, B_z)$ is the magnetic field, $\boldsymbol{I}$ is the identity tensor, $P_T \equiv P + \frac{1}{2}(\boldsymbol{B} \cdot \boldsymbol{B})$ is the total pressure, and $E$ is the total energy per unit volume $E \equiv \epsilon + \frac{1}{2}\rho(\boldsymbol{v}\cdot\boldsymbol{v}) + \frac{1}{2}(\boldsymbol{B}\cdot\boldsymbol{B})$. We adopt units in which the magnetic permeability $\mu_0 = 1$. 
+\noindent where $\rho$ is density, $\boldsymbol{v} = ( v_x, v_y, v_z)$ is the velocity vector, $t$ is time, $\boldsymbol{B} = ( B_x, B_y, B_z)$ is the magnetic field, $\boldsymbol{I}$ is the identity tensor, $P_T \equiv P + \frac{1}{2}(\boldsymbol{B} \cdot \boldsymbol{B})$ is the total pressure, and $E$ is the total energy per unit volume $E \equiv \epsilon + \frac{1}{2}\rho(\boldsymbol{v}\cdot\boldsymbol{v}) + \frac{1}{2}(\boldsymbol{B}\cdot\boldsymbol{B})$. We adopt units in which the magnetic permeability $\mu_0 = 1$.
 
-Equation \ref{eqn:mass-conservation} describes the conservation of mass, equation \ref{eqn:momentum-conservation} describes the conservation of momentum, equation \ref{eqn:energy-conservation} describes the conservation of energy, and equation \ref{eqn:induction} is the induction equation, which describes the divergence free condition. Cholla uses an ideal gas equation of state  which is $P \equiv \epsilon(\gamma - 1)$ where $\gamma$ is the adiabatic index and $\epsilon$ is the internal energy density. 
+Equation \ref{eqn:mass-conservation} describes the conservation of mass, equation \ref{eqn:momentum-conservation} describes the conservation of momentum, equation \ref{eqn:energy-conservation} describes the conservation of energy, and equation \ref{eqn:induction} is the induction equation, which describes the divergence free condition. Cholla uses an ideal gas equation of state  which is $P \equiv \epsilon(\gamma - 1)$ where $\gamma$ is the adiabatic index and $\epsilon$ is the internal energy density.
 
 In practice these equations are used in their vector form, where $\boldsymbol{U}$ and $\boldsymbol{W}$ are the conserved and primitive variables respectively:
 
@@ -65,17 +65,17 @@ In practice these equations are used in their vector form, where $\boldsymbol{U}
             P   &
             B_x &
             B_y &
-            B_z 
+            B_z
          \end{bmatrix}.
 \end{align}
 The conservation equations, in Cartesian coordinates, can then be rewritten as
 
 \begin{equation}
     \label{eqn:vector-conserved}
-    \frac{\partial \boldsymbol{U}}{\partial t} + 
-    \frac{\partial \boldsymbol{F_x}}{\partial x} + 
-    \frac{\partial \boldsymbol{F_y}}{\partial y} + 
-    \frac{\partial \boldsymbol{F_z}}{\partial z} = 0 
+    \frac{\partial \boldsymbol{U}}{\partial t} +
+    \frac{\partial \boldsymbol{F_x}}{\partial x} +
+    \frac{\partial \boldsymbol{F_y}}{\partial y} +
+    \frac{\partial \boldsymbol{F_z}}{\partial z} = 0
 \end{equation}
 where $\boldsymbol{F_x}$, $\boldsymbol{F_y}$, and $\boldsymbol{F_z}$ are the vectors of fluxes in the $x$, $y$, and $z$ direction respectively and are given by
 
@@ -151,7 +151,7 @@ The first step is to compute the time step. Cholla implements uniform time steps
         \label{eqn:dt}
         \Delta t = C_{CFL} \min \left(
             \frac{\Delta x}{\mid v^n_{x,i,j,k} \mid + c^n_{f,i,j,k}},
-            \frac{\Delta y}{\mid v^n_{y,i,j,k} \mid + c^n_{f,i,j,k}}, 
+            \frac{\Delta y}{\mid v^n_{y,i,j,k} \mid + c^n_{f,i,j,k}},
             \frac{\Delta z}{\mid v^n_{z,i,j,k} \mid + c^n_{f,i,j,k}}
         \right),
 \end{equation}
@@ -166,7 +166,7 @@ The first step is to compute the time step. Cholla implements uniform time steps
 
 \noindent where the $+$ option corresponds to the fast magnetosonic speed, and $-$ to the slow.
 
-Equation \ref{eqn:dt} computes the minimum crossing time of a wave in a specific cell. A global reduction is then performed to find the minimum in the entire grid; that minimum is used as the time step $\Delta t$. This reduction is done primarily on the GPU followed by an MPI ALL\_REDUCE. Because GPUs programming methods are inherently parallel, GPU reductions are not trivial and their performance is sensitive to the method used. Details of our reduction method are discussed in section \ref{sec:gpu-vs-cpu}. 
+Equation \ref{eqn:dt} computes the minimum crossing time of a wave in a specific cell. A global reduction is then performed to find the minimum in the entire grid; that minimum is used as the time step $\Delta t$. This reduction is done primarily on the GPU followed by an MPI ALL\_REDUCE. Because GPUs programming methods are inherently parallel, GPU reductions are not trivial and their performance is sensitive to the method used. Details of our reduction method are discussed in section \ref{sec:gpu-vs-cpu}.
 
 The cell-centered magnetic field is computed with a direct average of the face centered values:
 \begin{equation}
@@ -275,9 +275,9 @@ The derivatives from Equation \ref{eqn:emf-edge} are computed using the upwinded
 \end{equation}
 
 \begin{figure}[ht!]
-    \includegraphics[width=0.5\linewidth]{assets/2-methods/CT-edge-field-figures-X.pdf}
-    \includegraphics[width=0.5\linewidth]{assets/2-methods/CT-edge-field-figures-Y.pdf}
-    \includegraphics[width=0.5\linewidth]{assets/2-methods/CT-edge-field-figures-Z.pdf}
+    \includegraphics[width=0.5\linewidth]{CT-edge-field-figures-X.pdf}
+    \includegraphics[width=0.5\linewidth]{CT-edge-field-figures-Y.pdf}
+    \includegraphics[width=0.5\linewidth]{CT-edge-field-figures-Z.pdf}
     \caption{2D slices in all three planes showing the location of the fluxes, edge electric fields, and derivatives. Based on Figure 5 of \cite{stone_athena_2008}.}
     \label{fig:emf-graph}
 \end{figure}
@@ -330,24 +330,24 @@ Step 5 results in first order time-averaged values for the cell-centered conserv
 The steps of the PLM update are:
 \begin{enumerate}
     \item Compute the primitive variables from the conserved variables.
-    
+
     \item Compute the left, right, centered, and Van Leer differences in the primitive variables
-    \begin{align} 
-        \delta \boldsymbol{W}_{L,i} &= \boldsymbol{W_{i}} - \boldsymbol{W_{i-1}} \\ 
+    \begin{align}
+        \delta \boldsymbol{W}_{L,i} &= \boldsymbol{W_{i}} - \boldsymbol{W_{i-1}} \\
         \delta \boldsymbol{W}_{R,i} &= \boldsymbol{W_{i+1}} - \boldsymbol{W_{i}} \\
         \delta \boldsymbol{W}_{C,i} &= \frac{\boldsymbol{W_{i+1}} - \boldsymbol{W_{i-1}}}{2} \\
-        \delta \boldsymbol{W}_{VL,i} &= 
+        \delta \boldsymbol{W}_{VL,i} &=
         \begin{cases}
             \frac{2 \boldsymbol{W}_{L,i} \boldsymbol{W}_{R,i}}{\boldsymbol{W}_{L,i} +\boldsymbol{W}_{R,i}} ,& \text{if } \boldsymbol{W}_{L,i} \boldsymbol{W}_{R,i} > 0\\
             0,              & \text{otherwise}
         \end{cases}
     \end{align}
-    
+
     \item Project the slopes into the characteristic variables, $\boldsymbol{a}$, using the eigenvectors listed in the appendix of \cite{stone_athena_2008}. Note that to maintain mathematical consistency we use the eigenvectors of the $\boldsymbol{w_{i}}$ cell for all four slopes and the later projection back to primitive variables.
     \item Apply monotonicity constraints to the characteristic differences to ensure that the reconstruction is total variation diminishing (TVD). We use the following limiter, given in \cite{leveque2002finite}:
     \begin{equation}
         \label{eqn:limiter}
-        \delta \boldsymbol{a}_{m,i} = 
+        \delta \boldsymbol{a}_{m,i} =
         \begin{cases}
              \text{sgn}(\boldsymbol{a}_{C,i})\min(2\abs{\boldsymbol{a}_{L,i}},2\abs{\boldsymbol{a}_{R,i}},\abs{\boldsymbol{a}_{C,i}},\abs{\boldsymbol{a}_{VL,i}}),& \text{if } \boldsymbol{a}_{L,i} \boldsymbol{a}_{R,i} > 0\\
             0,              & \text{otherwise}

@@ -15,14 +15,14 @@ The propagation of the four MHD linear waves provides an excellent quantitative 
     q = \overline{q} + A R_w \sin{\frac{2\pi x}{\lambda}},
 \end{equation}
 
-\noindent where $q$ is the conserved variable, $\overline{q}$ is the mean background state, $A=10^{-6}$ is the amplitude of the wave, $R_w$ is the right eigenvector in conserved variables for the wave mode $w$, $x$ is the position, and $\lambda=1$ is the wavelength of the wave. The adiabatic index $\gamma$ is $5/3$ and the background state is: 
+\noindent where $q$ is the conserved variable, $\overline{q}$ is the mean background state, $A=10^{-6}$ is the amplitude of the wave, $R_w$ is the right eigenvector in conserved variables for the wave mode $w$, $x$ is the position, and $\lambda=1$ is the wavelength of the wave. The adiabatic index $\gamma$ is $5/3$ and the background state is:
 $\overline{\rho}=1.0$,
 $\overline{v_x}=\overline{v_y}=\overline{v_z}=0$ (except for the contact wave where $\overline{v_x} = 1$),
 $\overline{P}=1/\gamma$,
 $\overline{B_x}=1$,
 $\overline{B_y}=1.5$,
 and $\overline{B_z}=0$.
-The right eigenvectors for this state are given in Appendix A of \cite{gardiner_unsplit_2008}. 
+The right eigenvectors for this state are given in Appendix A of \cite{gardiner_unsplit_2008}.
 
 The wave propagates for one period, after which the error is computed between the initial and final state. First we compute the L1 norm, which is the absolute difference for each conserved variable between the initial and final state:
 
@@ -40,7 +40,7 @@ These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both th
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \includegraphics[width=\linewidth]{assets/3-mhd-tests/linear_convergence.pdf}
+    \includegraphics[width=\linewidth]{linear_convergence.pdf}
     \caption{Linear Wave Convergence of all four MHD waves using PLM and PPM reconstruction. \input{|python ../python/get_links.py 'linear_wave_convergence'}}
     \label{fig:linear-wave-convergence}
 \end{figure}
@@ -50,7 +50,7 @@ These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both th
 
 The circularly polarized Alfv\'en wave is a non-linear wave that tests a code's accuracy in the non-linear regime with the quantitative benefits of a regular wave test \citep{Toth1996}. The tests use a periodic domain of $3.0\times1.5\times1.5$ and a resolution of $2N\times N \times N$ where $N$ goes from 8 to 256 in powers of 2. The wave is initialized at an oblique angle the grid, making this a fully 3D test.
 
-In a coordinate system aligned with the movement of the wave, the initial conditions are 
+In a coordinate system aligned with the movement of the wave, the initial conditions are
 $\rho = 1.0$,
 $P = 0.1$,
 $v_x = (0,-1)$ for traveling or standing waves respectively,
@@ -69,11 +69,11 @@ where the amplitude of the wave $A = 0.1$ and the wavelength $\lambda = 1.0$. Th
 
 \noindent with $\sin\alpha = 2/3$ and $\sin\beta = 1/\sqrt{5}$. This ensures the domain is fully periodic through the boundaries and the wave can travel (or stand) indefinitely. The magnetic fields are initialized with the vector potential to ensure initial divergence is zero to round off. The waves are then run for a single period and the L2 norm of the L1 error vector is plotted in Figure \ref{fig:cpaw} using the same method as in Section \ref{sec:lwc}. It is interesting to note that the accuracy improvement of PPM versus PLM seen for the linear waves is absent in this non-linear test.
 
-These Alfv\'en waves are subject to a parametric instability \citep{del_zanna_parametric_2001}, which should not be present for these initial conditions. However, the truncation error will result in small variations in the magnetic pressure which drives low amplitude compression waves \citep{stone_athena_2008}. 
+These Alfv\'en waves are subject to a parametric instability \citep{del_zanna_parametric_2001}, which should not be present for these initial conditions. However, the truncation error will result in small variations in the magnetic pressure which drives low amplitude compression waves \citep{stone_athena_2008}.
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \includegraphics[width=\linewidth]{assets/3-mhd-tests/cpaw_convergence.pdf}
+    \includegraphics[width=\linewidth]{cpaw_convergence.pdf}
     \caption{Circularly Polarized Alfv\'en Wave Convergence using PLM and PPM reconstruction. \input{|python ../python/get_links.py 'cpaw'}}
     \label{fig:cpaw}
 \end{figure}
@@ -95,7 +95,7 @@ $B_z = 0$.
 
 In the central region the state is given by the following vector potential, which we have chosen such that $A_x = 0$:
 \begin{equation}
-    A_y = A_z = 
+    A_y = A_z =
     \begin{cases}
         A \left( R - r \right),& \text{for}\; r < R\\
         0,              & \text{otherwise}
@@ -105,10 +105,10 @@ In the central region the state is given by the following vector potential, whic
 \noindent where $r$ is the Euclidean distance from the center of the domain. Note that since the vector potential is along the vertices of the cells, $A_y$ and $A_z$ will never have the same value at the same position as they are not stored at identical positions. The test is conducted on a grid of $N\times N\times 2N$ cells for $N=(32, 64, 128, 256)$ with a periodic domain of $1.0\times1.0\times2.0$ centered at zero and evolved for two periods; $t_{max} = 2.0$.
 
 Figure \ref{fig:afl} shows the mean of cell centered $B^2$, normalized to the initial value, in order to demonstrate the convergence of the dissipation rate. The dissipation rate is comparable to those found in the literature \citep{stone_athena_2008} and improves at approximately first order. Figure \ref{fig:afl} also shows the maximum divergence in the domain as a function of time. Throughout the entire evolution it remains near round off and, after an initial rise, remains fairly constant. The zero magnetic field region outside of the current loop also remains near zero throughout the entire evolution of the problem.
- 
+
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \includegraphics[width=\linewidth]{assets/3-mhd-tests/afl.pdf}
+    \includegraphics[width=\linewidth]{afl.pdf}
     \caption{Evolution of tilted spherical magnetic field loop through two full periods. Mean of $B^2$ normalized to the initial value as a function of time (left) and the maximum divergence in the domain as a function of time (right). \input{|python ../python/get_links.py 'afl'}}
     \label{fig:afl}
 \end{figure}
@@ -116,11 +116,11 @@ Figure \ref{fig:afl} shows the mean of cell centered $B^2$, normalized to the in
 \subsubsection{MHD Riemann Problems}
 \label{sec:riemann}
 
-MHD Riemann problems are standard tests for new MHD codes and methods due to their mix of different flow types and extreme conditions. There are many different MHD Riemann problems in the literature \citep{brio_wu_1988, einfeldt_1991, ryu_jones_1995, dai_woodward_1998}; we have chosen to present five that cover a variety of challenging cases. 
+MHD Riemann problems are standard tests for new MHD codes and methods due to their mix of different flow types and extreme conditions. There are many different MHD Riemann problems in the literature \citep{brio_wu_1988, einfeldt_1991, ryu_jones_1995, dai_woodward_1998}; we have chosen to present five that cover a variety of challenging cases.
 
 The Riemann problem is defined as having a single state for half of the domain which suddenly switches at a discontinuity to a different state on the other half of the domain. All of Riemann problems here have a domain of $1\times1\times1$ and resolution of $512\times16\times16$ and are run until the $t_{max}$ for that particular Riemann problem and utilize parabolic reconstruction with limiting in the characteristic variables. All have been run in all three spatial directions with both possible orientations of the two states and achieved identical results. The details of each left and right state are given in Table \ref{table:riemann}.
 
-\input{../assets/3-mhd-tests/riemann-table.tex}
+\input{riemann-table.tex}
 
 \paragraph{Brio \& Wu Shock Tube}
 
@@ -128,7 +128,7 @@ The Brio \& Wu Shock Tube \citep{brio_wu_1988} is a staple test of MHD codes. Th
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \includegraphics[width=\linewidth]{assets/3-mhd-tests/b&w.pdf}
+    \includegraphics[width=\linewidth]{b&w.pdf}
     \caption{The Brio \& Wu Shock Tube solution \citep{brio_wu_1988}.
     \input{|python ../python/get_links.py 'b&w'}}
     \label{fig:brio-and-wu}
@@ -140,7 +140,7 @@ The Dai \& Woodward Shock Tube (also called Ryu \& Jones 2a) \citep{dai_woodward
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \includegraphics[width=\linewidth]{assets/3-mhd-tests/d&w.pdf}
+    \includegraphics[width=\linewidth]{d&w.pdf}
     \caption{Dai \& Woodward Shock Tube (also called Ryu \& Jones 2a) solution \citep{dai_woodward_1998, ryu_jones_1995}.
     \input{|python ../python/get_links.py 'd&w'}}
     \label{fig:dai-and-woodward}
@@ -152,7 +152,7 @@ Ryu \& Jones 1a Shock Tube solution \citep{ryu_jones_1995} is a less common test
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \includegraphics[width=\linewidth]{assets/3-mhd-tests/rj1a.pdf}
+    \includegraphics[width=\linewidth]{rj1a.pdf}
     \caption{Ryu \& Jones 1a Shock Tube solution \citep{ryu_jones_1995}.
     \input{|python ../python/get_links.py 'rj1a'}}
     \label{fig:rj-1a}
@@ -164,7 +164,7 @@ The Ryu \& Jones 4d Shock Tube solution \citep{ryu_jones_1995} features a switch
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \includegraphics[width=\linewidth]{assets/3-mhd-tests/rj4d.pdf}
+    \includegraphics[width=\linewidth]{rj4d.pdf}
     \caption{Ryu \& Jones 4d Shock Tube solution \citep{ryu_jones_1995}.
     \input{|python ../python/get_links.py 'rj4d'}}
     \label{fig:rj-4d}
@@ -176,7 +176,7 @@ The MHD Einfeldt Strong Rarefaction test \citep{einfeldt_1991} creates a strong 
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \includegraphics[width=\linewidth]{assets/3-mhd-tests/einfeldt.pdf}
+    \includegraphics[width=\linewidth]{einfeldt.pdf}
     \caption{MHD Einfeldt Strong Rarefaction solution \citep{einfeldt_1991}.
     \input{|python ../python/get_links.py 'einfeldt'}}
     \label{fig:einfeldt}
@@ -185,7 +185,7 @@ The MHD Einfeldt Strong Rarefaction test \citep{einfeldt_1991} creates a strong 
 \subsubsection{MHD Blast Wave in a Strongly Magnetized Medium}
 \label{sec:mhd-blast}
 
-Blast waves in different forms are excellent tests for hydrodynamics and MHD codes. They combine strong shocked flows, smooth flows, and, in MHD, strong magnetic fields. The results are qualitative rather than quantitative, but thoroughly test the robustness of the algorithm and are excellent regression tests for automated testing (see Section \ref{sec:testing}). For this test we use $\beta = 0.2$; like \cite{stone_2009}, we find instabilities if $\beta$ is decreased by a factor of 10. 
+Blast waves in different forms are excellent tests for hydrodynamics and MHD codes. They combine strong shocked flows, smooth flows, and, in MHD, strong magnetic fields. The results are qualitative rather than quantitative, but thoroughly test the robustness of the algorithm and are excellent regression tests for automated testing (see Section \ref{sec:testing}). For this test we use $\beta = 0.2$; like \cite{stone_2009}, we find instabilities if $\beta$ is decreased by a factor of 10.
 
 The background state is
 $\rho = 1.0$,
@@ -200,7 +200,7 @@ and the over pressure region is a central sphere of size $R = 0.1$ which has $P=
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
-    \includegraphics[width=\linewidth]{assets/3-mhd-tests/mhd-blast.pdf}
+    \includegraphics[width=\linewidth]{mhd-blast.pdf}
     \caption{Contour plot of the MHD blast wave test at $t=0.2$. 30 evenly spaced contours are shown in an $x-y$ slice through the center of the domain. \input{|python ../python/get_links.py 'mhd-blast'}}
     \label{fig:blast}
 \end{figure}
@@ -210,7 +210,7 @@ and the over pressure region is a central sphere of size $R = 0.1$ which has $P=
 
 The Orszag-Tang vortex is a standard 2D MHD test from \cite{otv_1979}. While it does not provide a quantitative measure of accuracy like the linear wave tests or a test of the robustness of the method like the MHD blast wave, it does have a very complex flow that is sensitive to changes in the integrator, making it ideal for regression testing.
 
-The test was conducted on a periodic domain of $1\times1\times1$ with a resolution of $192\times192\times192$ cells until $t = 0.5$ with the following initial conditions: 
+The test was conducted on a periodic domain of $1\times1\times1$ with a resolution of $192\times192\times192$ cells until $t = 0.5$ with the following initial conditions:
 $\rho = 25 / \left( 36 \pi \right)$,
 $P    =  5 / \left( 12 \pi \right)$,
 $v_x  = \sin 2\pi y$,
@@ -223,7 +223,7 @@ The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure
 
 \begin{figure}[!ht]
     % \epsscale{0.5}
-    \includegraphics[width=\linewidth]{assets/3-mhd-tests/orszag-tang-vortex.pdf}
+    \includegraphics[width=\linewidth]{orszag-tang-vortex.pdf}
     \caption{Contour plot of the Orszag-Tang Vortex at $t=0.5$. Thirty evenly spaced contours are shown for each plot in an $x-y$ slice through the center of the domain.  \input{|python ../python/get_links.py 'otv'}}
     \label{fig:otv}
 \end{figure}
@@ -231,11 +231,11 @@ The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure
 \subsection{MHD Performance Tests}
 \label{sec:mhd-perf-tests}
 
-Given that Cholla is a massively parallel code, its scaling properties warrant discussion. We focus on weak scaling rather than strong scaling as our primary goal, since good weak scaling enables much larger problems to be simulated, while strong scaling rapidly reduces the number of cells per GPU to the point where the whole GPU cannot be utilized. Thus, GPUs may not be a good choice for algorithms and applications that require strong scaling. Results of our weak scaling tests are shown in Figure \ref{fig:scaling-weak-efficiency}. 
+Given that Cholla is a massively parallel code, its scaling properties warrant discussion. We focus on weak scaling rather than strong scaling as our primary goal, since good weak scaling enables much larger problems to be simulated, while strong scaling rapidly reduces the number of cells per GPU to the point where the whole GPU cannot be utilized. Thus, GPUs may not be a good choice for algorithms and applications that require strong scaling. Results of our weak scaling tests are shown in Figure \ref{fig:scaling-weak-efficiency}.
 
 All of the weak scaling tests shown were performed with a slow magnetosonic wave perturbation (described in Section \ref{sec:lwc}), periodic boundary conditions, in double precision, and with $459^3$ cells per MPI rank; each rank is assigned one GPU. We employ the second order piecewise linear reconstruction method with limiting in the characteristic variables. The wave is evolved for 100 time steps and the resulting time per step is averaged over the total number of time steps, excluding setup and tear down time. The slow wave was chosen due to the fact that the HLLD Riemann solver does not resolve it and as such it is difficult to accurately advect. This problem requires that every cell be updated in each time step, and should thus provide a reasonable estimate for a typical full-grid update in a simulation.
 
-Our primary scaling tests were performed on the \textit{Frontier} Supercomputer at the Oak Ridge Leadership Computing Facility. \textit{Frontier} utilizes AMD Radeon Instinct MI250X GPUs, each of which contains two Graphics Compute Dies (GCDs) that largely function as separate GPUs and can be treated as such in software. Thus, for the sake of clear comparison to other systems, we will refer to each GCD as a single GPU for the remainder of this paper. 
+Our primary scaling tests were performed on the \textit{Frontier} Supercomputer at the Oak Ridge Leadership Computing Facility. \textit{Frontier} utilizes AMD Radeon Instinct MI250X GPUs, each of which contains two Graphics Compute Dies (GCDs) that largely function as separate GPUs and can be treated as such in software. Thus, for the sake of clear comparison to other systems, we will refer to each GCD as a single GPU for the remainder of this paper.
 
 On \textit{Frontier} Cholla updates $2.04\times10^8$ cells per second per GPU when running with a single GPU. On 74,088 GPUs, nearly the entirety of \textit{Frontier}, Cholla performs $1.67\times10^8$ cell updates per second per GPU, with a weak scaling efficiency of 82.2\%. The 74,088 GPU run updated a total of $1.24\times10^{13}$ cells per second on a total grid size of $19,278^3$ cells.
 
@@ -245,8 +245,8 @@ With a single MPI rank there is no communication overhead, as no halo cells need
 
 \begin{figure}[ht!]
     \epsscale{0.5}
-    \includegraphics[width=0.5\linewidth]{assets/3-mhd-tests/scaling_tests_weak_efficiency.pdf}
-    \includegraphics[width=0.5\linewidth]{assets/3-mhd-tests/scaling_tests_ms_per_gpu.pdf}
+    \includegraphics[width=0.5\linewidth]{scaling_tests_weak_efficiency.pdf}
+    \includegraphics[width=0.5\linewidth]{scaling_tests_ms_per_gpu.pdf}
     \caption{Weak scaling performance of Cholla MHD. When running on a single GPU Cholla updates $2.04\times10^8$ cells per second per GPU; the largest run with 74,088 GPUs updates $1.67\times10^8$ cells per second per GPU, a weak scaling efficiency of 82.2\%. The 74,088 GPU run updates a total of $1.24\times10^{13}$ cells per second. \input{|python ../python/get_links.py 'scaling'}}
     \label{fig:scaling-weak-efficiency}
 \end{figure}
