@@ -22,7 +22,7 @@ def main():
     with open(path, 'rb') as file:
         links = pickle.load(file)
 
-    link = f'\href{{{links[args.key]}}}{{\img{{../assets/github.png}}}}'
+    link = f'\href{{{links[args.key]}}}{{\img{{../latex-src/github.png}}}}'
 
     print(link)
 

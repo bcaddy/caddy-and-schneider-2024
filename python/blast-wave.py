@@ -42,7 +42,7 @@ def main():
     if args.out_path:
         OutPath = pathlib.Path(str(args.out_path))
     else:
-        OutPath = pathlib.Path(__file__).resolve().parent.parent / 'assets' / '3-mhd-tests'
+        OutPath = pathlib.Path(__file__).resolve().parent.parent / 'latex-src'
 
     if args.run_cholla:
         shared_tools.cholla_runner(param_file_name=f'mhd_blast.txt',

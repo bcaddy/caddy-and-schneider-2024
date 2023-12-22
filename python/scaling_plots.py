@@ -133,7 +133,7 @@ def cells_per_second_plot(scaling_data):
     legend = ax.legend(fontsize=15)
     fig.tight_layout()
 
-    output_path = shared_tools.repo_root / 'assets' / '3-mhd-tests' / f'scaling_tests_cells_per_second.pdf'
+    output_path = shared_tools.repo_root / 'latex-src' / f'scaling_tests_cells_per_second.pdf'
     fig.savefig(output_path, dpi=400)
 # ==============================================================================
 
@@ -192,7 +192,7 @@ def weak_scaling_efficiency(scaling_data):
     # legend = ax.legend(fontsize=15)
     fig.tight_layout()
 
-    output_path = shared_tools.repo_root / 'assets' / '3-mhd-tests' / f'scaling_tests_weak_efficiency.pdf'
+    output_path = shared_tools.repo_root / 'latex-src' / f'scaling_tests_weak_efficiency.pdf'
     fig.savefig(output_path, dpi=400)
 # ==============================================================================
 
@@ -254,7 +254,7 @@ def ms_per_timestep(scaling_data):
     legend = ax.legend(loc='upper left', fontsize=shared_tools.font_size_tiny)
     fig.tight_layout()
 
-    output_path = shared_tools.repo_root / 'assets' / '3-mhd-tests' / f'scaling_tests_ms_per_gpu.pdf'
+    output_path = shared_tools.repo_root / 'latex-src' / f'scaling_tests_ms_per_gpu.pdf'
     fig.savefig(output_path, dpi=400)
 # ==============================================================================
 

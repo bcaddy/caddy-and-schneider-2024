@@ -67,7 +67,7 @@ def main():
     if args.out_path:
         OutPath = pathlib.Path(str(args.out_path))
     else:
-        OutPath = pathlib.Path(__file__).resolve().parent.parent / 'assets' / '3-mhd-tests'
+        OutPath = pathlib.Path(__file__).resolve().parent.parent / 'latex-src'
 
     global shock_tubes
     if args.tube != ['all']:
