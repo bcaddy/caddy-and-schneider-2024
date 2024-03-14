@@ -39,9 +39,9 @@ Pittsburgh, PA 15260, USA}
     % S3: Performance results
     Cholla's MHD module can perform over 200 million cell updates per GPU-second while using the HLLD Riemann solver and second order reconstruction.
     % S4: How big of a grid can we do per GPU?
-    The inherently parallel nature of GPUs combined with increased memory in new hardware allows Cholla's MHD module to perform simulations with resolutions of $>450^3$ cells on a single GPU.
+    The inherently parallel nature of GPUs combined with increased memory in new hardware allows Cholla's MHD module to perform simulations with resolutions of $>450^3$ cells on a single GPU \textbf{(a single AMD Instinct™ MI250X Accelerator GCD)}.
     % S5: Scaling
-    We employ GPU direct MPI to attain nearly perfect weak scaling on the exascale supercomputer \textit{Frontier}, while using over 74,000 GPUs and simulating a total grid size of over 1.2 trillion cells.
+    We employ GPU direct MPI to attain nearly perfect weak scaling on the exascale supercomputer \textit{Frontier}, while using \textbf{over} 74,000 GPUs and simulating a total grid size of over \textbf{7}.2 trillion cells.
     % S6: We did test problems
     A suite of test problems highlights the accuracy of Cholla's MHD module and demonstrates that zero magnetic divergence in solutions is maintained to round off error.
     % S7: Summary of new testing framework
@@ -89,7 +89,7 @@ Over the past decade it has become increasingly clear that magnetohydrodynamics 
 
 Many studies have focused on the role of magnetic fields in galaxy evolution and have provided intriguing hints as to the possible effects of magnetic fields in galaxy dynamics \citep{shin_2008, banda_2016, grand_auriga_2017, pakmor_magnetic_2017, hopkins_but_2020, wibking_2021}. Different simulation methods, codes, and resolutions show varying impacts of magnetic fields, ranging from magnetic fields being largely irrelevant on large scales to magnetic fields being critically important in determining the evolution and structure of the interstellar medium (ISM), modifying galactic feedback, and influencing the structure of the circumgalactic medium (CGM) \citep{martin-alvarez_how_2020, dobbs_magnetic_2007, kim_vertical_2015, hanasz_global_2009, pakmor_simulations_2013, banda_2017}. A major factor in this uncertainty is the effect of numerical resolution on MHD simulations -- galactic magnetic fields are likely amplified by a turbulent dynamo, which operates over a large dynamic range \citep{martin-alvarez_three-phase_2018, beck_1996, gent_2021, carteret_2022, brandenburg_2023}. Resolving this dynamo requires extremely high resolution MHD simulations -- simulations that are now possible thanks to recent developments in hardware, numerical algorithms, and software.
 
-Modern numerical methods for MHD are sophisticated and robust, but even with highly optimized codes, MHD simulations remain very computationally expensive \citep{athena++_2020}. This computational expense is a result of the high number of floating point calculations required by modern finite-volume methods and the heavy memory bandwidth demands of MHD codes \citep{k_athena_2021}. In addition, MHD turbulent dynamos operate across a large dynamic range, from the full scale of a galaxy all the way down to a few parsecs or smaller, five or more orders of magnitude spatially \citep{pariev_magnetic_1_2007, pariev_magnetic_2_2007, ntormousi_dynamo_2020, galishnikova_tearing_2022}. As a result, high resolution simulations are critical in order to accurately capture the effects of magnetic fields in astrophysical simulations. This need has driven a push to develop MHD codes that can take advantage of modern computer architectures \citep[e.g.][]{schive_gamer-2_2018, almgren_castro_2020, zingale_castro_2020, shankar_gram-x_2022, liska_h-amr_2022, begue_cuharm_2023, holmen_early_2023}. The computational expense of MHD simulations, along with the advent of Graphics Processing Units (GPUs) as the primary source of computational power in new cutting edge supercomputers\footnote{https://www.top500.org}, thus necessitates the development of GPU-based astrophysical MHD simulation codes.
+Modern numerical methods for MHD are sophisticated and robust, but even with highly optimized codes, MHD simulations remain very computationally expensive \citep{athena++_2020}. This computational expense is a result of the high number of floating point calculations required by modern finite-volume methods and the heavy memory bandwidth demands of MHD codes \citep{k_athena_2021}. In addition, MHD turbulent dynamos operate across a large dynamic range, from the full scale of a galaxy all the way down to a few parsecs or smaller, five or more orders of magnitude spatially \citep{pariev_magnetic_1_2007, pariev_magnetic_2_2007, ntormousi_dynamo_2020, galishnikova_tearing_2022}. As a result, high resolution simulations are critical in order to accurately capture the effects of magnetic fields in astrophysical simulations. This need has driven a push to develop MHD codes that can take advantage of modern computer architectures \citep[e.g.][]{schive_gamer-2_2018, almgren_castro_2020, zingale_castro_2020, shankar_gram-x_2022, liska_h-amr_2022, begue_cuharm_2023, holmen_early_2023, parthenon_2023}. \textbf{Supercomputers are required to run inherently computationally expensive MHD simulations. The primary source of computational power in new cutting-edge supercomputers is Graphics Processing Units (GPUs)\footnote{\url{https://www.top500.org/lists/top500/2023/11/}}.Of the top ten supercomputers named in the November 2023 Top500 list, only one - Supercomputer Fugaku - does not rely on GPUs for the majority of their performance. Even that supercomputer uses custom CPUs that utilize vector processors similar to GPUs for much of its performance. The ubiquity of GPUs in modern supercomputers thus necessitates the development of GPU-based astrophysical MHD simulation codes.}
 
 The induction equation requires that the magnetic field be divergence free, i.e. the Universe does not contain magnetic monopoles. However, not all numerical methods for evolving the MHD equations maintain this constraint. In many particle-based schemes, for example, magnetic divergence is generated and is removed at each step, a method commonly known as divergence cleaning \citep{dedner_hyperbolic_2002}. Divergence cleaning is popular because it is simple and couples well to particle-based methods -- it essentially functions by computing the divergence regularly and subtracting it away. Divergence cleaning is also computationally cheaper than numerical methods that maintain a divergence-free solution, but typically leads to divergence errors on the level of a few percent \citep{dedner_hyperbolic_2002, pakmor_magnetizing_2020, van_de_voort_effect_2021}. While this error is small it could lead to unphysical solutions. However, a more accurate method for evolving the magnetic fields exists for grid based codes.
 
@@ -102,14 +102,14 @@ The other primary method for evolving the magnetic field is constrained transpor
 %   - why do we use this framework, what other options are there
 %   - we have a testing framework that allows for scalable development, makes it easier and faster to dev since they don't have to worry about breaking other peoples stuff
 % Note that K-Athena is not related to Athena and is no longer under development, it does use CT. AthenaPK is under active development and uses divergence cleaning
-The Cholla code (Computational Hydrodynamics On paraLLel Architectures) \citep{schneider_2015} is a fixed grid, finite volume hydrodynamics code for astrophysics that was designed to run natively on GPU-based supercomputers. It employs an unsplit 3D hydrodynamics integrator based on the Van Leer predictor-corrector method \citep{falle_1991, van_leer_2006} and was designed to be extended to MHD using constrained transport \citep{evans_1988}. This work presents the MHD extension of Cholla. Our MHD implementation largely follows the Van Leer + Constrained Transport (VL+CT) method presented in \cite{stone_2009} with modifications for GPUs. It also uses an HLLD Riemann solver \citep{hlld_2005} and includes second \citep{stone_2009} and third \citep{felker_2018} order reconstruction in the characteristic variables \citep{stone_athena_2008}.
+The Cholla code (Computational Hydrodynamics On paraLLel Architectures) \citep{schneider_2015} is a fixed grid, finite volume hydrodynamics code for astrophysics that was designed to run natively on GPU-based supercomputers. It employs an unsplit 3D hydrodynamics integrator based on the Van Leer predictor-corrector method \citep{falle_1991, van_leer_2006} and was designed to be extended to MHD using constrained transport \citep{evans_1988}. This work presents the MHD extension of Cholla. Our MHD implementation largely follows the Van Leer + Constrained Transport (VL+CT) method presented in \cite{stone_2009} with modifications for GPUs. It also uses an HLLD Riemann solver \citep{hlld_2005} and includes second \citep{stone_2009} and third \citep{felker_2018} order reconstruction in the characteristic variables \citep{stone_athena_2008}. \textbf{We also highlight implementation choices that are particularly relevant to solving these equations on GPUs.}
 
 %   - what kinds of sims?
 %     - giant turbulent boxes, mhd outflows of galaxies
-The extension of Cholla to include MHD allows the simulation of previously unreachable domains. The VL+CT integrator provides high accuracy results with divergences that are zero to round off error. Given current memory constraints, the code is fast enough that a $\sim450^3$ cell MHD simulation can be run on a single high end GPU, allowing research-quality simulations to be run with only a small number of local resources. In addition, Cholla scales up to power of the largest available supercomputers, enabling simulations up to $19,278^3 \approx 7.2$ trillion cells on \textit{Frontier}\footnote{\url{https://www.olcf.ornl.gov/frontier/}}, the world's first exascale supercomputer. This will allow MHD simulations of entire galaxies with a constant resolution of a few parsecs per cell, turbulent box simulations with many trillions of cells, or many thousands of lower resolution simulations to be computed rapidly. For example, with approximately the same computing resources used to evolve a $19,278^3$ simulation one could run thousands of $2,000^3$-cell simulations, enabling entire parameter studies with resolutions comparable to current cutting edge CPU-based simulations.
+The extension of Cholla to include MHD allows the simulation of previously unreachable domains. The VL+CT integrator provides high accuracy results with divergences that are zero to round off error. Given current memory constraints, the code is fast enough that a $\sim450^3$ cell MHD simulation can be run on a single \textbf{AMD Instinct™ MI250X Accelerator Graphics Compute Die (GCD) (logically a single GPU) with 64GB of GPU memory per GCD}, allowing \textbf{high resolution} simulations to be run with only a small number of local resources. In addition, Cholla scales up to power of the largest available supercomputers, enabling simulations up to $19,278^3 \approx 7.2$ trillion cells on \textit{Frontier}\footnote{\url{https://www.olcf.ornl.gov/frontier/}}, the world's first exascale supercomputer. This will allow MHD simulations of entire galaxies with a constant resolution of a few parsecs per cell, turbulent box simulations with many trillions of cells, or many thousands of lower resolution simulations to be computed rapidly. For example, with approximately the same computing resources used to evolve a $19,278^3$ simulation one could run thousands of $2,000^3$-cell simulations, enabling entire parameter studies with resolutions comparable to current cutting edge CPU-based simulations.
 
 % - Testing/CI stuff
-In addition to requiring complex algorithms to produce accurate results, modern community-developed simulation codes like Cholla require robust testing and software-development infrastructure to maintain their reliability. This work also presents the implementation of an automated testing/continuous integration (CI) pipeline for Cholla. CI tools have expanded rapidly in functionality and popularity over the last 20 years and their usefulness in scientific software is well established \citep{beck_1999, wilson_2014,wilson_2017}. Particularly in the last 5 years with the advent of GitHub Actions and similar easily accessible and cheap (or even free) tools, CI pipelines have become much more straightforward to set up and run even for small groups and individuals. We present our implementation of testing and CI that is designed to be straightforward and scalable from a single GPU all the way up to an exascale machine.
+In addition to requiring complex algorithms to produce accurate results, modern community-developed simulation codes like Cholla require robust testing and software-development infrastructure to maintain their reliability. This work also presents the implementation of an automated testing/continuous integration (CI) pipeline for Cholla. CI tools have expanded rapidly in functionality and popularity over the last 20 years and their usefulness in scientific software is well established \citep{beck_1999, wilson_2014,wilson_2017}. Particularly in the last 5 years with the advent of GitHub Actions, Jenkins, and similar easily accessible and cheap (or even free) tools, CI pipelines have become much more straightforward to set up and run even for small groups and individuals. We present our implementation of testing and CI that is designed to be straightforward and scalable from a single GPU all the way up to an exascale machine.
 
 % - outline paper
 %   - alude to performance and testing at scale
@@ -119,9 +119,9 @@ The outline of this paper is as follows. In Section \ref{sec:methods}, we descri
 \section{Methods}
 \label{sec:methods}
 
-Magnetic fields play a key role in many astrophysical phenomena, but are often neglected in numerical simulations due to the computational expense of magnetohydrodynamics. Part of this expense arises due to the wide range of temporal and physical scales over which magnetic field dynamos operate. Numerical integration of the MHD equations is also challenging; the additional waves compared to hydrodynamics and the requirement to maintain the divergence free condition result in considerable added complexity.
+% Magnetic fields play a key role in many astrophysical phenomena, but are often neglected in numerical simulations due to the computational expense of magnetohydrodynamics. Part of this expense arises due to the wide range of temporal and physical scales over which magnetic field dynamos operate. Numerical integration of the MHD equations is also challenging; the additional waves compared to hydrodynamics and the requirement to maintain the divergence free condition result in considerable added complexity.
 
-Given these considerations, MHD simulations often need to be both high resolution and use robust, divergence free methods, which tend to increase their computational cost. This limitation can be overcome by harnessing new GPU based supercomputers efficiently. Thus, we have elected to expand the existing massively parallel GPU-based hydrodynamics code, Cholla, to incorporate the effects of MHD. In this section we describe the equations solved and methods used by the MHD module of Cholla. While the algorithms themselves are not new, our particular combination of equations is not contained in any one reference, so we outline the full method here. We also highlight implementation choices that are particularly relevant to solving these equations on GPUs.
+% Given these considerations, MHD simulations often need to be both high resolution and use robust, divergence free methods, which tend to increase their computational cost. This limitation can be overcome by harnessing new GPU based supercomputers efficiently. Thus, we have elected to expand the existing massively parallel GPU-based hydrodynamics code, Cholla, to incorporate the effects of MHD. In this section we describe the equations solved and methods used by the MHD module of Cholla. While the algorithms themselves are not new, our particular combination of equations is not contained in any one reference, so we outline the full method here. We also highlight implementation choices that are particularly relevant to solving these equations on GPUs.
 
 \subsection{Magnetohydrodynamics}
 \label{sec:methods-mhd}
@@ -158,25 +158,25 @@ In practice these equations are used in their vector form, where $\boldsymbol{U}
 
 \begin{align}
     \boldsymbol{U} &= \begin{bmatrix}
-            \rho &
-            v_x &
-            v_y &
-            v_z &
-            E   &
-            B_x &
-            B_y &
+            \rho , &
+            \rho v_x, &
+            \rho v_y, &
+            \rho v_z, &
+            E,   &
+            B_x, &
+            B_y, &
             B_z
          \end{bmatrix}
     \\
     \boldsymbol{W} &= \begin{bmatrix}
-            \rho &
-            v_x &
-            v_y &
-            v_z &
-            P   &
-            B_x &
-            B_y &
-            B_z
+            \rho, &
+            v_x, &
+            v_y, &
+            v_z, &
+            P,   &
+            B_x, &
+            B_y, &
+            B_z,
          \end{bmatrix}.
 \end{align}
 The conservation equations, in Cartesian coordinates, can then be rewritten as
@@ -402,8 +402,8 @@ We first update the density, momenta, and energy, but not the magnetic fields, u
     \begin{aligned}
         \boldsymbol{U}^{n+1/2}_{i,j,k} = \boldsymbol{U}^{n}_{i,j,k}
         - \frac{\Delta t}{\Delta x} \left( \boldsymbol{F}^n_{x,i+1/2,j,k} - \boldsymbol{F}^n_{x,i-1/2,j,k} \right) \\
-        - \frac{\Delta t}{\Delta y} \left( \boldsymbol{F}^n_{y,i+1/2,j,k} - \boldsymbol{F}^n_{y,i-1/2,j,k} \right) \\
-        - \frac{\Delta t}{\Delta z} \left( \boldsymbol{F}^n_{z,i+1/2,j,k} - \boldsymbol{F}^n_{z,i-1/2,j,k} \right).
+        - \frac{\Delta t}{\Delta y} \left( \boldsymbol{F}^n_{y,i,j+1/2,k} - \boldsymbol{F}^n_{y,i,j+1/2,k} \right) \\
+        - \frac{\Delta t}{\Delta z} \left( \boldsymbol{F}^n_{z,i,j,k+1/2} - \boldsymbol{F}^n_{z,i,j,k+1/2} \right).
     \end{aligned}
 \end{equation}
 
@@ -498,8 +498,8 @@ Update the cell-centered hydro variables from $t = n$ to $t = n + \Delta t$ usin
     \begin{aligned}
         \boldsymbol{U}^{n+1}_{i,j,k} = \boldsymbol{U}^{n}_{i,j,k}
         &- \frac{\Delta t}{\Delta x} \left( \boldsymbol{F}^{n+1/2}_{x,i+1/2,j,k} - \boldsymbol{F}^{n+1/2}_{x,i-1/2,j,k} \right) \\
-        &- \frac{\Delta t}{\Delta y} \left( \boldsymbol{F}^{n+1/2}_{y,i+1/2,j,k} - \boldsymbol{F}^{n+1/2}_{y,i-1/2,j,k} \right) \\
-        &- \frac{\Delta t}{\Delta z} \left( \boldsymbol{F}^{n+1/2}_{z,i+1/2,j,k} - \boldsymbol{F}^{n+1/2}_{z,i-1/2,j,k} \right).
+        &- \frac{\Delta t}{\Delta y} \left( \boldsymbol{F}^{n+1/2}_{y,i,j+1/2,k} - \boldsymbol{F}^{n+1/2}_{y,i,j+1/2,k} \right) \\
+        &- \frac{\Delta t}{\Delta z} \left( \boldsymbol{F}^{n+1/2}_{z,i,j,k+1/2} - \boldsymbol{F}^{n+1/2}_{z,i,j,k+1/2} \right).
     \end{aligned}
 \end{equation}
 
@@ -670,7 +670,7 @@ Figure \ref{fig:afl} shows the mean of cell centered $B^2$, normalized to the in
 
 MHD Riemann problems are standard tests for new MHD codes and methods due to their mix of different flow types and extreme conditions. There are many different MHD Riemann problems in the literature \citep{brio_wu_1988, einfeldt_1991, ryu_jones_1995, dai_woodward_1998}; we have chosen to present five that cover a variety of challenging cases.
 
-The Riemann problem is defined as having a single state for half of the domain which suddenly switches at a discontinuity to a different state on the other half of the domain. All of Riemann problems here have a domain of $1\times1\times1$ and resolution of $512\times16\times16$ and are run until the $t_{max}$ for that particular Riemann problem and utilize parabolic reconstruction with limiting in the characteristic variables. All have been run in all three spatial directions with both possible orientations of the two states and achieved identical results. The details of each left and right state are given in Table \ref{table:riemann}.
+The Riemann problem is defined as \textbf{a domain which has a discontinuity between two different states within it}. All of Riemann problems here have a domain of $1\times1\times1$ and resolution of $512\times16\times16$ and are run until the $t_{max}$ for that particular Riemann problem and utilize parabolic reconstruction with limiting in the characteristic variables. All have been run in all three spatial directions with both possible orientations of the two states and achieved identical results. The details of each left and right state are given in Table \ref{table:riemann}.
 
 % Can add a * after "deluxetable" in begin and end to let it span 2 columns
 
@@ -877,7 +877,7 @@ All of the weak scaling tests shown were performed with a slow magnetosonic wave
 
 Our primary scaling tests were performed on the \textit{Frontier} Supercomputer at the Oak Ridge Leadership Computing Facility. \textit{Frontier} utilizes AMD Radeon Instinct MI250X GPUs, each of which contains two Graphics Compute Dies (GCDs) that largely function as separate GPUs and can be treated as such in software. Thus, for the sake of clear comparison to other systems, we will refer to each GCD as a single GPU for the remainder of this paper.
 
-On \textit{Frontier} Cholla updates $2.04\times10^8$ cells per second per GPU when running with a single GPU. On 74,088 GPUs, nearly the entirety of \textit{Frontier}, Cholla performs $1.67\times10^8$ cell updates per second per GPU, with a weak scaling efficiency of 82.2\%. The 74,088 GPU run updated a total of $1.24\times10^{13}$ cells per second on a total grid size of $19,278^3$ cells. This performance is comparable to other similar optimized GPU codes (see e.g. Figures 9 and 10 in \cite{parthenon_2023})\footnote{Note that the weak scaling plots in \cite{parthenon_2023} are normalized to single node performance, not single GPU performance, and they report performance for a 2nd order hydrodynamic solver, not MHD.}
+On \textit{Frontier} Cholla updates $2.04\times10^8$ cells per second per GPU when running with a single GPU. On 74,088 GPUs, nearly the entirety of \textit{Frontier}, Cholla performs $1.67\times10^8$ cell updates per second per GPU, with a weak scaling efficiency of 82.2\%. The 74,088 GPU run updated a total of $1.24\times10^{13}$ cells per second on a total grid size of $19,278^3$ cells. \textbf{This performance is comparable to other similar optimized GPU codes (see e.g. Figures 9 and 10 in \cite{parthenon_2023})\footnote{Note that the weak scaling plots in \cite{parthenon_2023} are normalized to single node performance, not single GPU performance, and they report performance for a 2nd order hydrodynamic solver, not MHD.}}
 
 With a single MPI rank there is no communication overhead, as no halo cells need to be exchanged. As the number of ranks grows the MPI overhead quickly stabilizes at around 15ms with a moderate increase when running on the full size of \textit{Frontier}. Perhaps most importantly, the VL+CT integrator scales almost perfectly and takes up most of the time on each time step, dominating over the MPI communication time by nearly a factor of 10. Overall these tests demonstrate that Cholla has excellent weak scaling up to the full size of \textit{Frontier}.
 
@@ -934,7 +934,7 @@ Our solution to these issues was to use a mix of two different systems. When a p
 
 We have presented the MHD extension to Cholla, a massively parallel, GPU native, astrophysical simulation code. MHD in Cholla uses the Van Leer plus Constrained Transport MHD integrator (VL+CT) \citep{stone_2009}, the HLLD Riemann solver \citep{hlld_2005}, and includes multiple high order reconstruction methods to model numerical solutions to the Eulerian ideal MHD equations on a static mesh.
 
-We showed the modifications required to implement MHD on GPUs compared to CPUs and discussed challenges working within the limits of GPUs. One major challenge was moving computational work and data storage from the CPU to the GPU. Previous versions of Cholla did some of the computation on the CPU and used CPU memory to effectively expand GPU memory. This required regularly copying data between the CPU and the GPU which became a performance bottleneck. The current version of Cholla maintains all the data, and the vast majority of the work, on the GPU which has led to a considerable speedup. As demonstrated in Section \ref{sec:mhd-perf-tests}, these optimizations combined with the highly parallel nature of GPUs make MHD in Cholla extremely fast, with over 200 million cell updates per GPU-second when running on a single GPU. Cholla also demonstrates excellent weak scaling, and maintains a performance of over 160 million cell updates per GPU-second when scaled up to 74,088 GPUs; a total of 12.4 trillion cell updates per second (see Figure \ref{fig:scaling-weak-efficiency}).
+We showed the modifications required to implement MHD on GPUs compared to CPUs and discussed challenges working within the limits of GPUs. One major challenge was moving computational work and data storage from the CPU to the GPU. Previous versions of Cholla did some of the computation on the CPU and used CPU memory to effectively expand GPU memory. This required regularly copying data between the CPU and the GPU which became a performance bottleneck. The current version of Cholla maintains all the data, and the vast majority of the work, on the GPU which has led to a considerable speedup. As demonstrated in Section \ref{sec:mhd-perf-tests}, these optimizations combined with the highly parallel nature of GPUs make MHD in Cholla extremely fast, with over 200 million cell updates per GPU-second when running on a single \textbf{AMD Instinct™ MI250X Accelerator Graphics Compute Die (GCD) (logically a single GPU)}. Cholla also demonstrates excellent weak scaling, and maintains a performance of over 160 million cell updates per GPU-second when scaled up to 74,088 GPUs; a total of 12.4 trillion cell updates per second (see Figure \ref{fig:scaling-weak-efficiency}).
 
 We have also presented a suite of canonical MHD tests in Section \ref{sec:mhd-tests}. These tests demonstrate the accuracy of Cholla across a broad range of problems. They also demonstrate that the VL+CT MHD algorithm does an excellent job of maintaining the divergence free condition even in highly challenging settings.
 
