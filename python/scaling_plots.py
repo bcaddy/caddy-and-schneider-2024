@@ -35,11 +35,11 @@ plt.close('all')
 
 # ==============================================================================
 def main():
-    data_path = shared_tools.repo_root / 'scaling-tests' / 'data' / '2023-09-20-high-res-plmc-identify-bad-ranks'
+    data_path = shared_tools.repo_root / 'scaling-tests' / 'data' / '2024-03-13-fused-pcm'
 
     scaling_data = load_data(data_path)
 
-    # cells_per_second_plot(scaling_data)
+    cells_per_second_plot(scaling_data)
     weak_scaling_efficiency(scaling_data)
     ms_per_timestep(scaling_data)
 
@@ -98,7 +98,7 @@ def cells_per_second_plot(scaling_data):
 
     # Print the performance results
     for i in range(len(x)):
-        print(f'Ranks: {int(x[i]):5d} updating at {round(y[i]/1.E8,2):3.2f}E8 cell updates per second per gpu')
+        print(f'Ranks: {int(x[i]):5d} updating at {round(y[i]/1.E8,4):3.4f}E8 cell updates per second per gpu')
 
     # Setup the rest of the plot
     ax.set_xlim(xmin = 0.7, xmax = 1E5)
