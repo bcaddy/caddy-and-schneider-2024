@@ -15,6 +15,7 @@ import pathlib
 import matplotlib
 import matplotlib.ticker
 import matplotlib.pyplot as plt
+import argparse
 import shared_tools
 
 matplotlib.use("Agg")
@@ -36,14 +37,26 @@ plt.close('all')
 # ==============================================================================
 def main():
     data_path = shared_tools.repo_root / 'scaling-tests' / 'data' / '2024-03-13-fused-pcm'
+    data_path_strong = shared_tools.repo_root / 'scaling-tests' / 'data' / '2024-03-23-strong-scaling'
 
-    scaling_data = load_data(data_path)
+    # Check for CLI arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-w', '--weak',   action="store_true", help='Generate the weak scaling plots')
+    parser.add_argument('-s', '--strong', action="store_true", help='Generate the strong scaling plot')
+    args = parser.parse_args()
 
-    cells_per_second_plot(scaling_data)
-    weak_scaling_efficiency(scaling_data)
-    ms_per_timestep(scaling_data)
+    if args.weak:
+        scaling_data = load_data(data_path)
 
-    shared_tools.update_plot_entry('scaling', 'python/scaling_plots.py')
+        cells_per_second_plot(scaling_data)
+        weak_scaling_efficiency(scaling_data)
+        ms_per_timestep(scaling_data)
+
+        shared_tools.update_plot_entry('scaling', 'python/scaling_plots.py')
+
+    if args.strong:
+        strong_scaling(data_path_strong)
+        shared_tools.update_plot_entry('strong-scaling', 'python/scaling_plots.py')
 # ==============================================================================
 
 # ==============================================================================
@@ -299,6 +312,69 @@ def cells_per_second_per_gpu(scaling_data, name, color, label, ax, marker_size, 
 
     ax.plot(x, y, '--', c=color, marker=marker_style, markersize=marker_size, label=label)
     return ax, x, y
+# ==============================================================================
+
+# ==============================================================================
+def strong_scaling(data_path):
+
+    # Plot settings
+    file_path = data_path / 'run_timing.log'
+    scaling_linestyle  = '--'
+    alpha              = 0.4
+    scaling_color      = 'black'
+
+
+    # get header info
+    with open(file_path, 'r') as file:
+        lines        = file.readlines()
+        header       = lines[5][1:].split()
+
+    scaling_data = pd.read_csv(file_path, delim_whitespace=True, comment='#', skiprows=4, names=header)
+
+    # Compute the speed up
+    num_ranks = np.array(scaling_data['n_proc'])
+    speedup   = np.array(np.max(scaling_data['Total'])/scaling_data['Total'])
+
+    num_ranks = num_ranks
+    speedup   =   speedup
+
+    # Print the performance results
+    for i in range(len(speedup)):
+        print(f'Ranks: {int(num_ranks[i]):5d}, speedup: {round(speedup[i],2):>3.2f}, Strong Scaling Efficiency: {round(100*speedup[i] / num_ranks[i],2):3.2f}%')
+
+    # Instantiate Plot
+    fig = plt.figure(1, figsize=(shared_tools.fig_height, shared_tools.fig_height))
+    ax = plt.gca()
+
+    # Set plot settings
+    color_total        = 'black'#'#D55E00'
+    marker_style_total = '^'
+    marker_size        = 5
+
+    # Plot the data
+    ax.plot(num_ranks, speedup, linestyle='--', c=color_total, marker=marker_style_total, markersize=marker_size, label='Total Runtime (excluding initialization)')
+
+    # Plot the perfect scaling line
+    ax.plot(num_ranks, num_ranks, color=scaling_color, alpha=alpha, linestyle=scaling_linestyle, label='Ideal Scaling')
+
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+
+    ax.tick_params(which='both', direction='in', labelsize=shared_tools.font_size_normal, bottom=True, top=True, left=True, right=True)
+    # ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter())
+
+    plt.grid(axis='x', color='0.5', which='major')
+    plt.grid(axis='y', color='0.5', which='major')
+
+    ax.set_ylabel(r'Speedup (vs. single GPU)', fontsize=shared_tools.font_size_normal)
+    ax.set_xlabel(r'Number of GPUs', fontsize=shared_tools.font_size_normal)
+    ax.set_box_aspect(1)
+
+    legend = ax.legend(fontsize=9)
+    fig.tight_layout()
+
+    output_path = shared_tools.repo_root / 'latex-src' / f'scaling_test_strong.pdf'
+    fig.savefig(output_path, dpi=400)
 # ==============================================================================
 
 if __name__ == '__main__':

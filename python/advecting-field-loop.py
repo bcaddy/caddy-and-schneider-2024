@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 import pathlib
+import scipy
 
 import shared_tools
 
@@ -34,6 +35,7 @@ radius        = 0.3
 
 # Plotting data save path
 save_path = shared_tools.repo_root / 'python' / 'afl.pkl'
+save_path_slice  = shared_tools.repo_root / 'python' / 'afl_slice.pkl'
 
 # ==============================================================================
 def main():
@@ -44,6 +46,8 @@ def main():
     parser.add_argument('-r', '--run_cholla', action="store_true", help='Runs cholla to generate all the data')
     parser.add_argument('-f', '--figure', action="store_true", help='Generate the plots')
     parser.add_argument('-d', '--data', action="store_true", help='Load and generate the data to be plotted.')
+    parser.add_argument('--slicedata', action="store_true", help='Load and generate the slice data to be plotted.')
+    parser.add_argument('--slicefigure', action="store_true", help='Plot the slice figure')
 
     args = parser.parse_args()
 
@@ -66,6 +70,13 @@ def main():
     if args.figure:
         plotAFL(OutPath)
         shared_tools.update_plot_entry("afl", 'python/advecting-field-loop.py')
+
+    if args.slicedata:
+        shared_tools.pickle_dictionary(load_slices(), save_path_slice)
+
+    if args.slicefigure:
+        plotAFL_slice(OutPath)
+        shared_tools.update_plot_entry("afl_slice", 'python/advecting-field-loop.py')
 
 # ==============================================================================
 
@@ -125,6 +136,33 @@ def load_data():
         b_squared_avg[key] /= b_squared_avg[key][0]
 
     return {'b_squared_avg':b_squared_avg, 'divergence':divergence, 'times':times}
+# ==============================================================================
+
+# ==============================================================================
+def load_slices():
+
+    def load_slice(filename):
+        data = shared_tools.load_conserved_data(filename, load_gamma=True, load_resolution=True)
+        data = shared_tools.center_magnetic_fields(data)
+        data = shared_tools.compute_velocities(data)
+        data = shared_tools.compute_derived_quantities(data, data['gamma'])
+
+        B_energy = data['magnetic_energy']
+
+        side_slice = B_energy[:,B_energy.shape[1]//2,:]
+
+        top_slice = scipy.ndimage.rotate(B_energy, angle=45, axes=(1,2))
+        top_slice = top_slice[:,15:-16,top_slice.shape[2]//2]
+
+        return np.rot90(side_slice), np.rot90(top_slice)
+
+    init_side, init_top   = load_slice('afl_n256_0')
+    final_side, final_top = load_slice('afl_n256_10')
+
+    max_val = np.max(np.array([init_side, final_side, init_top, final_top]))
+
+    return {'init_side':init_side, 'init_top':init_top,
+            'final_side':final_side, 'final_top':final_top, 'max':max_val}
 # ==============================================================================
 
 # ==============================================================================
@@ -188,6 +226,41 @@ def plotAFL(outPath):
     # Save the figure and close it
     fig.tight_layout()
     plt.savefig(outPath / f'afl.pdf', transparent = True)
+    plt.close()
+# ==============================================================================
+
+# ==============================================================================
+def plotAFL_slice(outPath):
+    # Plotting info
+    line_width         = 0.4
+    num_contours       = 30
+    font_size          = 20
+
+     # Load data
+    data = shared_tools.unpickle_dictionary(save_path_slice)
+
+    # Setup figure
+    figSize = 10.0
+    fig, subPlot = plt.subplots(1,4, layout='constrained', figsize = (2*shared_tools.fig_width, shared_tools.fig_height))
+
+    # Plot the data
+    subPlot[0].imshow(data['init_top'],   vmin=0.0, vmax=data['max'], cmap='Blues')#shared_tools.color_maps["magnetic_energy"])
+    subPlot[1].imshow(data['final_top'],  vmin=0.0, vmax=data['max'], cmap='Blues')#shared_tools.color_maps["magnetic_energy"])
+    subPlot[2].imshow(data['init_side'],  vmin=0.0, vmax=data['max'], cmap='Blues')#shared_tools.color_maps["magnetic_energy"])
+    subPlot[3].imshow(data['final_side'], vmin=0.0, vmax=data['max'], cmap='Blues')#shared_tools.color_maps["magnetic_energy"])
+
+    # # Set ticks and grid
+    for i in range(4):
+        subPlot[i].tick_params(labelleft=False, labelbottom=False,bottom=False, left=False)
+
+    # Set labels
+    subPlot[0].text(.01, .99, r'$t=0.0$', ha='left', va='top', transform=subPlot[0].transAxes, fontsize=shared_tools.font_size_normal)
+    subPlot[1].text(.01, .99, r'$t=1.0$', ha='left', va='top', transform=subPlot[1].transAxes, fontsize=shared_tools.font_size_normal)
+    subPlot[2].text(.01, .99, r'$t=0.0$', ha='left', va='top', transform=subPlot[2].transAxes, fontsize=shared_tools.font_size_normal)
+    subPlot[3].text(.01, .99, r'$t=1.0$', ha='left', va='top', transform=subPlot[3].transAxes, fontsize=shared_tools.font_size_normal)
+
+    # Save the figure and close it
+    plt.savefig(outPath / f'afl_slices.pdf', transparent = True)
     plt.close()
 # ==============================================================================
 
