@@ -1797,3 +1797,65 @@ url = {https://github.com/HDFGroup/hdf5}
   year={1991},
   publisher={ACM New York, NY, USA}
 }
+
+@article{mignone_2010,
+	title = {A second-order unsplit {Godunov} scheme for cell-centered {MHD}: {The} {CTU}-{GLM} scheme},
+	volume = {229},
+	issn = {00219991},
+	shorttitle = {A second-order unsplit {Godunov} scheme for cell-centered {MHD}},
+	url = {https://linkinghub.elsevier.com/retrieve/pii/S002199910900655X},
+	doi = {10.1016/j.jcp.2009.11.026},
+	abstract = {We assess the validity of a single step Godunov scheme for the solution of the magnetohydrodynamics equations in more than one dimension. The scheme is second-order accurate and the temporal discretization is based on the dimensionally unsplit Corner Transport Upwind (CTU) method of Colella. The proposed scheme employs a cell-centered representation of the primary ﬂuid variables (including magnetic ﬁeld) and conserves mass, momentum, magnetic induction and energy. A variant of the scheme, which breaks momentum and energy conservation, is also considered. Divergence errors are transported out of the domain and damped using the mixed hyperbolic/parabolic divergence cleaning technique by Dedner et al. (2002) [11]. The strength and accuracy of the scheme are veriﬁed by a direct comparison with the eight-wave formulation (also employing a cell-centered representation) and with the popular constrained transport method, where magnetic ﬁeld components retain a staggered collocation inside the computational cell. Results obtained from two- and three-dimensional test problems indicate that the newly proposed scheme is robust, accurate and competitive with recent implementations of the constrained transport method while being considerably easier to implement in existing hydro codes.},
+	language = {en},
+	number = {6},
+	urldate = {2024-03-24},
+	journal = {Journal of Computational Physics},
+	author = {Mignone, Andrea and Tzeferacos, Petros},
+	month = mar,
+	year = {2010},
+	pages = {2117--2138},
+	file = {Mignone and Tzeferacos - 2010 - A second-order unsplit Godunov scheme for cell-centered MHD The CTU-GLM scheme.pdf:/Users/Bob/Zotero/storage/MARJJ5WT/Mignone and Tzeferacos - 2010 - A second-order unsplit Godunov scheme for cell-centered MHD The CTU-GLM scheme.pdf:application/pdf},
+}
+@Inbook{Powell1997,
+author="Powell, Kenneth G.",
+editor="Hussaini, M. Yousuff
+and van Leer, Bram
+and Van Rosendale, John",
+title="An Approximate Riemann Solver for Magnetohydrodynamics",
+bookTitle="Upwind and High-Resolution Schemes",
+year="1997",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="570--583",
+abstract="An approximate Riemann solver is developed for the governing equations of ideal magnetohydrodynamics (MHD). The Riemann solver has an eight-wave structure, where seven of the waves are those used in previous work on upwind schemes for MHD, and the eighth wave is related to the divergence of the magnetic field. The structure of the eighth wave is not immediately obvious from the governing equations as they are usually written, but arises from a modification of the equations that is presented in this paper. The addition of the eighth wave allows multi-dimensional MHD problems to be solved without the use of staggered grids or a projection scheme, one or the other of which was necessary in previous work on upwind schemes for MHD. A test problem made up of a shock tube with rotated initial conditions is solved to show that the two-dimensional code yields answers consistent with the one-dimensional methods developed previously.",
+isbn="978-3-642-60543-7",
+doi="10.1007/978-3-642-60543-7_23",
+url="https://doi.org/10.1007/978-3-642-60543-7_23"
+}
+@article{rossmanith_2006,
+author = { Rossmanith, James A.},
+title = {An Unstaggered, High‐Resolution Constrained Transport Method for Magnetohydrodynamic Flows},
+journal = {SIAM Journal on Scientific Computing},
+volume = {28},
+number = {5},
+pages = {1766-1797},
+year = {2006},
+doi = {10.1137/050627022},
+
+URL = {https://doi.org/10.1137/050627022},
+eprint = {https://doi.org/10.1137/050627022}
+}
+@article{Crockett_2005,
+title = {An unsplit, cell-centered Godunov method for ideal MHD},
+journal = {Journal of Computational Physics},
+volume = {203},
+number = {2},
+pages = {422-448},
+year = {2005},
+issn = {0021-9991},
+doi = {https://doi.org/10.1016/j.jcp.2004.08.021},
+url = {https://www.sciencedirect.com/science/article/pii/S0021999104003869},
+author = {Robert K. Crockett and Phillip Colella and Robert T. Fisher and Richard I. Klein and Christopher F. McKee},
+keywords = {Magnetohydrodynamics, Numerical approximation, Stability and convergence of difference schemes},
+abstract = {We present a second-order Godunov algorithm for multidimensional, ideal MHD. Our algorithm is based on the unsplit formulation of Colella (J. Comput. Phys. 87, 1990), with all of the primary dependent variables centered at the same location. To properly represent the divergence-free condition of the magnetic fields, we apply a discrete projection to the intermediate values of the field at cell faces, and apply a filter to the primary dependent variables at the end of each time step. We test the method against a suite of linear and nonlinear tests to ascertain accuracy and stability of the scheme under a variety of conditions. The test suite includes rotated planar linear waves, MHD shock tube problems, low-beta flux tubes, and a magnetized rotor problem. For all of these cases, we observe that the algorithm is second-order accurate for smooth solutions, converges to the correct weak solution for problems involving shocks, and exhibits no evidence of instability or loss of accuracy due to the possible presence of non-solenoidal fields.}
+}
