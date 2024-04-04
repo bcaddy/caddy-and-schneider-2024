@@ -272,7 +272,7 @@ The first step is to compute the time step. Cholla implements uniform time steps
         \right),
 \end{equation}
 
-\noindent where $\Delta t$ is the time step, $C_{CFL} \leq 0.5$ is the CFL number, $\mid v^n_{l,i,j,k}\mid $ is the magnitude of the velocity in the $l$ direction velocity in the ${i,j,k}$ cell, and $c^n_f $ is the fast magnetosonic wave-speed computed using \emph{cell centered} values. \textbf{Note that this is an estimate of the CFL condition and Cholla uses 0.3 by default.} The fast and slow magnetosonic speeds are
+\noindent where $\Delta t$ is the time step, $C_{CFL} \leq 0.5$ is the CFL number, $\mid v^n_{l,i,j,k}\mid $ is the magnitude of the velocity in the $l$ direction velocity in the ${i,j,k}$ cell, and $c^n_f $ is the fast magnetosonic wave-speed computed using \emph{cell centered} values. \textbf{The method is formally accurate at $C_{CFL} = 0.5$, though that is an estimate\citep{stone_2009}. We have found empirically that the method is not stable at $C_{CFL} = 0.5$ but is stable at $C_{CFL} = 0.5$\footnote{Typically we use $C_{CFL} = 0.3$ to improve the accuracy of the operator splitting}.} The fast and slow magnetosonic speeds are
 
 \begin{equation}
     c_{f,s} = \sqrt{\frac
@@ -762,7 +762,7 @@ The \textbf{typical Riemann problem setup uses a domain with a discontinuity at 
     
         %% All data must appear between the \startdata and \enddata commands
         % Riemann Problem      rho_R   P_R    V_x,R   V_y,R V_z,R B_y,R                     B_z,R
-        Brio \& Wu           & 0.128 & 0.1  & 0     & 0   & 0   & -1                      & 0                       \\ \hline
+        Brio \& Wu           & 0.125 & 0.1  & 0     & 0   & 0   & -1                      & 0                       \\ \hline
         Dai \& Woodward      & 1     & 1    & 0     & 0   & 0   & $\frac{4}{\sqrt{4\pi}}$ & $\frac{2}{\sqrt{4\pi}}$ \\ \hline
         Ryu \& Jones 1a      & 1     & 1    & -10   & 0   & 0   & $\frac{5}{\sqrt{4\pi}}$ & 0                       \\ \hline
         Ryu \& Jones 4d      & 0.3   & 0.2  & 0     & 0   & 1   & 1                       & 0                       \\ \hline
