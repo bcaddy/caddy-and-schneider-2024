@@ -7,10 +7,10 @@
 \usepackage{BobsPreamble}
 
 \newcommand*{\img}[1]{%
-    \raisebox{-.3\baselineskip}{%
+    \raisebox{-.05\baselineskip}{%
         \includegraphics[
-        height=\baselineskip,
-        width=\baselineskip,
+        height=0.65\baselineskip,
+        % width=\baselineskip,
         keepaspectratio,
         ]{#1}%
     }%
@@ -118,7 +118,7 @@ In addition to requiring complex algorithms to produce accurate results, modern 
 
 % - outline paper
 %   - alude to performance and testing at scale
-The outline of this paper is as follows. In Section \ref{sec:methods}, we describe our implementation of the VL+CT algorithm in detail along with the modifications we made to efficiently run on GPUs. In Section \ref{sec:mhd-tests}, we demonstrate the correctness and accuracy of Cholla on a suite of MHD test problems. We also describe Cholla's performance and weak scaling behavior on up to 74,088 GPUs using \textit{Frontier}. In Section \ref{sec:testing}, we discuss the new continuous integration and automated testing framework. We conclude in Section \ref{sec:summary}. In figure captions the GitHub icon, \img{github.png}, links to the version of the python script which generated that figure. These scripts, and the associated GitHub repository, have sufficient information to reproduce the figures shown in this paper.
+The outline of this paper is as follows. In Section \ref{sec:methods}, we describe our implementation of the VL+CT algorithm in detail along with the modifications we made to efficiently run on GPUs. In Section \ref{sec:mhd-tests}, we demonstrate the correctness and accuracy of Cholla on a suite of MHD test problems. We also describe Cholla's performance and weak scaling behavior on up to 74,088 GPUs using \textit{Frontier}. In Section \ref{sec:testing}, we discuss the new continuous integration and automated testing framework. We conclude in Section \ref{sec:summary}. In figure captions the \textbf{Zenodo icon, \img{zenodo-gradient-200.png}, links to the Zenodo repository that contains the python scripts to generate each figure. This Zenodo repository has sufficient information to reproduce the figures shown in this paper.}
 
 
 \section{Methods}
@@ -603,7 +603,7 @@ These L2 errors are plotted in \autoref{fig:linear-wave-convergence} for both th
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \includegraphics[width=\linewidth]{linear_convergence.pdf}
-    \caption{Linear Wave Convergence of all four MHD waves using PLM and PPM reconstruction. \href{https://github.com/bcaddy/caddy-et-al-2023/blob/a5d284c28192e6ae8b0c09e82f75a36456cf0ca6/python/linear-wave-convergence.py}{\img{github.png}}}
+    \caption{Linear Wave Convergence of all four MHD waves using PLM and PPM reconstruction. \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:linear-wave-convergence}
 \end{figure}
 
@@ -636,7 +636,7 @@ These Alfv\'en waves are subject to a parametric instability \citep{del_zanna_pa
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \includegraphics[width=\linewidth]{cpaw_convergence.pdf}
-    \caption{Circularly Polarized Alfv\'en Wave Convergence using PLM and PPM reconstruction. \href{https://github.com/bcaddy/caddy-et-al-2023/blob/a5d284c28192e6ae8b0c09e82f75a36456cf0ca6/python/circularly-polarized-alfven-convergence.py}{\img{github.png}}}
+    \caption{Circularly Polarized Alfv\'en Wave Convergence using PLM and PPM reconstruction. \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:cpaw}
 \end{figure}
 
@@ -671,14 +671,14 @@ Figure \ref{fig:afl} shows the mean of cell centered $B^2$, normalized to the in
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \includegraphics[width=\linewidth]{afl.pdf}
-    \caption{Evolution of tilted spherical magnetic field loop through two full periods \textbf{using PPMC reconstruction}. Mean of $B^2$ normalized to the initial value as a function of time (left) and the maximum divergence in the domain as a function of time (right). \href{https://github.com/bcaddy/caddy-et-al-2023/blob/a5d284c28192e6ae8b0c09e82f75a36456cf0ca6/python/advecting-field-loop.py}{\img{github.png}}}
+    \caption{Evolution of tilted spherical magnetic field loop through two full periods \textbf{using PPMC reconstruction}. Mean of $B^2$ normalized to the initial value as a function of time (left) and the maximum divergence in the domain as a function of time (right). \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:afl}
 \end{figure}
 
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \includegraphics[width=\linewidth]{afl_slices.pdf}
-    \caption{Cross sections of the spherical advecting field loop magnetic energy density at $t=0.0$ and one period. The first and second panels show a slice centered on the loop through the plane of symmetry. The third and fourth panels show a slice along the $x-z$ plane. Note that these figures utilize PLMC reconstruction as PPMC introduced spurious oscilations in the direction of advection. \href{https://github.com/bcaddy/caddy-et-al-2023/blob/c7902cfed2ae307727d6f623ab29b8c6b4921480/python/advecting-field-loop.py}{\img{github.png}}}
+    \caption{Cross sections of the spherical advecting field loop magnetic energy density at $t=0.0$ and one period. The first and second panels show a slice centered on the loop through the plane of symmetry. The third and fourth panels show a slice along the $x-z$ plane. Note that these figures utilize PLMC reconstruction as PPMC introduced spurious oscilations in the direction of advection. \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:afl_slice}
 \end{figure}
 
@@ -786,7 +786,7 @@ The \textbf{typical Riemann problem setup uses a domain with a discontinuity at 
     % \epsscale{0.5}
     \includegraphics[width=\linewidth]{b-and-w.pdf}
     \caption{The Brio \& Wu Shock Tube solution \citep{brio_wu_1988}.
-    \href{https://github.com/bcaddy/caddy-et-al-2023/blob/4c9c5ef905902e54e50943d0a261bd5b08342225/python/shock-tubes.py}{\img{github.png}}}
+    \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:brio-and-wu}
 \end{figure}
 
@@ -797,7 +797,7 @@ The \textbf{typical Riemann problem setup uses a domain with a discontinuity at 
     % \epsscale{0.5}
     \includegraphics[width=\linewidth]{d-and-w.pdf}
     \caption{Dai \& Woodward Shock Tube (also called Ryu \& Jones 2a) solution \citep{dai_woodward_1998, ryu_jones_1995}.
-    \href{https://github.com/bcaddy/caddy-et-al-2023/blob/4c9c5ef905902e54e50943d0a261bd5b08342225/python/shock-tubes.py}{\img{github.png}}}
+    \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:dai-and-woodward}
 \end{figure}
 
@@ -808,7 +808,7 @@ The \textbf{typical Riemann problem setup uses a domain with a discontinuity at 
     % \epsscale{0.5}
     \includegraphics[width=\linewidth]{rj1a.pdf}
     \caption{Ryu \& Jones 1a Shock Tube solution \citep{ryu_jones_1995}.
-    \href{https://github.com/bcaddy/caddy-et-al-2023/blob/4c9c5ef905902e54e50943d0a261bd5b08342225/python/shock-tubes.py}{\img{github.png}}}
+    \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:rj-1a}
 \end{figure}
 
@@ -819,7 +819,7 @@ The \textbf{typical Riemann problem setup uses a domain with a discontinuity at 
     % \epsscale{0.5}
     \includegraphics[width=\linewidth]{rj4d.pdf}
     \caption{Ryu \& Jones 4d Shock Tube solution \citep{ryu_jones_1995}.
-    \href{https://github.com/bcaddy/caddy-et-al-2023/blob/4c9c5ef905902e54e50943d0a261bd5b08342225/python/shock-tubes.py}{\img{github.png}}}
+    \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:rj-4d}
 \end{figure}
 
@@ -830,7 +830,7 @@ The \textbf{typical Riemann problem setup uses a domain with a discontinuity at 
     % \epsscale{0.5}
     \includegraphics[width=\linewidth]{einfeldt.pdf}
     \caption{MHD Einfeldt Strong Rarefaction solution \citep{einfeldt_1991}.
-    \href{https://github.com/bcaddy/caddy-et-al-2023/blob/4c9c5ef905902e54e50943d0a261bd5b08342225/python/shock-tubes.py}{\img{github.png}}}
+    \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:einfeldt}
 \end{figure}
 
@@ -853,7 +853,7 @@ and the over pressure region is a central sphere of size $R = 0.1$ which has $P=
 \begin{figure}[ht!]
     % \epsscale{0.5}
     \includegraphics[width=\linewidth]{mhd-blast.pdf}
-    \caption{Contour plot of the MHD blast wave test at $t=0.2$. 30 evenly spaced contours are shown in an $x-y$ slice through the center of the domain. \href{https://github.com/bcaddy/caddy-et-al-2023/blob/8f5051180971c6d63423db42e05c3d1fa1ec9785/python/blast-wave.py}{\img{github.png}}}
+    \caption{Contour plot of the MHD blast wave test at $t=0.2$. 30 evenly spaced contours are shown in an $x-y$ slice through the center of the domain. \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:blast}
 \end{figure}
 
@@ -876,7 +876,7 @@ The results, plotted in Figure \ref{fig:otv}, can be compared directly to Figure
 \begin{figure}[!ht]
     % \epsscale{0.5}
     \includegraphics[width=\linewidth]{orszag-tang-vortex.pdf}
-    \caption{Contour plot of the Orszag-Tang Vortex at $t=0.5$. Thirty evenly spaced contours are shown for each plot in an $x-y$ slice through the center of the domain.  \href{https://github.com/bcaddy/caddy-et-al-2023/blob/8f5051180971c6d63423db42e05c3d1fa1ec9785/python/orszag-tang-vortex.py}{\img{github.png}}}
+    \caption{Contour plot of the Orszag-Tang Vortex at $t=0.5$. Thirty evenly spaced contours are shown for each plot in an $x-y$ slice through the center of the domain.  \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:otv}
 \end{figure}
 
@@ -901,14 +901,14 @@ On \textit{Frontier} Cholla updates \textbf{$2.36\times10^8$} cells per second p
     \epsscale{0.5}
     \includegraphics[width=0.5\linewidth]{scaling_tests_weak_efficiency.pdf}
     \includegraphics[width=0.5\linewidth]{scaling_tests_ms_per_gpu.pdf}
-    \caption{Weak scaling performance of Cholla MHD. When running on a single GPU Cholla updates $2.04\times10^8$ cells per second per GPU; the largest run with 74,088 GPUs updates $1.67\times10^8$ cells per second per GPU, a weak scaling efficiency of 82.2\%. The 74,088 GPU run updates a total of $1.24\times10^{13}$ cells per second. \href{https://github.com/bcaddy/caddy-et-al-2023/blob/5bcde40653b1a376f7424eb0ccdc412608978157/python/scaling_plots.py}{\img{github.png}}}
+    \caption{Weak scaling performance of Cholla MHD. When running on a single GPU Cholla updates $2.04\times10^8$ cells per second per GPU; the largest run with 74,088 GPUs updates $1.67\times10^8$ cells per second per GPU, a weak scaling efficiency of 82.2\%. The 74,088 GPU run updates a total of $1.24\times10^{13}$ cells per second. \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:scaling-weak-efficiency}
 \end{figure}
 
 \begin{figure}[ht!]
     \centering
     \includegraphics{scaling_test_strong.pdf}
-    \caption{Strong scaling performance of Cholla MHD with a problem size of $459^3$ cells. \href{https://github.com/bcaddy/caddy-et-al-2023/blob/c7902cfed2ae307727d6f623ab29b8c6b4921480/python/scaling_plots.py}{\img{github.png}}}
+    \caption{Strong scaling performance of Cholla MHD with a problem size of $459^3$ cells. \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:scaling-strong}
 \end{figure}
 
@@ -970,7 +970,7 @@ Cholla is free and open source software available at \url{https://github.com/cho
 RVC thanks Alwin Mao, Helena Richie, Orlando Warren, Kyle Felker, and Seth Cook for many helpful discussions. Special thanks to Daniel Perrefort at the Center for Research Computing for his help in setting up and maintaining the Jenkins environment for our automated testing. This research was supported in part by the University of Pittsburgh Center for Research Computing, RRID:SCR\_022735, through the resources provided. Specifically, this work used the H2P cluster, which is supported by NSF award number OAC-2117681. This research also used resources of the Oak Ridge Leadership Computing Facility, which is a DOE Office of Science User Facility supported under Contract DE-AC05-00OR22725, using Frontier CAAR allocations CSC380 and AST181. E.E.S. acknowledges support from NASA TCAN grant 80NSSC21K0271, NASA ATP grant 80NSSC22K0720, StScI grant HST-AR-16633.001-A, and the David and Lucile Packard Foundation (grant no. 2022-74680).
 
 \software{
-Cholla \citep{schneider_2015},
+Cholla \citep{schneider_2015, caddy_2024},
 numpy \citep{van2011numpy},
 matplotlib \citep{hunter2007matplotlib},
 HDF5 (\href{https://github.com/HDFGroup/hdf5}{The HDF Group. Hierarchical Data Format, version 5.}),
