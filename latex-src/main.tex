@@ -272,7 +272,7 @@ The first step is to compute the time step. Cholla implements uniform time steps
         \right),
 \end{equation}
 
-\noindent where $\Delta t$ is the time step, $C_{CFL} \leq 0.5$ is the CFL number, $\mid v^n_{l,i,j,k}\mid $ is the magnitude of the velocity in the $l$ direction velocity in the ${i,j,k}$ cell, and $c^n_f $ is the fast magnetosonic wave-speed computed using \emph{cell centered} values. \textbf{The method is formally accurate at $C_{CFL} = 0.5$, though that is an estimate\citep{stone_2009}. We have found empirically that the method is not stable at $C_{CFL} = 0.5$ but is stable at $C_{CFL} = 0.5$\footnote{Typically we use $C_{CFL} = 0.3$ to improve the accuracy of the operator splitting}.} The fast and slow magnetosonic speeds are
+\noindent where $\Delta t$ is the time step, $C_{CFL} \leq 0.5$ is the CFL number, $\mid v^n_{l,i,j,k}\mid $ is the magnitude of the velocity in the $l$ direction velocity in the ${i,j,k}$ cell, and $c^n_f $ is the fast magnetosonic wave-speed computed using \emph{cell centered} values. \textbf{The method is formally accurate at $C_{CFL} = 0.5$, though that is an estimate\citep{stone_2009}. We have found empirically that the method is not stable at $C_{CFL} = 0.5$ but is stable at $C_{CFL} = 0.4$\footnote{Typically we use $C_{CFL} = 0.3$ to improve the accuracy of the operator splitting}.} The fast and slow magnetosonic speeds are
 
 \begin{equation}
     c_{f,s} = \sqrt{\frac
