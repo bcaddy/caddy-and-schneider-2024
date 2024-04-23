@@ -182,15 +182,16 @@ def weak_scaling_efficiency(scaling_data):
 
     ax.set_xscale('log')
 
-    # locmaj = matplotlib.ticker.LogLocator(base=10.0,
-    #                                       subs=(1.0, ),
-    #                                       numticks=100)
-    # ax.yaxis.set_major_locator(locmaj)
+    locmaj = matplotlib.ticker.LogLocator(base=10.0,
+                                          subs=(1.0, ),
+                                          numticks=100)
+    ax.xaxis.set_major_locator(locmaj)
 
-    # locmin = matplotlib.ticker.LogLocator(base=10.0,
-    #                                       subs=np.arange(2, 10) * .1,
-    #                                       numticks=100)
-    # ax.yaxis.set_minor_locator(locmin)
+    locmin = matplotlib.ticker.LogLocator(base=10.0,
+                                          subs=np.arange(2, 10) * .1,
+                                          numticks=100)
+    ax.xaxis.set_minor_locator(locmin)
+
     ax.tick_params(which='both', direction='in', labelsize=shared_tools.font_size_normal, bottom=True, top=True, left=True, right=True)
     ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter())
 
@@ -255,6 +256,16 @@ def ms_per_timestep(scaling_data):
     # ax.yaxis.set_minor_locator(locmin)
     ax.tick_params(which='both', direction='in', labelsize=shared_tools.font_size_normal, bottom=True, top=True, left=True, right=True)
     # ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter())
+
+    locmaj = matplotlib.ticker.LogLocator(base=10.0,
+                                          subs=(1.0, ),
+                                          numticks=100)
+    ax.xaxis.set_major_locator(locmaj)
+
+    locmin = matplotlib.ticker.LogLocator(base=10.0,
+                                          subs=np.arange(2, 10) * .1,
+                                          numticks=100)
+    ax.xaxis.set_minor_locator(locmin)
 
     plt.grid(axis='x', color='0.5', which='major')
     plt.grid(axis='y', color='0.5', which='major')
@@ -331,17 +342,16 @@ def strong_scaling(data_path):
 
     scaling_data = pd.read_csv(file_path, delim_whitespace=True, comment='#', skiprows=4, names=header)
 
-    # Compute the speed up
-    num_ranks = np.array(scaling_data['n_proc'])
-    speedup   = np.array(np.max(scaling_data['Total'])/scaling_data['Total'])
-
-    num_ranks = num_ranks
-    speedup   =   speedup
+    # Compute the speed up and strong scaling efficiency
+    num_ranks  = np.array(scaling_data['n_proc'])
+    speedup    = np.array(np.max(scaling_data['Total'])/scaling_data['Total'])
+    efficiency = 100*(speedup / num_ranks)
 
     # Print the performance results
     for i in range(len(speedup)):
-        print(f'Ranks: {int(num_ranks[i]):5d}, speedup: {round(speedup[i],2):>3.2f}, Strong Scaling Efficiency: {round(100*speedup[i] / num_ranks[i],2):3.2f}%')
+        print(f'Ranks: {int(num_ranks[i]):5d}, speedup: {round(speedup[i],2):>3.2f}, Strong Scaling Efficiency: {round(efficiency[i],2):3.2f}%')
 
+    # ===== Speedup Plot =====
     # Instantiate Plot
     fig = plt.figure(1, figsize=(shared_tools.fig_height, shared_tools.fig_height))
     ax = plt.gca()
@@ -373,7 +383,52 @@ def strong_scaling(data_path):
     legend = ax.legend(fontsize=9)
     fig.tight_layout()
 
-    output_path = shared_tools.repo_root / 'latex-src' / f'scaling_test_strong.pdf'
+    output_path = shared_tools.repo_root / 'latex-src' / f'scaling_test_strong_speedup.pdf'
+    fig.savefig(output_path, dpi=400)
+    plt.close('all')
+
+    # ===== Strong Scaling Efficiency Plot =====
+    # Instantiate Plot
+    fig = plt.figure(2, figsize=(shared_tools.fig_height, shared_tools.fig_height))
+    ax = plt.gca()
+
+    # Set plot settings
+    color_total        = 'black'#'#D55E00'
+    marker_style_total = '^'
+    marker_size        = 5
+
+    # Plot the data
+    ax.plot(num_ranks, efficiency, linestyle='--', c=color_total, marker=marker_style_total, markersize=marker_size, label='Total Runtime (excluding initialization)')
+
+    ax.set_xscale('log')
+    # ax.set_yscale('log')
+    ax.set_ylim(ymin = 0, ymax = 102)
+
+    ax.tick_params(axis='x', which='both', direction='in', labelsize=shared_tools.font_size_normal, bottom=True, top=True, left=True, right=True)
+    ax.tick_params(axis='y', which='both', direction='in', labelsize=shared_tools.font_size_normal, bottom=True, top=True, left=True, right=True)
+    ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter())
+
+    locmaj = matplotlib.ticker.LogLocator(base=10.0,
+                                          subs=(1.0, ),
+                                          numticks=100)
+    ax.xaxis.set_major_locator(locmaj)
+
+    locmin = matplotlib.ticker.LogLocator(base=10.0,
+                                          subs=np.arange(2, 10) * .1,
+                                          numticks=100)
+    ax.xaxis.set_minor_locator(locmin)
+
+    plt.grid(axis='x', color='0.5', which='major')
+    plt.grid(axis='y', color='0.5', which='major')
+
+    ax.set_ylabel(r'Strong Scaling Efficiency', fontsize=shared_tools.font_size_normal)
+    ax.set_xlabel(r'Number of GPUs', fontsize=shared_tools.font_size_normal)
+    ax.set_box_aspect(1)
+
+    # legend = ax.legend(fontsize=9)
+    fig.tight_layout()
+
+    output_path = shared_tools.repo_root / 'latex-src' / f'scaling_test_strong_efficiency.pdf'
     fig.savefig(output_path, dpi=400)
 # ==============================================================================
 
