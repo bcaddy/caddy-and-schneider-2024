@@ -1,0 +1,461 @@
+\begin{thebibliography}{}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\href{#1}{#1}}
+\providecommand{\dodoi}[1]{doi:~\href{http://doi.org/#1}{\nolinkurl{#1}}}
+\providecommand{\doeprint}[1]{\href{http://ascl.net/#1}{\nolinkurl{http://ascl.net/#1}}}
+\providecommand{\doarXiv}[1]{\href{https://arxiv.org/abs/#1}{\nolinkurl{https://arxiv.org/abs/#1}}}
+
+\bibitem[{Almgren {et~al.}(2020)Almgren, Sazo, Bell, Harpole, Katz, Sexton,
+  Willcox, Zhang, \& Zingale}]{almgren_castro_2020}
+Almgren, A., Sazo, M., Bell, J., {et~al.} 2020, Journal of Open Source
+  Software, 5, 2513, \dodoi{10.21105/joss.02513}
+
+\bibitem[{Banda-Barragán {et~al.}(2017)Banda-Barragán, Federrath, Crocker, \&
+  Bicknell}]{banda_2017}
+Banda-Barragán, W., Federrath, C., Crocker, R., \& Bicknell, G. 2017, MNRAS,
+  473, 3454, \dodoi{10.1093/mnras/stx2541}
+
+\bibitem[{Banda-Barragán {et~al.}(2016)Banda-Barragán, Parkin, Federrath,
+  Crocker, \& Bicknel}]{banda_2016}
+Banda-Barragán, W.~E., Parkin, E.~R., Federrath, C., Crocker, R.~M., \&
+  Bicknel, G.~V. 2016, Monthly Notices of the Royal Astronomical Society, 455,
+  1309, \dodoi{10.1093/mnras/stv2405}
+
+\bibitem[{Beck(1999)}]{beck_1999}
+Beck, K. 1999, Computer, 32, 70, \dodoi{10.1109/2.796139}
+
+\bibitem[{Beck(2016)}]{beck_2016}
+Beck, R. 2016, The Astronomy and Astrophysics Review, 24, 4,
+  \dodoi{10.1007/s00159-015-0084-4}
+
+\bibitem[{Beck {et~al.}(1996)Beck, Brandenburg, Moss, Shukurov, \&
+  Sokoloff}]{beck_1996}
+Beck, R., Brandenburg, A., Moss, D., Shukurov, A., \& Sokoloff, D. 1996, Annual
+  Review of Astronomy and Astrophysics, 34, 155,
+  \dodoi{10.1146/annurev.astro.34.1.155}
+
+\bibitem[{Blandford {et~al.}(2019)Blandford, Meier, \&
+  Readhead}]{blandford_2019}
+Blandford, R., Meier, D., \& Readhead, A. 2019, Annual Review of Astronomy and
+  Astrophysics, 57, 467, \dodoi{10.1146/annurev-astro-081817-051948}
+
+\bibitem[{Brackbill \& Barnes(1980)}]{brackbill_1980}
+Brackbill, J.~U., \& Barnes, D.~C. 1980, Journal of Computational Physics, 35,
+  426
+
+\bibitem[{Brandenburg \& Ntormousi(2023)}]{brandenburg_2023}
+Brandenburg, A., \& Ntormousi, E. 2023, Annual Review of Astronomy and
+  Astrophysics, 61, 561, \dodoi{10.1146/annurev-astro-071221-052807}
+
+\bibitem[{Brio \& Wu(1988)}]{brio_wu_1988}
+Brio, M., \& Wu, C.~C. 1988, JOURNAL OF COMPUTATlONAL PHYSICS, 75, 40.
+\newblock \url{https://ui.adsabs.harvard.edu/abs/1988JCoPh..75..400B/abstract}
+
+\bibitem[{Brüggen {et~al.}(2023)Brüggen, Scannapieco, \&
+  Grete}]{bruggen_2023}
+Brüggen, M., Scannapieco, E., \& Grete, P. 2023, The Astrophysical Journal,
+  951, 113, \dodoi{10.3847/1538-4357/acd63e}
+
+\bibitem[{Buck {et~al.}(2020)Buck, Pfrommer, Pakmor, Grand, \&
+  Springel}]{buck_effects_2020}
+Buck, T., Pfrommer, C., Pakmor, R., Grand, R. J.~J., \& Springel, V. 2020,
+  Monthly Notices of the Royal Astronomical Society, 497, 1712,
+  \dodoi{10.1093/mnras/staa1960}
+
+\bibitem[{Bégué {et~al.}(2023)Bégué, Pe’er, Zhang, Zhang, \&
+  Pevzner}]{begue_cuharm_2023}
+Bégué, D., Pe’er, A., Zhang, G.-Q., Zhang, B.-B., \& Pevzner, B. 2023, The
+  Astrophysical Journal Supplement Series, 264, 32,
+  \dodoi{10.3847/1538-4365/aca276}
+
+\bibitem[{Caddy {et~al.}(2024)Caddy, Schneider, Villasenor, Richie, alwinm,
+  Budiardja, Warren, Abruzzo, Robertson, Zlimen, White, Yarza, \&
+  Wood-Vasey}]{caddy_2024}
+Caddy, R., Schneider, E., Villasenor, B., {et~al.} 2024, bcaddy/cholla: Caddy
+  \& Schneider 2024, v3.x,  Zenodo, \dodoi{10.5281/zenodo.10927183}
+
+\bibitem[{Carteret {et~al.}(2022)Carteret, Bendre, \& Schober}]{carteret_2022}
+Carteret, Y., Bendre, A.~B., \& Schober, J. 2022, Observational {Signatures} of
+  {Galactic} {Turbulent} {Dynamos},  arXiv.
+\newblock \url{http://arxiv.org/abs/2208.14178}
+
+\bibitem[{Chan {et~al.}(2019)Chan, Kereš, Hopkins, Quataert, Su, Hayward, \&
+  Faucher-Giguère}]{chan_cosmic_2019}
+Chan, T.~K., Kereš, D., Hopkins, P.~F., {et~al.} 2019, Monthly Notices of the
+  Royal Astronomical Society, 488, 3716, \dodoi{10.1093/mnras/stz1895}
+
+\bibitem[{Charbonneau(2014)}]{charbonneau_2014}
+Charbonneau, P. 2014, Annual Review of Astronomy and Astrophysics, 52, 251,
+  \dodoi{10.1146/annurev-astro-081913-040012}
+
+\bibitem[{Colella(1990)}]{colella_1990}
+Colella, P. 1990, Journal of Computational Physics, 87, 171,
+  \dodoi{10.1016/0021-9991(90)90233-Q}
+
+\bibitem[{Colella \& Woodward(1984)}]{colella_1984}
+Colella, P., \& Woodward, P.~R. 1984, Journal of Computational Physics, 54,
+  174, \dodoi{10.1016/0021-9991(84)90143-8}
+
+\bibitem[{Courant {et~al.}(1967)Courant, Friedrichs, \& Lewyt}]{cfl}
+Courant, R., Friedrichs, K., \& Lewyt, H. 1967, IBM Journal
+
+\bibitem[{Crockett {et~al.}(2005)Crockett, Colella, Fisher, Klein, \&
+  McKee}]{Crockett_2005}
+Crockett, R.~K., Colella, P., Fisher, R.~T., Klein, R.~I., \& McKee, C.~F.
+  2005, Journal of Computational Physics, 203, 422,
+  \dodoi{https://doi.org/10.1016/j.jcp.2004.08.021}
+
+\bibitem[{Dai \& Woodward(1998)}]{dai_woodward_1998}
+Dai, W., \& Woodward, P.~R. 1998, THE ASTROPHYSICAL JOURNAL, 494, 317.
+\newblock \url{https://iopscience.iop.org/article/10.1086/305176/meta}
+
+\bibitem[{Davis \& Tchekhovskoy(2020)}]{davis_2020}
+Davis, S.~W., \& Tchekhovskoy, A. 2020, Annual Review of Astronomy and
+  Astrophysics, 58, 407, \dodoi{10.1146/annurev-astro-081817-051905}
+
+\bibitem[{Dedner {et~al.}(2002)Dedner, Kemm, Kröner, Munz, Schnitzer, \&
+  Wesenberg}]{dedner_hyperbolic_2002}
+Dedner, A., Kemm, F., Kröner, D., {et~al.} 2002, Journal of Computational
+  Physics, 175, 645, \dodoi{10.1006/jcph.2001.6961}
+
+\bibitem[{Del~Zanna {et~al.}(2001)Del~Zanna, Velli, \&
+  Londrillo}]{del_zanna_parametric_2001}
+Del~Zanna, L., Velli, M., \& Londrillo, P. 2001, Astronomy \& Astrophysics,
+  367, 705, \dodoi{10.1051/0004-6361:20000455}
+
+\bibitem[{Dobbs \& Price(2007)}]{dobbs_magnetic_2007}
+Dobbs, C.~L., \& Price, D.~J. 2007, Monthly Notices of the Royal Astronomical
+  Society, 383, 497, \dodoi{10.1111/j.1365-2966.2007.12591.x}
+
+\bibitem[{Einfeldt {et~al.}(1991)Einfeldt, Munz, Roe, \&
+  Wgreen}]{einfeldt_1991}
+Einfeldt, B., Munz, C.~D., Roe, P.~L., \& Wgreen, B. 1991, JOURNAL OF
+  COMPUTATIONAL PHYSICS, 92, 213.
+\newblock \url{https://ui.adsabs.harvard.edu/abs/1991JCoPh..92..273E/abstract}
+
+\bibitem[{Evans \& Hawley(1988)}]{evans_1988}
+Evans, C.~R., \& Hawley, J.~F. 1988, Astrophysical Journal, 332, 659,
+  \dodoi{10.1086/166684}
+
+\bibitem[{Falle(1991)}]{falle_1991}
+Falle, S. A. E.~G. 1991, Monthly Notices of the Royal Astronomical Society,
+  250, 581, \dodoi{10.1093/mnras/250.3.581}
+
+\bibitem[{Felker \& Stone(2018)}]{felker_2018}
+Felker, K.~G., \& Stone, J. 2018, Journal of Computational Physics, 375, 1365,
+  \dodoi{10.1016/j.jcp.2018.08.025}
+
+\bibitem[{Galishnikova {et~al.}(2022)Galishnikova, Kunz, \&
+  Schekochihin}]{galishnikova_tearing_2022}
+Galishnikova, A.~K., Kunz, M.~W., \& Schekochihin, A.~A. 2022, Tearing
+  instability and current-sheet disruption in the turbulent dynamo,  arXiv.
+\newblock \url{http://arxiv.org/abs/2201.07757}
+
+\bibitem[{Gardiner \& Stone(2005)}]{gardiner_2005}
+Gardiner, T.~A., \& Stone, J.~M. 2005, Journal of Computational Physics, 205,
+  509, \dodoi{10.1016/j.jcp.2004.11.016}
+
+\bibitem[{Gardiner \& Stone(2008)}]{gardiner_unsplit_2008}
+---. 2008, Journal of Computational Physics, 227, 4123,
+  \dodoi{10.1016/j.jcp.2007.12.017}
+
+\bibitem[{Gent {et~al.}(2021)Gent, Mac~Low, Käpylä, \& Singh}]{gent_2021}
+Gent, F.~A., Mac~Low, M.-M., Käpylä, M.~J., \& Singh, N.~K. 2021, The
+  Astrophysical Journal Letters, 910, L15, \dodoi{10.3847/2041-8213/abed59}
+
+\bibitem[{Girichidis {et~al.}(2019)Girichidis, Pfrommer, Hanasz, \&
+  Naab}]{girichidis_spectrally_2019}
+Girichidis, P., Pfrommer, C., Hanasz, M., \& Naab, T. 2019, Monthly Notices of
+  the Royal Astronomical Society, stz2961, \dodoi{10.1093/mnras/stz2961}
+
+\bibitem[{Girichidis {et~al.}(2022)Girichidis, Pfrommer, Pakmor, \&
+  Springel}]{girichidis_spectrally_2022}
+Girichidis, P., Pfrommer, C., Pakmor, R., \& Springel, V. 2022, Monthly Notices
+  of the Royal Astronomical Society, 510, 3917, \dodoi{10.1093/mnras/stab3462}
+
+\bibitem[{Girichidis {et~al.}(2016)Girichidis, Naab, Walch, Hanasz, Low,
+  Ostriker, Gatto, Peters, Wünsch, Glover, Klessen, Clark, \&
+  Baczynski}]{girichidis_launching_2016}
+Girichidis, P., Naab, T., Walch, S., {et~al.} 2016, The Astrophysical Journal,
+  816, L19, \dodoi{10.3847/2041-8205/816/2/L19}
+
+\bibitem[{Godunov \& Bohachevsky(1959)}]{Godunov}
+Godunov, S.~K., \& Bohachevsky, I. 1959, {Matemati{\v c}eskij sbornik}, 47(89),
+  271.
+\newblock \url{https://hal.science/hal-01620642}
+
+\bibitem[{Goldberg(1991)}]{goldberg_1991}
+Goldberg, D. 1991, ACM computing surveys (CSUR), 23, 5
+
+\bibitem[{Grand {et~al.}(2017)Grand, Gómez, Marinacci, Pakmor, Springel,
+  Campbell, Frenk, Jenkins, \& White}]{grand_auriga_2017}
+Grand, R. J.~J., Gómez, F.~A., Marinacci, F., {et~al.} 2017, Monthly Notices
+  of the Royal Astronomical Society, stx071, \dodoi{10.1093/mnras/stx071}
+
+\bibitem[{Grete {et~al.}(2021)Grete, Glines, \& O'Shea}]{k_athena_2021}
+Grete, P., Glines, F.~W., \& O'Shea, B.~W. 2021, IEEE Transactions on Parallel
+  and Distributed Systems, 32, 85, \dodoi{10.1109/TPDS.2020.3010016}
+
+\bibitem[{Grete {et~al.}(2023)Grete, Dolence, Miller, Brown, Ryan, Gaspar,
+  Glines, Swaminarayan, Lippuner, Solomon, Shipman, Junghans, Holladay, Stone,
+  \& Roberts}]{parthenon_2023}
+Grete, P., Dolence, J.~C., Miller, J.~M., {et~al.} 2023, The International
+  Journal of High Performance Computing Applications, 37, 465,
+  \dodoi{10.1177/10943420221143775}
+
+\bibitem[{Han(2017)}]{han_2017}
+Han, J. 2017, Annual Review of Astronomy and Astrophysics, 55, 111,
+  \dodoi{10.1146/annurev-astro-091916-055221}
+
+\bibitem[{Hanasz {et~al.}(2013)Hanasz, Lesch, Naab, Gawryszczak, Kowalik, \&
+  Wóltański}]{hanasz_cosmic_2013}
+Hanasz, M., Lesch, H., Naab, T., {et~al.} 2013, The Astrophysical Journal, 777,
+  L38, \dodoi{10.1088/2041-8205/777/2/L38}
+
+\bibitem[{Hanasz {et~al.}(2009)Hanasz, Wóltański, \&
+  Kowalik}]{hanasz_global_2009}
+Hanasz, M., Wóltański, D., \& Kowalik, K. 2009, The Astrophysical Journal,
+  706, L155, \dodoi{10.1088/0004-637X/706/1/L155}
+
+\bibitem[{Holmen {et~al.}(2023)Holmen, Grete, \& Vergara}]{holmen_early_2023}
+Holmen, J.~K., Grete, P., \& Vergara, V. G.~M. 2023, in {CUG} {Conference}
+  {Proceedings}, Helsinki, Finland.
+\newblock
+  \url{https://www.ornl.gov/publication/early-experiences-olcf-frontier-system-athenapk-and-parthenon-hydro}
+
+\bibitem[{Hopkins {et~al.}(2020)Hopkins, Chan, Garrison-Kimmel, Ji, Su,
+  Hummels, Kereš, Quataert, \& Faucher-Giguère}]{hopkins_but_2020}
+Hopkins, P.~F., Chan, T.~K., Garrison-Kimmel, S., {et~al.} 2020, Monthly
+  Notices of the Royal Astronomical Society, 492, 3465,
+  \dodoi{10.1093/mnras/stz3321}
+
+\bibitem[{Hunter(2007)}]{hunter2007matplotlib}
+Hunter, J.~D. 2007, Computing in science \& engineering, 9, 90
+
+\bibitem[{Kaspi \& Beloborodov(2017)}]{kaspi_2017}
+Kaspi, V.~M., \& Beloborodov, A.~M. 2017, Annual Review of Astronomy and
+  Astrophysics, 55, 261, \dodoi{10.1146/annurev-astro-081915-023329}
+
+\bibitem[{Kim \& Ostriker(2015)}]{kim_vertical_2015}
+Kim, C.-G., \& Ostriker, E.~C. 2015, The Astrophysical Journal, 815, 67,
+  \dodoi{10.1088/0004-637X/815/1/67}
+
+\bibitem[{LeVeque(2002)}]{leveque2002finite}
+LeVeque, R.~J. 2002, Finite volume methods for hyperbolic problems, Vol.~31
+  (Cambridge university press)
+
+\bibitem[{Liska {et~al.}(2022)Liska, Chatterjee, Issa, Yoon, Kaaz,
+  Tchekhovskoy, Van~Eijnatten, Musoke, Hesp, Rohoza, Markoff, Ingram, \& Van
+  Der~Klis}]{liska_h-amr_2022}
+Liska, M. T.~P., Chatterjee, K., Issa, D., {et~al.} 2022, The Astrophysical
+  Journal Supplement Series, 263, 26, \dodoi{10.3847/1538-4365/ac9966}
+
+\bibitem[{Martin-Alvarez {et~al.}(2018)Martin-Alvarez, Devriendt, Slyz, \&
+  Teyssier}]{martin-alvarez_three-phase_2018}
+Martin-Alvarez, S., Devriendt, J., Slyz, A., \& Teyssier, R. 2018, Monthly
+  Notices of the Royal Astronomical Society, 479, 3343,
+  \dodoi{10.1093/mnras/sty1623}
+
+\bibitem[{Martin-Alvarez {et~al.}(2020)Martin-Alvarez, Slyz, Devriendt, \&
+  Gómez-Guijarro}]{martin-alvarez_how_2020}
+Martin-Alvarez, S., Slyz, A., Devriendt, J., \& Gómez-Guijarro, C. 2020,
+  Monthly Notices of the Royal Astronomical Society, 495, 4475,
+  \dodoi{10.1093/mnras/staa1438}
+
+\bibitem[{Mignone \& Tzeferacos(2010)}]{mignone_2010}
+Mignone, A., \& Tzeferacos, P. 2010, Journal of Computational Physics, 229,
+  2117, \dodoi{10.1016/j.jcp.2009.11.026}
+
+\bibitem[{Miniati \& Martin(2011)}]{charm_2011}
+Miniati, F., \& Martin, D.~F. 2011, Astrophysical Journal, Supplement Series,
+  195, \dodoi{10.1088/0067-0049/195/1/5}
+
+\bibitem[{Miyoshi \& Kusano(2005)}]{hlld_2005}
+Miyoshi, T., \& Kusano, K. 2005, Journal of Computational Physics, 208, 315,
+  \dodoi{10.1016/j.jcp.2005.02.017}
+
+\bibitem[{Muller {et~al.}(2018)Muller, Brisebarre, De~Dinechin, Jeannerod,
+  Lefevre, Melquiond, Revol, Stehl{\'e}, Torres, {et~al.}}]{muller_2018}
+Muller, J.-M., Brisebarre, N., De~Dinechin, F., {et~al.} 2018, Handbook of
+  floating-point arithmetic (Springer)
+
+\bibitem[{Naab \& Ostriker(2017)}]{naab_2017}
+Naab, T., \& Ostriker, J.~P. 2017, Annual Review of Astronomy and Astrophysics,
+  55, 59, \dodoi{10.1146/annurev-astro-081913-040019}
+
+\bibitem[{Nakariakov \& Kolotkov(2020)}]{Nakariakov_2020}
+Nakariakov, V.~M., \& Kolotkov, D.~Y. 2020, Annual Review of Astronomy and
+  Astrophysics, 58, 441, \dodoi{10.1146/annurev-astro-032320-042940}
+
+\bibitem[{Ntormousi {et~al.}(2020)Ntormousi, Tassis, Del~Sordo, Fragkoudi, \&
+  Pakmor}]{ntormousi_dynamo_2020}
+Ntormousi, E., Tassis, K., Del~Sordo, F., Fragkoudi, F., \& Pakmor, R. 2020,
+  Astronomy \& Astrophysics, 641, A165, \dodoi{10.1051/0004-6361/202037835}
+
+\bibitem[{Nuñez-Castiñeyra {et~al.}(2022)Nuñez-Castiñeyra, Grenier,
+  Bournaud, Dubois, Youssef, \& Hennebelle}]{nunez-castineyra_cosmic-ray_2022}
+Nuñez-Castiñeyra, A., Grenier, I.~A., Bournaud, F., {et~al.} 2022, Cosmic-ray
+  diffusion and the multi-phase interstellar medium in a dwarf galaxy. {I}.
+  {Large}-scale properties and \${\textbackslash}gamma\$-ray luminosities,
+  arXiv.
+\newblock \url{http://arxiv.org/abs/2205.08163}
+
+\bibitem[{{Orszag} \& {Tang}(1979)}]{otv_1979}
+{Orszag}, S.~A., \& {Tang}, C.~M. 1979, Journal of Fluid Mechanics, 90, 129,
+  \dodoi{10.1017/S002211207900210X}
+
+\bibitem[{Pakmor {et~al.}(2016)Pakmor, Pfrommer, Simpson, \&
+  Springel}]{pakmor_galactic_2016}
+Pakmor, R., Pfrommer, C., Simpson, C.~M., \& Springel, V. 2016, The
+  Astrophysical Journal, 824, L30, \dodoi{10.3847/2041-8205/824/2/L30}
+
+\bibitem[{Pakmor \& Springel(2013)}]{pakmor_simulations_2013}
+Pakmor, R., \& Springel, V. 2013, Monthly Notices of the Royal Astronomical
+  Society, 432, 176, \dodoi{10.1093/mnras/stt428}
+
+\bibitem[{Pakmor {et~al.}(2017)Pakmor, Gómez, Grand, Marinacci, Simpson,
+  Springel, Campbell, Frenk, Guillet, Pfrommer, \&
+  White}]{pakmor_magnetic_2017}
+Pakmor, R., Gómez, F.~A., Grand, R. J.~J., {et~al.} 2017, Monthly Notices of
+  the Royal Astronomical Society, 469, 3185, \dodoi{10.1093/mnras/stx1074}
+
+\bibitem[{Pariev \& Colgate(2007)}]{pariev_magnetic_1_2007}
+Pariev, V.~I., \& Colgate, S.~A. 2007, The Astrophysical Journal, 658, 114,
+  \dodoi{10.1086/510734}
+
+\bibitem[{Pariev {et~al.}(2007)Pariev, Colgate, \&
+  Finn}]{pariev_magnetic_2_2007}
+Pariev, V.~I., Colgate, S.~A., \& Finn, J.~M. 2007, The Astrophysical Journal,
+  658, 129, \dodoi{10.1086/510735}
+
+\bibitem[{Pfrommer {et~al.}(2017)Pfrommer, Pakmor, Simpson, \&
+  Springel}]{pfrommer_simulating_2017}
+Pfrommer, C., Pakmor, R., Simpson, C.~M., \& Springel, V. 2017, The
+  Astrophysical Journal, 847, L13, \dodoi{10.3847/2041-8213/aa8bb1}
+
+\bibitem[{Philippov \& Kramer(2022)}]{Philippov_2022}
+Philippov, A., \& Kramer, M. 2022, Annual Review of Astronomy and Astrophysics,
+  60, 495, \dodoi{10.1146/annurev-astro-052920-112338}
+
+\bibitem[{Powell(1997)}]{Powell1997}
+Powell, K.~G. 1997, An Approximate Riemann Solver for Magnetohydrodynamics
+  (Berlin, Heidelberg: Springer Berlin Heidelberg), 570--583,
+  \dodoi{10.1007/978-3-642-60543-7_23}
+
+\bibitem[{Ryu {et~al.}(1995)Ryu, Jones, \& Frank}]{ryu_1995}
+Ryu, D., Jones, T., \& Frank, A. 1995, Astrophysical Journal, 452, 785
+
+\bibitem[{Ryu \& Jones(1995)}]{ryu_jones_1995}
+Ryu, D., \& Jones, T.~W. 1995, The Astrophysical Journal, 422, 228
+
+\bibitem[{Schive {et~al.}(2018)Schive, ZuHone, Goldbaum, Turk, Gaspari, \&
+  Cheng}]{schive_gamer-2_2018}
+Schive, H.-Y., ZuHone, J.~A., Goldbaum, N.~J., {et~al.} 2018, Monthly Notices
+  of the Royal Astronomical Society, 481, 4815, \dodoi{10.1093/mnras/sty2586}
+
+\bibitem[{Schneider \& Robertson(2015)}]{schneider_2015}
+Schneider, E.~E., \& Robertson, B.~E. 2015, Astrophysical Journal, Supplement
+  Series, 217, 24, \dodoi{10.1088/0067-0049/217/2/24}
+
+\bibitem[{Shankar {et~al.}(2022)Shankar, Mösta, Brandt, Haas, Schnetter, \&
+  de~Graaf}]{shankar_gram-x_2022}
+Shankar, S., Mösta, P., Brandt, S.~R., {et~al.} 2022, {GRaM}-{X}: {A} new
+  {GPU}-accelerated dynamical spacetime {GRMHD} code for {Exascale} computing
+  with the {Einstein} {Toolkit},  arXiv.
+\newblock \url{http://arxiv.org/abs/2210.17509}
+
+\bibitem[{Shin {et~al.}(2008)Shin, Stone, \& Snyder}]{shin_2008}
+Shin, M.-S., Stone, J.~M., \& Snyder, G.~F. 2008, APJ, 680, 336,
+  \dodoi{10.1086/587775}
+
+\bibitem[{Simpson {et~al.}(2016)Simpson, Pakmor, Marinacci, Pfrommer, Springel,
+  Glover, Clark, \& Smith}]{simpson_role_2016}
+Simpson, C.~M., Pakmor, R., Marinacci, F., {et~al.} 2016, The Astrophysical
+  Journal, 827, L29, \dodoi{10.3847/2041-8205/827/2/L29}
+
+\bibitem[{Sod(1978)}]{sod_1978}
+Sod, G.~A. 1978, Journal of Computational Physics, 27, 1,
+  \dodoi{10.1016/0021-9991(78)90023-2}
+
+\bibitem[{Stone \& Gardiner(2009)}]{stone_2009}
+Stone, J.~M., \& Gardiner, T. 2009, New Astronomy, 14, 139,
+  \dodoi{10.1016/j.newast.2008.06.003}
+
+\bibitem[{Stone {et~al.}(2008)Stone, Gardiner, Teuben, Hawley, \&
+  Simon}]{stone_athena_2008}
+Stone, J.~M., Gardiner, T.~A., Teuben, P., Hawley, J.~F., \& Simon, J.~B. 2008,
+  The Astrophysical Journal Supplement Series, 178, 137.
+\newblock \url{https://ui.adsabs.harvard.edu/abs/2008ApJS..178..137S/abstract}
+
+\bibitem[{Stone {et~al.}(2020)Stone, Tomida, White, \& Felker}]{athena++_2020}
+Stone, J.~M., Tomida, K., White, C.~J., \& Felker, K.~G. 2020, The
+  Astrophysical Journal Supplement Series, 249, 4,
+  \dodoi{10.3847/1538-4365/ab929b}
+
+\bibitem[{Toro(2009)}]{Toro}
+Toro, E.~F. 2009, Riemann {Solvers} and {Numerical} {Methods} for {Fluid}
+  {Dynamics} {Third} {Edition} (Springer), \dodoi{10.1007/978-3-540-49834-6}
+
+\bibitem[{Torrilhon(2005)}]{torrilhon2005locally}
+Torrilhon, M. 2005, SIAM Journal on Scientific Computing, 26, 1166
+
+\bibitem[{T{\'o}th(1996)}]{Toth1996}
+T{\'o}th, G. 1996, in Magnetodynamic Phenomena in the Solar Atmosphere:
+  Prototypes of Stellar Magnetic Activity, ed. Y.~Uchida, T.~Kosugi, \& H.~S.
+  Hudson (Dordrecht: Springer Netherlands), 471--472,
+  \dodoi{10.1007/978-94-009-0315-9_101}
+
+\bibitem[{Trujillo~Bueno \& del Pino~Alem\'{a}n(2022)}]{Trujillo_2022}
+Trujillo~Bueno, J., \& del Pino~Alem\'{a}n, T. 2022, Annual Review of Astronomy
+  and Astrophysics, 60, 415, \dodoi{10.1146/annurev-astro-041122-031043}
+
+\bibitem[{Van Der~Walt {et~al.}(2011)Van Der~Walt, Colbert, \&
+  Varoquaux}]{van2011numpy}
+Van Der~Walt, S., Colbert, S.~C., \& Varoquaux, G. 2011, Computing in science
+  \& engineering, 13, 22
+
+\bibitem[{Van~Leer(2006)}]{van_leer_2006}
+Van~Leer, B. 2006, in 16th {AIAA} {Computational} {Fluid} {Dynamics}
+  {Conference} (Orlando, Florida: American Institute of Aeronautics and
+  Astronautics), \dodoi{10.2514/6.2003-3559}
+
+\bibitem[{Werhahn {et~al.}(2023)Werhahn, Girichidis, Pfrommer, \&
+  Whittingham}]{werhahn_gamma-ray_2023}
+Werhahn, M., Girichidis, P., Pfrommer, C., \& Whittingham, J. 2023, Monthly
+  Notices of the Royal Astronomical Society, 525, 4437,
+  \dodoi{10.1093/mnras/stad2105}
+
+\bibitem[{Werhahn {et~al.}(2021)Werhahn, Pfrommer, Girichidis, \&
+  Winner}]{werhahn_cosmic_2021}
+Werhahn, M., Pfrommer, C., Girichidis, P., \& Winner, G. 2021, Monthly Notices
+  of the Royal Astronomical Society, 505, 3295, \dodoi{10.1093/mnras/stab1325}
+
+\bibitem[{Wibking \& Krumholz(2021)}]{wibking_2021}
+Wibking, B.~D., \& Krumholz, M.~R. 2021, arXiv:2105.04136 [astro-ph].
+\newblock \url{http://arxiv.org/abs/2105.04136}
+
+\bibitem[{Wilson {et~al.}(2017)Wilson, Bryan, Cranston, Kitzes, Nederbragt, \&
+  Teal}]{wilson_2017}
+Wilson, G., Bryan, J., Cranston, K., {et~al.} 2017, PLOS Computational Biology,
+  13, e1005510, \dodoi{10.1371/journal.pcbi.1005510}
+
+\bibitem[{Wilson {et~al.}(2014)Wilson, Aruliah, Brown, Hong, Davis, Guy,
+  Haddock, Huff, Mitchell, Plumbley, Waugh, White, \& Wilson}]{wilson_2014}
+Wilson, G., Aruliah, D.~A., Brown, C.~T., {et~al.} 2014, PLOS Biology, 12, 7
+
+\bibitem[{Yang {et~al.}(2012)Yang, Ruszkowski, Ricker, Zweibel, \&
+  Lee}]{yang_fermi_2012}
+Yang, H.-Y.~K., Ruszkowski, M., Ricker, P.~M., Zweibel, E., \& Lee, D. 2012,
+  The Astrophysical Journal, 761, 185, \dodoi{10.1088/0004-637X/761/2/185}
+
+\bibitem[{Yoshida {et~al.}(2021)Yoshida, Matsukiyo, Shimokawa, Washimi, \&
+  Hada}]{yoshida_trajectory_2021}
+Yoshida, K., Matsukiyo, S., Shimokawa, K., Washimi, H., \& Hada, T. 2021, The
+  Astrophysical Journal, 916, 29, \dodoi{10.3847/1538-4357/ac02c2}
+
+\bibitem[{Zingale {et~al.}(2020)Zingale, Almgren, Sazo, Bell, Eiden, Harpole,
+  Katz, Nonaka, Willcox, \& Zhang}]{zingale_castro_2020}
+Zingale, M., Almgren, A.~S., Sazo, M.~B., {et~al.} 2020, Journal of Physics:
+  Conference Series, 1623, 012021, \dodoi{10.1088/1742-6596/1623/1/012021}
+
+\end{thebibliography}

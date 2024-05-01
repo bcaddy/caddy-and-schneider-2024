@@ -2,7 +2,7 @@
 % Add the "linenumbers" argument to include line numbers
 % See this link for more info on how to use the documentclass
 %  https://www.overleaf.com/project/6470f9cad6ea94bea26d41cb
-\documentclass[modern, linenumbers]{aastex631}
+\documentclass[modern]{aastex631}
 
 \usepackage{BobsPreamble}
 
@@ -89,12 +89,12 @@ Over the past decade it has become increasingly clear that magnetohydrodynamics 
 
 Many studies have focused on the role of magnetic fields in galaxy evolution and have provided intriguing hints as to the possible effects of magnetic fields in galaxy dynamics \citep{shin_2008, banda_2016, grand_auriga_2017, pakmor_magnetic_2017, hopkins_but_2020, wibking_2021}. Different simulations employing different numerical methods show varying impacts of magnetic fields, ranging from magnetic fields being largely irrelevant on large scales to magnetic fields being critically important in determining the evolution and structure of the interstellar medium (ISM), modifying galactic feedback, and influencing the structure of the circumgalactic medium (CGM) \citep{martin-alvarez_how_2020, dobbs_magnetic_2007, kim_vertical_2015, hanasz_global_2009, pakmor_simulations_2013, banda_2017}. One factor in this uncertainty is the effect of numerical resolution on MHD simulations -- galactic magnetic fields are likely amplified by a turbulent dynamo, which operates over a large dynamic range \citep{martin-alvarez_three-phase_2018, beck_1996, gent_2021, carteret_2022, brandenburg_2023}. The accuracy with which the dynamo is captured thus depends on both the numerical method that is employed as well as the resolution. Thus, a simple way to extend the dynamic range captured in an MHD simulation is by employing very high resolution MHD simulations -- simulations that are now possible thanks to recent developments in hardware, numerical algorithms, and software.
 
-Modern numerical methods for MHD are sophisticated and robust, but even with highly optimized codes, MHD simulations remain very computationally expensive \citep{athena++_2020}. This computational expense is a result of the high number of floating point calculations required by modern finite-volume methods and the heavy memory bandwidth demands of MHD codes \citep{k_athena_2021}. In addition, MHD turbulent dynamos operate across a large dynamic range, from the full scale of a galaxy all the way down to a few parsecs or smaller, five or more orders of magnitude spatially \citep{pariev_magnetic_1_2007, pariev_magnetic_2_2007, ntormousi_dynamo_2020, galishnikova_tearing_2022}. As a result, high resolution simulations are critical in order to accurately capture the effects of magnetic fields in astrophysical simulations. 
+Modern numerical methods for MHD are sophisticated and robust, but even with highly optimized codes, MHD simulations remain very computationally expensive \citep{athena++_2020}. This computational expense is a result of the high number of floating point calculations required by modern finite-volume methods and the heavy memory bandwidth demands of MHD codes \citep{k_athena_2021}. In addition, MHD turbulent dynamos operate across a large dynamic range, from the full scale of a galaxy all the way down to a few parsecs or smaller, five or more orders of magnitude spatially \citep{pariev_magnetic_1_2007, pariev_magnetic_2_2007, ntormousi_dynamo_2020, galishnikova_tearing_2022}. As a result, high resolution simulations are critical in order to accurately capture the effects of magnetic fields in astrophysical simulations.
 
 This need has driven a push to develop MHD codes that can take advantage of modern computer architectures \citep[e.g.][]{schive_gamer-2_2018, almgren_castro_2020, zingale_castro_2020, shankar_gram-x_2022, liska_h-amr_2022, begue_cuharm_2023, holmen_early_2023, parthenon_2023}. Very large, high resolution MHD simulations require supercomputers to run due to their high computational cost. The primary source of computational power in most new supercomputers is Graphics Processing Units (GPUs)\footnote{\url{https://www.top500.org/lists/top500/2023/11/}}. For example, of the top ten supercomputers named in the November 2023 Top500 list, only one - Fugaku - does not rely on GPUs for the majority of its performance.\footnote{Fugaku employs custom CPUs that utilize vector processors similar to GPUs for much of its performance.} The ubiquity of GPUs in modern supercomputers thus necessitates the development of GPU-based astrophysical MHD simulation codes.
 
-The induction equation implies a simple constraint; it requires that the magnetic field be divergence free, i.e. the Universe does not contain magnetic monopoles. However, achieving this constraint numerically is not trivial, and several methods have been developed. Among these are the Powell 8 Wave scheme, which adds an additional source term to the induction equation and uses an 8 wave Riemann solver with the 8th wave corresponding to the magnetic divergence \citep{Powell1997}; 
-vector potential/projection methods, which project the magnetic field into the scalar and vector potential and then perform a cleaning step to reduce the divergence to zero by solving a Poisson equation \citep{brackbill_1980,ryu_1995,Crockett_2005,torrilhon2005locally}; 
+The induction equation implies a simple constraint; it requires that the magnetic field be divergence free, i.e. the Universe does not contain magnetic monopoles. However, achieving this constraint numerically is not trivial, and several methods have been developed. Among these are the Powell 8 Wave scheme, which adds an additional source term to the induction equation and uses an 8 wave Riemann solver with the 8th wave corresponding to the magnetic divergence \citep{Powell1997};
+vector potential/projection methods, which project the magnetic field into the scalar and vector potential and then perform a cleaning step to reduce the divergence to zero by solving a Poisson equation \citep{brackbill_1980,ryu_1995,Crockett_2005,torrilhon2005locally};
 divergence cleaning methods, which operate by modifying the system of conserved equations with corrections that dissipate and propagate out the magnetic divergence \citep{dedner_hyperbolic_2002,mignone_2010}; and constrained transport (CT), which evolves face-centered values of the magnetic field and updates them using the electromotive forces \citep{evans_1988}.
 We have chosen to implement the CT method in Cholla due to its overall accuracy, because the algorithm pairs well with static structured grids, and because the computational efficiency of GPUs is a good match to the algebraic complexity of CT.
 
@@ -697,18 +697,18 @@ The typical Riemann problem setup uses a domain with a discontinuity at the midp
 \begin{table}
     \centering
     \begin{tabular}{lcccccccccc}
-    
-    
+
+
         %% Over-ride the default font size
         %% Use Default (12pt)
-    
+
         %% Use \tablewidth{?pt} to over-ride the default table width.
         %% If you are unhappy with the default look at the end of the
         %% *.log file to see what the default was set at before adjusting
         %% this value.
-    
+
         %% This is the title of the table
-    
+
         %% The \tablehead gives provides the column headers.  It
         %% is currently set up so that the column labels are on the
         %% top line and the units surrounded by ()s are in the
@@ -718,38 +718,38 @@ The typical Riemann problem setup uses a domain with a discontinuity at the midp
         %% and remember to end any extra lines with \\ and include the
         %% correct number of &s.
         Riemann Problem & $\gamma$ & $t_{max}$ & $B_x$ & $\rho_L$ & $P_L$ & $v_{x,L}$ & $v_{y,L}$ & $v_{z,L}$ & $B_{y,L}$ & $B_{z,L}$  \\ \hline
-    
+
         %% All data must appear between the \startdata and \enddata commands
-        % Riemann Problem      gamma           t_max  B_x                       rho_L  P_L    V_x,L  V_y,L  V_z,L B_y,L                       B_z,L                   
+        % Riemann Problem      gamma           t_max  B_x                       rho_L  P_L    V_x,L  V_y,L  V_z,L B_y,L                       B_z,L
         Brio \& Wu           & 2             & 0.1  & 0.75                    & 1    & 1    & 0    & 0    & 0   & 1                         & 0                       \\ \hline
         Dai \& Woodward      & $\frac{5}{3}$ & 0.2  & $\frac{2}{\sqrt{4\pi}}$ & 1.08 & 0.95 & 1.2  & 0.01 & 0.5 & $\frac{3.6}{\sqrt{4\pi}}$ & $\frac{2}{\sqrt{4\pi}}$ \\ \hline
         Ryu \& Jones 1a      & $\frac{5}{3}$ & 0.08 & $\frac{5}{\sqrt{4\pi}}$ & 1    & 20   & 10   & 0    & 0   & $\frac{5}{\sqrt{4\pi}}$   & 0                       \\ \hline
         Ryu \& Jones 4d      & $\frac{5}{3}$ & 0.16 & 0.7                     & 1    & 1    & 0    & 0    & 0   & 0                         & 0                       \\ \hline
         Einfeldt Rarefaction & 1.4           & 0.16 & 0                       & 1    & 0.45 & -2   & 0    & 0   & 0.5                       & 0                       \\ \hline
-    
+
         %% Include any \tablenotetext{key}{text}, \tablerefs{ref list},
         %% or \tablecomments{text} between the \enddata and
         %% \end{deluxetable} commands
-    
+
         %% General table comment marker
-    
+
     \end{tabular}
     \newline
     \newline
     \newline
     \begin{tabular}{lcccccccc}
-    
-    
+
+
         %% Over-ride the default font size
         %% Use Default (12pt)
-    
+
         %% Use \tablewidth{?pt} to over-ride the default table width.
         %% If you are unhappy with the default look at the end of the
         %% *.log file to see what the default was set at before adjusting
         %% this value.
-    
+
         %% This is the title of the table
-    
+
         %% The \tablehead gives provides the column headers.  It
         %% is currently set up so that the column labels are on the
         %% top line and the units surrounded by ()s are in the
@@ -759,7 +759,7 @@ The typical Riemann problem setup uses a domain with a discontinuity at the midp
         %% and remember to end any extra lines with \\ and include the
         %% correct number of &s.
         Riemann Problem & $\rho_R$ & $P_R$ & $v_{x,R}$ & $v_{y,R}$ & $v_{z,R}$ & $B_{y,R}$ & $B_{z,R}$ \\ \hline
-    
+
         %% All data must appear between the \startdata and \enddata commands
         % Riemann Problem      rho_R   P_R    V_x,R   V_y,R V_z,R B_y,R                     B_z,R
         Brio \& Wu           & 0.125 & 0.1  & 0     & 0   & 0   & -1                      & 0                       \\ \hline
@@ -767,13 +767,13 @@ The typical Riemann problem setup uses a domain with a discontinuity at the midp
         Ryu \& Jones 1a      & 1     & 1    & -10   & 0   & 0   & $\frac{5}{\sqrt{4\pi}}$ & 0                       \\ \hline
         Ryu \& Jones 4d      & 0.3   & 0.2  & 0     & 0   & 1   & 1                       & 0                       \\ \hline
         Einfeldt Rarefaction & 1     & 0.45 & 2     & 0   & 0   & 0.5                     & 0                       \\ \hline
-    
+
         %% Include any \tablenotetext{key}{text}, \tablerefs{ref list},
         %% or \tablecomments{text} between the \enddata and
         %% \end{deluxetable} commands
-    
+
         %% General table comment marker
-    
+
     \end{tabular}
     \caption{Riemann Problem Initial Conditions.} The $L/R$ subscripts indicate that it is the left/right state. $B_x$ is always the same in both states.
     \label{table:riemann}
@@ -907,7 +907,7 @@ With a single MPI rank there is negligible communication overhead as no halo cel
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics{latex-src/scaling_test_strong_efficiency.pdf}
+    \includegraphics{scaling_test_strong_efficiency.pdf}
     \caption{Strong scaling performance of Cholla MHD with a problem size of $459^3$ cells. \textbf{Note that a typical number of cells per GPU is $>128^3$ which is corresponds to 64 GPUs in this test.} \href{https://zenodo.org/records/10927223}{\img{zenodo-gradient-200.png}}}
     \label{fig:scaling-strong}
 \end{figure}
